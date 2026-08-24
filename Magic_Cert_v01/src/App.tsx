@@ -1,16 +1,52 @@
 import React, { useState } from 'react';
-import saaC03Data from './data/saa-c03-questions.json';
+import originalData from './data/saa-c03-questions.json';
+import extendedData from './data/saa-c03-questions-extended.json';
 import { Question } from './types/question';
 
+type QuizMode = 'welcome' | 'quiz' | 'complete';
+type Dataset = 'basic' | 'extended';
+
 function App() {
+  // Quiz mode state
+  const [mode, setMode] = useState<QuizMode>('welcome');
+  const [dataset, setDataset] = useState<Dataset>('extended');
+  const [selectedDomain, setSelectedDomain] = useState<string>('all');
+  const [questionCount, setQuestionCount] = useState<number>(5);
+  
+  // Quiz state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [showExplanation, setShowExplanation] = useState(false);
   const [score, setScore] = useState(0);
   const [quizComplete, setQuizComplete] = useState(false);
 
-  const questions: Question[] = saaC03Data.questions;
+  // Get questions based on selection
+  const getQuestions = (): Question[] => {
+    const data = dataset === 'basic' ? originalData : extendedData;
+    let questions = data.questions;
+
+    // Filter by domain if extended dataset and not 'all'
+    if (dataset === 'extended' && selectedDomain !== 'all') {
+      questions = questions.filter((q: any) => q.domain === selectedDomain);
+    }
+
+    // Shuffle and limit to selected count
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(questionCount, shuffled.length));
+  };
+
+  const questions = getQuestions();
   const currentQuestion = questions[currentQuestionIndex];
+
+  // Start quiz handler
+  const handleStartQuiz = () => {
+    setMode('quiz');
+    setCurrentQuestionIndex(0);
+    setSelectedAnswers([]);
+    setShowExplanation(false);
+    setScore(0);
+    setQuizComplete(false);
+  };
 
   const handleAnswerSelect = (optionId: string) => {
     if (showExplanation) return;
@@ -56,6 +92,7 @@ function App() {
   };
 
   const handleRestart = () => {
+    setMode('welcome');
     setCurrentQuestionIndex(0);
     setSelectedAnswers([]);
     setShowExplanation(false);
@@ -63,6 +100,145 @@ function App() {
     setQuizComplete(false);
   };
 
+  // Welcome Screen
+  if (mode === 'welcome') {
+    const domains = [
+      { id: 'all', name: 'All Domains', weight: '100%' },
+      { id: 'domain1', name: 'Design Secure Architectures', weight: '30%' },
+      { id: 'domain2', name: 'Design Resilient Architectures', weight: '26%' },
+      { id: 'domain3', name: 'Design High-Performing Architectures', weight: '24%' },
+      { id: 'domain4', name: 'Design Cost-Optimized Architectures', weight: '20%' },
+    ];
+
+    // Count questions for preview
+    const basicCount = originalData.questions.length;
+    const extendedCount = extendedData.questions.length;
+    const selectedCount = getQuestions().length;
+
+    return (
+      <div className="app">
+        <div className="container">
+          <div className="welcome-screen">
+            <div className="welcome-header">
+              <h1>🪄 Magic Cert</h1>
+              <p className="welcome-subtitle">AWS Solutions Architect Associate (SAA-C03)</p>
+              <p className="welcome-description">
+                Practice with real-world scenarios and detailed explanations
+              </p>
+            </div>
+
+            <div className="quiz-options">
+              <div className="option-section">
+                <h2>📚 Select Question Set</h2>
+                <div className="option-cards">
+                  <div
+                    className={`option-card ${dataset === 'basic' ? 'selected' : ''}`}
+                    onClick={() => setDataset('basic')}
+                  >
+                    <div className="option-card-header">
+                      <h3>Basic Set</h3>
+                      <span className="question-count">{basicCount} questions</span>
+                    </div>
+                    <p>Fundamental topics covering core AWS services</p>
+                    <ul className="option-features">
+                      <li>✓ Core AWS services</li>
+                      <li>✓ Quick practice</li>
+                      <li>✓ Mixed difficulty</li>
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`option-card ${dataset === 'extended' ? 'selected' : ''}`}
+                    onClick={() => setDataset('extended')}
+                  >
+                    <div className="option-card-header">
+                      <h3>Extended Set</h3>
+                      <span className="question-count">{extendedCount} questions</span>
+                    </div>
+                    <p>Organized by official SAA-C03 exam domains</p>
+                    <ul className="option-features">
+                      <li>✓ Domain-organized</li>
+                      <li>✓ Exam-aligned</li>
+                      <li>✓ Advanced scenarios</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {dataset === 'extended' && (
+                <div className="option-section">
+                  <h2>🎯 Select Domain</h2>
+                  <div className="domain-grid">
+                    {domains.map((domain) => (
+                      <div
+                        key={domain.id}
+                        className={`domain-card ${selectedDomain === domain.id ? 'selected' : ''}`}
+                        onClick={() => setSelectedDomain(domain.id)}
+                      >
+                        <div className="domain-card-content">
+                          <h3>{domain.name}</h3>
+                          <div className="domain-meta">
+                            <span className="domain-weight">{domain.weight}</span>
+                            {domain.id !== 'all' && (
+                              <span className="domain-questions">
+                                {extendedData.questions.filter((q: any) => q.domain === domain.id).length} questions
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="option-section">
+                <h2>🔢 Number of Questions</h2>
+                <div className="count-options">
+                  {[3, 5, 10].map((count) => (
+                    <button
+                      key={count}
+                      className={`count-btn ${questionCount === count ? 'selected' : ''}`}
+                      onClick={() => setQuestionCount(count)}
+                    >
+                      {count} Questions
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="start-section">
+                <div className="quiz-summary">
+                  <p>
+                    <strong>Selected:</strong> {dataset === 'basic' ? 'Basic' : 'Extended'} Set
+                    {dataset === 'extended' && selectedDomain !== 'all' && (
+                      <> • {domains.find(d => d.id === selectedDomain)?.name}</>
+                    )}
+                  </p>
+                  <p className="quiz-count">
+                    <strong>{selectedCount}</strong> question{selectedCount !== 1 ? 's' : ''} ready
+                  </p>
+                </div>
+                <button
+                  onClick={handleStartQuiz}
+                  className="btn btn-primary btn-large"
+                  disabled={selectedCount === 0}
+                >
+                  Start Quiz →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <footer className="footer">
+            <p>Created with AI ✨ | AWS Community Day Bolivia 2026</p>
+          </footer>
+        </div>
+      </div>
+    );
+  }
+
+  // Quiz Complete Screen
   if (quizComplete) {
     return (
       <div className="app">
