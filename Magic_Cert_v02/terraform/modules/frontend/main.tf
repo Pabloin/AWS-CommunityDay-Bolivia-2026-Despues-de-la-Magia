@@ -60,3 +60,38 @@ resource "aws_s3_bucket_cors_configuration" "website" {
     max_age_seconds = 3000
   }
 }
+
+# Upload built frontend files
+resource "null_resource" "build_and_deploy_frontend" {
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      set -e
+      cd ${path.module}/../../../Magic_Cert_v01
+      
+      # Create .env.production with API URL
+      echo "VITE_API_URL=${var.api_url}" > .env.production
+      
+      # Install dependencies if needed
+      if [ ! -d "node_modules" ]; then
+        npm install
+      fi
+      
+      # Build
+      npm run build
+      
+      # Sync to S3
+      aws s3 sync dist/ s3://${aws_s3_bucket.website.id} --delete --profile magic-account
+    EOT
+    
+    interpreter = ["/bin/bash", "-c"]
+  }
+
+  depends_on = [
+    aws_s3_bucket.website,
+    aws_s3_bucket_policy.website
+  ]
+}

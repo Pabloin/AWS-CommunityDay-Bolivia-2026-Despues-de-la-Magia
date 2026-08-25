@@ -63,7 +63,7 @@ resource "aws_resourcegroups_group" "by_owner" {
 
 # Resource Group for Cost Tracking
 resource "aws_resourcegroups_group" "by_event" {
-  name        = "aws-cday-bolivia-2026-all-resources"
+  name        = "cday-bolivia-2026-all-resources"
   description = "All resources for AWS Community Day Bolivia 2026 event"
 
   resource_query {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import originalData from './data/saa-c03-questions.json';
 import extendedData from './data/saa-c03-questions-extended.json';
 import { Question } from './types/question';
@@ -32,7 +32,7 @@ function App() {
 
     // Shuffle and limit to selected count
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, Math.min(questionCount, shuffled.length));
+    return shuffled.slice(0, Math.min(questionCount, shuffled.length)) as Question[];
   };
 
   const questions = getQuestions();

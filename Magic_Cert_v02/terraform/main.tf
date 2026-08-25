@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.0"
     }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 3.0"
+    }
   }
   
   # Remote backend will be configured after initial setup
@@ -67,6 +71,9 @@ module "frontend" {
   
   project_name = var.project_name
   environment  = var.environment
+  api_url      = module.api.api_url
+  
+  depends_on = [module.api]
 }
 
 module "api" {

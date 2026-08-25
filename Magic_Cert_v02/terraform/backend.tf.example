@@ -1,0 +1,19 @@
+# Backend Configuration for Remote State
+# 
+# INSTRUCTIONS:
+# 1. First run: terraform apply (creates S3 bucket and DynamoDB table)
+# 2. Rename this file to backend.tf
+# 3. Run: terraform init -migrate-state
+# 4. Type "yes" to migrate local state to S3
+# 5. Delete terraform.tfstate and terraform.tfstate.backup locally
+
+terraform {
+  backend "s3" {
+    bucket         = "magic-cert-terraform-state-YOUR_ACCOUNT_ID"  # Update with actual account ID
+    key            = "production/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "magic-cert-terraform-locks"
+    encrypt        = true
+    profile        = "magic-account"
+  }
+}
