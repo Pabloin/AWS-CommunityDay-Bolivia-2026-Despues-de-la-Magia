@@ -1,3 +1,9 @@
+# AWS CommunityDay Bolivia 2026: Talk 
+
+"Despues de la Magia: de Localhost a Produccion"
+
+We use as reference Magic-Cert applicaiton, a interactive application to prepare for AWS Certifications, with focus on AWS SAA-003 for demo purposes
+
 # AWS Certification Quiz Application
 
 An interactive quiz application for AWS certification preparation, starting with SAA-C03 (Solutions Architect Associate).
