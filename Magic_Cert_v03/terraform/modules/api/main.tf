@@ -54,13 +54,15 @@ resource "null_resource" "lambda_package_dependencies" {
   provisioner "local-exec" {
     command = <<-EOT
       set -e
-      BUILD_ROOT="${path.root}/.terraform-build"
+      TERRAFORM_ROOT="$(pwd)"
+      BUILD_ROOT="$TERRAFORM_ROOT/.terraform-build"
+      SOURCE_ROOT="$TERRAFORM_ROOT/../backend/functions"
       rm -rf "$BUILD_ROOT"
       mkdir -p "$BUILD_ROOT"
 
       while IFS=: read -r FUNCTION_NAME SOURCE_NAME; do
         BUILD_DIR="$BUILD_ROOT/$FUNCTION_NAME"
-        SOURCE_DIR="${path.root}/../backend/functions/$SOURCE_NAME"
+        SOURCE_DIR="$SOURCE_ROOT/$SOURCE_NAME"
         mkdir -p "$BUILD_DIR"
         cp "$SOURCE_DIR/index.js" "$SOURCE_DIR/package.json" "$SOURCE_DIR/package-lock.json" "$BUILD_DIR/"
         cd "$BUILD_DIR"
