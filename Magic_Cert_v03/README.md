@@ -6,7 +6,7 @@ Magic Cert v03 keeps the v02 serverless runtime and adds a production-oriented d
 
 - **S3 Static Website** for frontend hosting (HTTP)
 - **API Gateway** for REST API endpoints
-- **Lambda Functions** for backend logic (Node.js 18)
+- **Lambda Functions** for backend logic (Node.js 20)
 - **DynamoDB** for data persistence (on-demand)
 - **Amazon Bedrock** optional cross-account AI explanations
 - **CloudWatch** for monitoring and logging

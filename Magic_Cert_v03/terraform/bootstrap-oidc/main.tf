@@ -137,7 +137,7 @@ resource "aws_iam_role_policy" "terraform_apply_permissions" {
     Statement = [{
       Effect = "Allow"
       Action = [
-        "iam:CreateRole", "iam:DeleteRole", "iam:GetRole", "iam:ListRolePolicies",
+        "iam:CreateRole", "iam:DeleteRole", "iam:GetRole", "iam:GetRolePolicy", "iam:ListRolePolicies",
         "iam:PutRolePolicy", "iam:DeleteRolePolicy", "iam:AttachRolePolicy",
         "iam:DetachRolePolicy", "iam:PassRole", "iam:TagRole", "iam:UntagRole",
         "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole"

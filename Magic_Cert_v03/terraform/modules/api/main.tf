@@ -43,27 +43,35 @@ locals {
 }
 
 resource "null_resource" "lambda_package_dependencies" {
-  for_each = local.lambda_sources
-
   triggers = {
-    source_hash = sha256(join("", [
-      filesha256("${path.root}/../backend/functions/${each.value.directory}/index.js"),
-      filesha256("${path.root}/../backend/functions/${each.value.directory}/package.json"),
-      filesha256("${path.root}/../backend/functions/${each.value.directory}/package-lock.json")
-    ]))
+    source_hash = sha256(join("", [for source in values(local.lambda_sources) : join("", [
+      filesha256("${path.root}/../backend/functions/${source.directory}/index.js"),
+      filesha256("${path.root}/../backend/functions/${source.directory}/package.json"),
+      filesha256("${path.root}/../backend/functions/${source.directory}/package-lock.json")
+    ])]))
   }
 
   provisioner "local-exec" {
     command = <<-EOT
       set -e
-      BUILD_DIR="${path.root}/.terraform-build/${each.key}"
-      SOURCE_DIR="${path.root}/../backend/functions/${each.value.directory}"
+      BUILD_ROOT="${path.root}/.terraform-build"
+      rm -rf "$BUILD_ROOT"
+      mkdir -p "$BUILD_ROOT"
 
-      rm -rf "$BUILD_DIR"
-      mkdir -p "$BUILD_DIR"
-      cp "$SOURCE_DIR/index.js" "$SOURCE_DIR/package.json" "$SOURCE_DIR/package-lock.json" "$BUILD_DIR/"
-      cd "$BUILD_DIR"
-      npm ci --omit=dev --silent
+      while IFS=: read -r FUNCTION_NAME SOURCE_NAME; do
+        BUILD_DIR="$BUILD_ROOT/$FUNCTION_NAME"
+        SOURCE_DIR="${path.root}/../backend/functions/$SOURCE_NAME"
+        mkdir -p "$BUILD_DIR"
+        cp "$SOURCE_DIR/index.js" "$SOURCE_DIR/package.json" "$SOURCE_DIR/package-lock.json" "$BUILD_DIR/"
+        cd "$BUILD_DIR"
+        npm ci --omit=dev --silent
+      done <<'FUNCTIONS'
+      questions:questions
+      auth:auth
+      user_profile:user-profile
+      user_progress:user-progress
+      ai_practice:ai-practice
+      FUNCTIONS
     EOT
 
     interpreter = ["/bin/bash", "-c"]
@@ -232,7 +240,7 @@ resource "aws_lambda_function" "questions" {
   function_name = "${var.project_name}-questions-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs20.x"
   timeout       = 30
   memory_size   = 256
 
@@ -256,7 +264,7 @@ resource "aws_lambda_function" "auth" {
   function_name = "${var.project_name}-auth-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs20.x"
   timeout       = 30
   memory_size   = 256
 
@@ -281,7 +289,7 @@ resource "aws_lambda_function" "user_profile" {
   function_name = "${var.project_name}-user-profile-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs20.x"
   timeout       = 30
   memory_size   = 256
 
@@ -306,7 +314,7 @@ resource "aws_lambda_function" "user_progress" {
   function_name = "${var.project_name}-user-progress-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs20.x"
   timeout       = 30
   memory_size   = 256
 
@@ -331,7 +339,7 @@ resource "aws_lambda_function" "ai_practice" {
   function_name = "${var.project_name}-ai-practice-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
-  runtime       = "nodejs18.x"
+  runtime       = "nodejs20.x"
   timeout       = 30
   memory_size   = 256
 
