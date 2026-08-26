@@ -36,6 +36,9 @@ locals {
     user_progress = {
       directory = "user-progress"
     }
+    ai_practice = {
+      directory = "ai-practice"
+    }
   }
 }
 
@@ -158,6 +161,26 @@ resource "aws_iam_role_policy" "lambda_secrets" {
   })
 }
 
+resource "aws_iam_role_policy" "lambda_assume_bedrock" {
+  count = var.bedrock_role_arn != "" ? 1 : 0
+
+  name = "${var.project_name}-lambda-assume-bedrock-${var.environment}"
+  role = aws_iam_role.lambda_exec.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sts:AssumeRole"
+        ]
+        Resource = var.bedrock_role_arn
+      }
+    ]
+  })
+}
+
 # CloudWatch Log Groups
 resource "aws_cloudwatch_log_group" "questions" {
   name              = "/aws/lambda/${aws_lambda_function.questions.function_name}"
@@ -188,6 +211,15 @@ resource "aws_cloudwatch_log_group" "user_profile" {
 
 resource "aws_cloudwatch_log_group" "user_progress" {
   name              = "/aws/lambda/${aws_lambda_function.user_progress.function_name}"
+  retention_in_days = 7
+
+  tags = {
+    Component = "logging"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "ai_practice" {
+  name              = "/aws/lambda/${aws_lambda_function.ai_practice.function_name}"
   retention_in_days = 7
 
   tags = {
@@ -294,6 +326,33 @@ resource "aws_lambda_function" "user_progress" {
   }
 }
 
+resource "aws_lambda_function" "ai_practice" {
+  filename      = data.archive_file.lambda_package["ai_practice"].output_path
+  function_name = "${var.project_name}-ai-practice-${var.environment}"
+  role          = aws_iam_role.lambda_exec.arn
+  handler       = "index.handler"
+  runtime       = "nodejs18.x"
+  timeout       = 30
+  memory_size   = 256
+
+  source_code_hash = data.archive_file.lambda_package["ai_practice"].output_base64sha256
+
+  environment {
+    variables = {
+      BEDROCK_ROLE_ARN    = var.bedrock_role_arn
+      BEDROCK_EXTERNAL_ID = var.bedrock_external_id
+      BEDROCK_REGION      = var.bedrock_region
+      BEDROCK_MODEL_ID    = var.bedrock_model_id
+      ENVIRONMENT         = var.environment
+    }
+  }
+
+  tags = {
+    Component = "api"
+    Function  = "ai-practice"
+  }
+}
+
 # API Gateway
 resource "aws_api_gateway_rest_api" "main" {
   name        = "${var.project_name}-api-${var.environment}"
@@ -345,6 +404,18 @@ resource "aws_api_gateway_resource" "user_progress" {
   rest_api_id = aws_api_gateway_rest_api.main.id
   parent_id   = aws_api_gateway_resource.user.id
   path_part   = "progress"
+}
+
+resource "aws_api_gateway_resource" "ai" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  parent_id   = aws_api_gateway_rest_api.main.root_resource_id
+  path_part   = "ai"
+}
+
+resource "aws_api_gateway_resource" "ai_explain" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  parent_id   = aws_api_gateway_resource.ai.id
+  path_part   = "explain"
 }
 
 # API Gateway Methods - Questions
@@ -449,6 +520,23 @@ resource "aws_api_gateway_integration" "user_progress_post" {
   uri                     = aws_lambda_function.user_progress.invoke_arn
 }
 
+# API Gateway Methods - AI Explain
+resource "aws_api_gateway_method" "ai_explain_post" {
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.ai_explain.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "ai_explain_post" {
+  rest_api_id             = aws_api_gateway_rest_api.main.id
+  resource_id             = aws_api_gateway_resource.ai_explain.id
+  http_method             = aws_api_gateway_method.ai_explain_post.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.ai_practice.invoke_arn
+}
+
 # CORS Configuration for all resources
 module "cors_questions" {
   source = "../cors"
@@ -485,6 +573,13 @@ module "cors_user_progress" {
   resource_id = aws_api_gateway_resource.user_progress.id
 }
 
+module "cors_ai_explain" {
+  source = "../cors"
+
+  api_id      = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.ai_explain.id
+}
+
 # Lambda Permissions for API Gateway
 resource "aws_lambda_permission" "questions" {
   statement_id  = "AllowAPIGatewayInvoke"
@@ -518,6 +613,14 @@ resource "aws_lambda_permission" "user_progress" {
   source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
 }
 
+resource "aws_lambda_permission" "ai_practice" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ai_practice.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.main.execution_arn}/*/*"
+}
+
 # API Gateway Deployment
 resource "aws_api_gateway_deployment" "main" {
   rest_api_id = aws_api_gateway_rest_api.main.id
@@ -533,6 +636,10 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_resource.auth_login.id,
       aws_api_gateway_method.auth_login_post.id,
       aws_api_gateway_integration.auth_login_post.id,
+      aws_api_gateway_resource.ai.id,
+      aws_api_gateway_resource.ai_explain.id,
+      aws_api_gateway_method.ai_explain_post.id,
+      aws_api_gateway_integration.ai_explain_post.id,
     ]))
   }
 
@@ -547,6 +654,7 @@ resource "aws_api_gateway_deployment" "main" {
     aws_api_gateway_integration.user_profile_get,
     aws_api_gateway_integration.user_progress_get,
     aws_api_gateway_integration.user_progress_post,
+    aws_api_gateway_integration.ai_explain_post,
   ]
 }
 

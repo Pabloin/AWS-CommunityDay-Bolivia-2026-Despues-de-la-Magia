@@ -32,7 +32,16 @@ output "lambda_functions" {
       name = aws_lambda_function.user_progress.function_name
       arn  = aws_lambda_function.user_progress.arn
     }
+    ai_practice = {
+      name = aws_lambda_function.ai_practice.function_name
+      arn  = aws_lambda_function.ai_practice.arn
+    }
   }
+}
+
+output "lambda_execution_role_arn" {
+  description = "Lambda execution role ARN. Use this as the trusted principal in the Bedrock account role."
+  value       = aws_iam_role.lambda_exec.arn
 }
 
 output "jwt_secret_arn" {

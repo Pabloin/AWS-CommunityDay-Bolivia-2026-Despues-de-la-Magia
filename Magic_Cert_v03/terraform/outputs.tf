@@ -59,6 +59,11 @@ output "lambda_functions" {
   value       = module.api.lambda_functions
 }
 
+output "lambda_execution_role_arn" {
+  description = "Lambda execution role ARN to trust from the Bedrock account"
+  value       = module.api.lambda_execution_role_arn
+}
+
 # Monitoring outputs
 output "cloudwatch_dashboard_url" {
   description = "CloudWatch Dashboard URL"
@@ -103,6 +108,7 @@ output "deployment_summary" {
         * GET  ${module.api.api_url}/user/profile
         * GET  ${module.api.api_url}/user/progress
         * POST ${module.api.api_url}/user/progress
+        * POST ${module.api.api_url}/ai/explain
     
     Database:
       - Questions: ${module.database.questions_table_name}

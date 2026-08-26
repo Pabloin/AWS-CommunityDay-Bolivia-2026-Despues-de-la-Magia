@@ -8,6 +8,7 @@ Magic Cert v03 keeps the v02 serverless runtime and adds a production-oriented d
 - **API Gateway** for REST API endpoints
 - **Lambda Functions** for backend logic (Node.js 18)
 - **DynamoDB** for data persistence (on-demand)
+- **Amazon Bedrock** optional cross-account AI explanations
 - **CloudWatch** for monitoring and logging
 - **Terraform** for infrastructure as code
 - **Complete tagging** for cost tracking
@@ -26,6 +27,8 @@ Users (HTTP)
 S3 Static Website → React App
     ↓
 API Gateway (HTTPS) → Lambda Functions → DynamoDB
+                                  ↓
+                         Cross-account Bedrock role
     ↓
 CloudWatch (Logs & Metrics)
 ```
@@ -36,7 +39,7 @@ CloudWatch (Logs & Metrics)
 |----------|---------|-------|
 | **S3 Bucket** | Frontend hosting | 1 |
 | **API Gateway** | REST API | 1 |
-| **Lambda Functions** | Backend logic | 4 |
+| **Lambda Functions** | Backend logic | 5 |
 | **DynamoDB Tables** | Data storage | 4 |
 | **CloudWatch** | Monitoring | Dashboards + Alarms |
 | **Secrets Manager** | JWT secret | 1 |
@@ -47,6 +50,7 @@ CloudWatch (Logs & Metrics)
 2. **auth** - User registration and login
 3. **user-profile** - Get/update user profile
 4. **user-progress** - Track quiz attempts and statistics
+5. **ai-practice** - Generate AI explanations through a cross-account Bedrock role
 
 ### DynamoDB Tables
 
@@ -78,6 +82,8 @@ EOF
 ```
 
 Update `terraform/backend.hcl` with your backend bucket, state key, region, lock table, and optional local profile. Direct Terraform commands must run with `AWS_PROFILE` set, or through the scripts that source `.env`.
+
+Optional Bedrock cross-account setup is documented in [BEDROCK_CROSS_ACCOUNT.md](BEDROCK_CROSS_ACCOUNT.md).
 
 ### Step 1: Bootstrap GitHub OIDC
 

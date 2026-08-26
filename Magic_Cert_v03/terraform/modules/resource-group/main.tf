@@ -2,7 +2,7 @@
 
 resource "aws_resourcegroups_group" "magic_cert" {
   name        = "${var.project_name}-${var.environment}"
-  description = "Magic Cert v02 - AWS Community Day Bolivia 2026 - All project resources"
+  description = "Magic Cert v03 - AWS Community Day Bolivia 2026 - All project resources"
 
   resource_query {
     query = jsonencode({
@@ -63,8 +63,8 @@ resource "aws_resourcegroups_group" "by_owner" {
 
 # Resource Group for Cost Tracking
 resource "aws_resourcegroups_group" "by_event" {
-  name        = "cday-bolivia-2026-all-resources"
-  description = "All resources for AWS Community Day Bolivia 2026 event"
+  name        = "${var.project_name}-${var.environment}-all-resources"
+  description = "Magic Cert v03 resources for AWS Community Day Bolivia 2026"
 
   resource_query {
     query = jsonencode({

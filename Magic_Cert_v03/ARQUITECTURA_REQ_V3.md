@@ -137,7 +137,7 @@ Terraform owns:
 - Secrets Manager secret for JWT signing.
 - CloudWatch dashboard/alarms.
 - Resource Groups for tag-based discovery.
-- S3 remote state bucket and lock table bootstrap resources.
+- The v03 application state configuration only references the existing shared S3 remote state bucket and lock table. Those backend resources are bootstrapped separately.
 
 Terraform also packages Lambda functions deterministically from:
 

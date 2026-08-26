@@ -84,6 +84,10 @@ module "api" {
   users_table_arn      = module.database.users_table_arn
   progress_table_arn   = module.database.progress_table_arn
   sessions_table_arn   = module.database.sessions_table_arn
+  bedrock_role_arn     = var.bedrock_role_arn
+  bedrock_external_id  = var.bedrock_role_external_id
+  bedrock_region       = var.bedrock_region
+  bedrock_model_id     = var.bedrock_model_id
 }
 
 module "monitoring" {

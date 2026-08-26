@@ -156,3 +156,36 @@ export async function getStatistics(token: string) {
     return { success: false, error: 'Network error' };
   }
 }
+
+export interface AiExplanationRequest {
+  question: Question;
+  selectedAnswers: string[];
+  correctAnswers: string[];
+  explanation?: string;
+}
+
+export interface AiExplanationResponse {
+  success: boolean;
+  explanation?: string;
+  error?: string;
+  message?: string;
+}
+
+export async function explainAnswerWithAi(
+  request: AiExplanationRequest
+): Promise<AiExplanationResponse> {
+  try {
+    const response = await fetch(`${API_URL}/ai/explain`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request)
+    });
+
+    return await response.json();
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Network error'
+    };
+  }
+}
