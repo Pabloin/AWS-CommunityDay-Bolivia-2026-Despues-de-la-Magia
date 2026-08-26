@@ -24,11 +24,14 @@ This application helps users prepare for AWS certifications through interactive 
 │   │   └── questionLoader.ts
 │   └── types/          # TypeScript type definitions
 │       └── question.ts
-├── public/             # Static assets
 ├── tests/              # Test files
 ├── QUESTION_STRUCTURE.md   # Documentation for question format
+├── QUESTIONS_GUIDE.md      # SAA-C03 question bank notes
+├── ARCHITECTURE.md         # Local-only architecture baseline
 └── README.md
 ```
+
+v01 is intentionally a local/browser baseline for the talk. It should stay small: React, static JSON data, and no AWS deployment workflow.
 
 ## 📚 Available Certifications
 

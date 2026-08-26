@@ -4,6 +4,16 @@ import { fetchQuestions, Question as APIQuestion } from './services/api';
 type QuizMode = 'welcome' | 'quiz' | 'complete';
 type Dataset = 'basic' | 'extended';
 
+function VersionBadge() {
+  return (
+    <div className="version-badge" aria-label="Application version">
+      <span className="version-badge-main">v02</span>
+      <span className="version-badge-detail">AWS Serverless MVP</span>
+      <span className="version-badge-stack">S3 + API Gateway + Lambda + DynamoDB</span>
+    </div>
+  );
+}
+
 function App() {
   // Quiz mode state
   const [mode, setMode] = useState<QuizMode>('welcome');
@@ -122,6 +132,7 @@ function App() {
     return (
       <div className="app">
         <div className="container">
+          <VersionBadge />
           <div className="welcome-screen">
             <div className="welcome-header">
               <h1>🪄 Magic Cert</h1>
@@ -246,6 +257,7 @@ function App() {
     return (
       <div className="app">
         <div className="container">
+          <VersionBadge />
           <div className="quiz-complete">
             <h1>🎉 Quiz Complete!</h1>
             <div className="score-card">
@@ -267,6 +279,7 @@ function App() {
   return (
     <div className="app">
       <div className="container">
+        <VersionBadge />
         <header className="header">
           <h1>🪄 Magic Cert</h1>
           <p className="subtitle">AWS Solutions Architect Associate (SAA-C03)</p>

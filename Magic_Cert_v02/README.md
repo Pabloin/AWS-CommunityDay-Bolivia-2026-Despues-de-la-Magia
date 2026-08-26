@@ -117,7 +117,6 @@ Builds and uploads React app to S3.
 Magic_Cert_v02/
 ├── frontend/
 │   ├── src/                         # React app source
-│   ├── public/                      # Static frontend assets
 │   ├── index.html
 │   ├── package.json
 │   └── vite.config.ts

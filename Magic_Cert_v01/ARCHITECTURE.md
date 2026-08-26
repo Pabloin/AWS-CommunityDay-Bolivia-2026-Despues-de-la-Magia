@@ -451,7 +451,6 @@ Magic_Cert_v01/
 │   ├── components/           # (Future: React components)
 │   └── pages/               # (Future: Page components)
 │
-├── public/                   # Static assets
 └── dist/                    # Build output (generated)
 ```
 

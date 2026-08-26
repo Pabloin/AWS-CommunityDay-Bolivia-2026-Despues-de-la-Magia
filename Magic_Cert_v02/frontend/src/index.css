@@ -39,6 +39,40 @@ body {
   margin: 0 auto;
 }
 
+.version-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 18px auto;
+  padding: 8px 12px;
+  border: 1px solid rgba(35, 47, 62, 0.18);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(35, 47, 62, 0.08);
+  color: var(--aws-dark);
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.version-badge-main {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--aws-dark);
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.version-badge-detail {
+  font-weight: 700;
+}
+
+.version-badge-stack {
+  color: var(--text-secondary);
+}
+
 .header {
   text-align: center;
   margin-bottom: 40px;
@@ -579,6 +613,12 @@ body {
 @media (max-width: 768px) {
   .header h1 {
     font-size: 2rem;
+  }
+
+  .version-badge {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-right: auto;
   }
 
   .question-card {
