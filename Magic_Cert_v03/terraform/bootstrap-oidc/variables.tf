@@ -14,6 +14,16 @@ variable "github_repository" {
   description = "GitHub repository name"
 }
 
+variable "github_owner_id" {
+  type        = string
+  description = "Immutable GitHub owner ID used in the OIDC subject claim"
+}
+
+variable "github_repository_id" {
+  type        = string
+  description = "Immutable GitHub repository ID used in the OIDC subject claim"
+}
+
 variable "github_production_environment" {
   type        = string
   description = "GitHub environment used by the protected apply job"

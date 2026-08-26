@@ -118,6 +118,8 @@ The local profile is used only by `scripts/bootstrap-oidc.sh`. That script creat
 - A read-only plan role trusted only by Pull Requests from this repository.
 - An apply role trusted only by the protected GitHub `production` environment.
 
+The trust policies use GitHub's ID-based subject format, including owner ID `21208987` and repository ID `1345231004`, rather than relying only on mutable owner/repository names.
+
 The root workflow at `.github/workflows/magic-cert-v03-terraform.yml` uses `id-token: write` and exchanges the GitHub token for short-lived AWS credentials. AWS access keys are not stored in GitHub.
 
 Terraform application state uses `v03/terraform.tfstate`. OIDC bootstrap state uses `v03/bootstrap-oidc.tfstate`; both are protected by the existing S3 backend and lock table.
