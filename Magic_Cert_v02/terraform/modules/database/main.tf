@@ -2,10 +2,10 @@
 
 # Questions Table
 resource "aws_dynamodb_table" "questions" {
-  name           = "${var.project_name}-questions-${var.environment}"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "PK"
-  range_key      = "SK"
+  name         = "${var.project_name}-questions-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
 
   attribute {
     name = "PK"
@@ -46,10 +46,10 @@ resource "aws_dynamodb_table" "questions" {
 
 # Users Table
 resource "aws_dynamodb_table" "users" {
-  name           = "${var.project_name}-users-${var.environment}"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "PK"
-  range_key      = "SK"
+  name         = "${var.project_name}-users-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
 
   attribute {
     name = "PK"
@@ -84,10 +84,10 @@ resource "aws_dynamodb_table" "users" {
 
 # Progress Table
 resource "aws_dynamodb_table" "progress" {
-  name           = "${var.project_name}-progress-${var.environment}"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "PK"
-  range_key      = "SK"
+  name         = "${var.project_name}-progress-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
 
   attribute {
     name = "PK"
@@ -111,10 +111,10 @@ resource "aws_dynamodb_table" "progress" {
 
 # Sessions Table (for guest users with TTL)
 resource "aws_dynamodb_table" "sessions" {
-  name           = "${var.project_name}-sessions-${var.environment}"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "PK"
-  range_key      = "SK"
+  name         = "${var.project_name}-sessions-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
 
   attribute {
     name = "PK"

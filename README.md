@@ -1,6 +1,6 @@
 # AWS Community Day Bolivia 2026 - Después de la Magia 🪄
 
-> **Del Código a la Nube: Un Viaje Mágico con IA y AWS**
+> **Después de la Magia: de localhost a producción**
 
 ## 📖 Sobre esta Presentación
 

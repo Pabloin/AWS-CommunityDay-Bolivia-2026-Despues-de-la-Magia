@@ -22,6 +22,61 @@ resource "random_password" "jwt_secret" {
   special = true
 }
 
+locals {
+  lambda_sources = {
+    questions = {
+      directory = "questions"
+    }
+    auth = {
+      directory = "auth"
+    }
+    user_profile = {
+      directory = "user-profile"
+    }
+    user_progress = {
+      directory = "user-progress"
+    }
+  }
+}
+
+resource "null_resource" "lambda_package_dependencies" {
+  for_each = local.lambda_sources
+
+  triggers = {
+    source_hash = sha256(join("", [
+      filesha256("${path.root}/../backend/functions/${each.value.directory}/index.js"),
+      filesha256("${path.root}/../backend/functions/${each.value.directory}/package.json"),
+      filesha256("${path.root}/../backend/functions/${each.value.directory}/package-lock.json")
+    ]))
+  }
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      set -e
+      BUILD_DIR="${path.root}/.terraform-build/${each.key}"
+      SOURCE_DIR="${path.root}/../backend/functions/${each.value.directory}"
+
+      rm -rf "$BUILD_DIR"
+      mkdir -p "$BUILD_DIR"
+      cp "$SOURCE_DIR/index.js" "$SOURCE_DIR/package.json" "$SOURCE_DIR/package-lock.json" "$BUILD_DIR/"
+      cd "$BUILD_DIR"
+      npm ci --omit=dev --silent
+    EOT
+
+    interpreter = ["/bin/bash", "-c"]
+  }
+}
+
+data "archive_file" "lambda_package" {
+  for_each = local.lambda_sources
+
+  type        = "zip"
+  source_dir  = "${path.root}/.terraform-build/${each.key}"
+  output_path = "${path.root}/.terraform-build/${each.key}.zip"
+
+  depends_on = [null_resource.lambda_package_dependencies]
+}
+
 # IAM Role for Lambda Functions
 resource "aws_iam_role" "lambda_exec" {
   name = "${var.project_name}-lambda-exec-${var.environment}"
@@ -140,9 +195,8 @@ resource "aws_cloudwatch_log_group" "user_progress" {
   }
 }
 
-# Lambda Functions Placeholder (will be updated with actual code)
 resource "aws_lambda_function" "questions" {
-  filename      = "${path.module}/../../backend/functions/questions.zip"
+  filename      = data.archive_file.lambda_package["questions"].output_path
   function_name = "${var.project_name}-questions-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
@@ -150,7 +204,7 @@ resource "aws_lambda_function" "questions" {
   timeout       = 30
   memory_size   = 256
 
-  source_code_hash = fileexists("${path.module}/../../backend/functions/questions.zip") ? filebase64sha256("${path.module}/../../backend/functions/questions.zip") : null
+  source_code_hash = data.archive_file.lambda_package["questions"].output_base64sha256
 
   environment {
     variables = {
@@ -166,7 +220,7 @@ resource "aws_lambda_function" "questions" {
 }
 
 resource "aws_lambda_function" "auth" {
-  filename      = "${path.module}/../../backend/functions/auth.zip"
+  filename      = data.archive_file.lambda_package["auth"].output_path
   function_name = "${var.project_name}-auth-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
@@ -174,7 +228,7 @@ resource "aws_lambda_function" "auth" {
   timeout       = 30
   memory_size   = 256
 
-  source_code_hash = fileexists("${path.module}/../../backend/functions/auth.zip") ? filebase64sha256("${path.module}/../../backend/functions/auth.zip") : null
+  source_code_hash = data.archive_file.lambda_package["auth"].output_base64sha256
 
   environment {
     variables = {
@@ -191,7 +245,7 @@ resource "aws_lambda_function" "auth" {
 }
 
 resource "aws_lambda_function" "user_profile" {
-  filename      = "${path.module}/../../backend/functions/user-profile.zip"
+  filename      = data.archive_file.lambda_package["user_profile"].output_path
   function_name = "${var.project_name}-user-profile-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
@@ -199,7 +253,7 @@ resource "aws_lambda_function" "user_profile" {
   timeout       = 30
   memory_size   = 256
 
-  source_code_hash = fileexists("${path.module}/../../backend/functions/user-profile.zip") ? filebase64sha256("${path.module}/../../backend/functions/user-profile.zip") : null
+  source_code_hash = data.archive_file.lambda_package["user_profile"].output_base64sha256
 
   environment {
     variables = {
@@ -216,7 +270,7 @@ resource "aws_lambda_function" "user_profile" {
 }
 
 resource "aws_lambda_function" "user_progress" {
-  filename      = "${path.module}/../../backend/functions/user-progress.zip"
+  filename      = data.archive_file.lambda_package["user_progress"].output_path
   function_name = "${var.project_name}-user-progress-${var.environment}"
   role          = aws_iam_role.lambda_exec.arn
   handler       = "index.handler"
@@ -224,7 +278,7 @@ resource "aws_lambda_function" "user_progress" {
   timeout       = 30
   memory_size   = 256
 
-  source_code_hash = fileexists("${path.module}/../../backend/functions/user-progress.zip") ? filebase64sha256("${path.module}/../../backend/functions/user-progress.zip") : null
+  source_code_hash = data.archive_file.lambda_package["user_progress"].output_base64sha256
 
   environment {
     variables = {
@@ -398,35 +452,35 @@ resource "aws_api_gateway_integration" "user_progress_post" {
 # CORS Configuration for all resources
 module "cors_questions" {
   source = "../cors"
-  
+
   api_id      = aws_api_gateway_rest_api.main.id
   resource_id = aws_api_gateway_resource.questions.id
 }
 
 module "cors_auth_register" {
   source = "../cors"
-  
+
   api_id      = aws_api_gateway_rest_api.main.id
   resource_id = aws_api_gateway_resource.auth_register.id
 }
 
 module "cors_auth_login" {
   source = "../cors"
-  
+
   api_id      = aws_api_gateway_rest_api.main.id
   resource_id = aws_api_gateway_resource.auth_login.id
 }
 
 module "cors_user_profile" {
   source = "../cors"
-  
+
   api_id      = aws_api_gateway_rest_api.main.id
   resource_id = aws_api_gateway_resource.user_profile.id
 }
 
 module "cors_user_progress" {
   source = "../cors"
-  
+
   api_id      = aws_api_gateway_rest_api.main.id
   resource_id = aws_api_gateway_resource.user_progress.id
 }

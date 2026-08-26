@@ -1,8 +1,13 @@
 #!/bin/bash
-# Get all deployment URLs
+# Print deployment URLs from Terraform outputs.
 
-export AWS_PROFILE=magic-account
-cd "$(dirname "$0")/terraform"
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$SCRIPT_DIR/lib/env.sh"
+
+cd "$TERRAFORM_DIR"
 
 echo "🎉 Magic Cert v02 - Deployment URLs"
 echo "===================================="

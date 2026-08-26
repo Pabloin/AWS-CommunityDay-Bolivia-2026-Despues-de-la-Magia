@@ -3,13 +3,12 @@
 
 set -e
 
-export AWS_PROFILE=magic-account
-
-echo "🎨 Deploying frontend to S3..."
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-FRONTEND_DIR="$PROJECT_ROOT/../Magic_Cert_v01"
+FRONTEND_DIR="$PROJECT_ROOT/frontend"
+source "$SCRIPT_DIR/lib/env.sh"
+
+echo "🎨 Deploying frontend to S3..."
 
 # Get outputs from Terraform
 cd "$PROJECT_ROOT/terraform"
@@ -49,9 +48,9 @@ npm run build
 # Deploy to S3
 echo ""
 echo "☁️  Uploading to S3..."
-aws s3 sync dist/ "s3://$BUCKET_NAME" --delete --profile magic-account
+aws s3 sync dist/ "s3://$BUCKET_NAME" --delete
 
 echo ""
 echo "✅ Frontend deployed successfully!"
 echo ""
-echo "🌐 Website URL: http://$BUCKET_NAME.s3-website-us-east-1.amazonaws.com"
+echo "🌐 Website URL: http://$BUCKET_NAME.s3-website-$AWS_REGION.amazonaws.com"

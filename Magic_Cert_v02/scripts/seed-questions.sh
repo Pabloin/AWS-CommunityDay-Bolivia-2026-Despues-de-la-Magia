@@ -3,12 +3,11 @@
 
 set -e
 
-export AWS_PROFILE=magic-account
-
-echo "🌱 Seeding questions to DynamoDB..."
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$SCRIPT_DIR/lib/env.sh"
+
+echo "🌱 Seeding questions to DynamoDB..."
 
 # Get table name from Terraform output
 TABLE_NAME=$(cd "$PROJECT_ROOT/terraform" && terraform output -raw questions_table_name 2>/dev/null)
@@ -21,9 +20,9 @@ fi
 echo "Table: $TABLE_NAME"
 echo ""
 
-# Source data files
-BASIC_QUESTIONS="$PROJECT_ROOT/../Magic_Cert_v01/src/data/saa-c03-questions.json"
-EXTENDED_QUESTIONS="$PROJECT_ROOT/../Magic_Cert_v01/src/data/saa-c03-questions-extended.json"
+# Source data files (in scripts/seed-data)
+BASIC_QUESTIONS="$SCRIPT_DIR/seed-data/saa-c03-questions.json"
+EXTENDED_QUESTIONS="$SCRIPT_DIR/seed-data/saa-c03-questions-extended.json"
 
 # Create seed script
 cat > /tmp/seed-questions.js << 'SEEDSCRIPT'
@@ -38,24 +37,55 @@ const tableName = process.argv[2];
 const basicFile = process.argv[3];
 const extendedFile = process.argv[4];
 
+function loadQuestions(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return [];
+  }
+
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (Array.isArray(data.questions)) {
+    return data.questions;
+  }
+
+  throw new Error(`Unsupported question file format: ${filePath}`);
+}
+
+function getCorrectAnswers(question) {
+  if (Array.isArray(question.correctAnswer)) {
+    return question.correctAnswer;
+  }
+  if (question.correctAnswer) {
+    return [question.correctAnswer];
+  }
+  if (Array.isArray(question.correctAnswers)) {
+    return question.correctAnswers;
+  }
+  if (Array.isArray(question.options)) {
+    return question.options
+      .filter(option => option.isCorrect)
+      .map(option => option.id);
+  }
+
+  return [];
+}
+
 async function seedQuestions() {
   console.log('Loading questions...');
   
   let allQuestions = [];
   
   // Load basic questions
-  if (fs.existsSync(basicFile)) {
-    const basic = JSON.parse(fs.readFileSync(basicFile, 'utf8'));
-    allQuestions = allQuestions.concat(basic);
-    console.log(`Loaded ${basic.length} basic questions`);
-  }
+  const basic = loadQuestions(basicFile);
+  allQuestions = allQuestions.concat(basic);
+  console.log(`Loaded ${basic.length} basic questions`);
   
   // Load extended questions
-  if (fs.existsSync(extendedFile)) {
-    const extended = JSON.parse(fs.readFileSync(extendedFile, 'utf8'));
-    allQuestions = allQuestions.concat(extended);
-    console.log(`Loaded ${extended.length} extended questions`);
-  }
+  const extended = loadQuestions(extendedFile);
+  allQuestions = allQuestions.concat(extended);
+  console.log(`Loaded ${extended.length} extended questions`);
   
   console.log(`Total questions to seed: ${allQuestions.length}`);
   console.log('');
@@ -73,7 +103,7 @@ async function seedQuestions() {
     difficulty: q.difficulty || 'medium',
     question: q.question,
     options: q.options,
-    correctAnswers: Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer],
+    correctAnswers: getCorrectAnswers(q),
     explanation: q.explanation || '',
     references: q.references || [],
     tags: q.tags || [],

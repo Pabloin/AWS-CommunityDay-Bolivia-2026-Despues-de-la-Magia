@@ -3,7 +3,9 @@
 
 set -e
 
-export AWS_PROFILE=magic-account
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$SCRIPT_DIR/lib/env.sh"
 
 echo "🔥 Destroying Magic Cert v02 Infrastructure"
 echo ""
@@ -22,10 +24,6 @@ if [ "$CONFIRM" != "destroy" ]; then
   exit 0
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-TERRAFORM_DIR="$PROJECT_ROOT/terraform"
-
 cd "$TERRAFORM_DIR"
 
 # Get bucket name before destroying
@@ -34,7 +32,7 @@ BUCKET_NAME=$(terraform output -raw website_bucket_name 2>/dev/null || echo "")
 # Empty S3 bucket first (terraform can't destroy non-empty buckets)
 if [ -n "$BUCKET_NAME" ]; then
   echo "🗑️  Emptying S3 bucket: $BUCKET_NAME"
-  aws s3 rm "s3://$BUCKET_NAME" --recursive --profile magic-account 2>/dev/null || true
+  aws s3 rm "s3://$BUCKET_NAME" --recursive 2>/dev/null || true
 fi
 
 echo ""

@@ -84,7 +84,7 @@ output "tag_editor_url" {
 # Deployment info
 output "deployment_summary" {
   description = "Deployment summary"
-  value = <<-EOT
+  value       = <<-EOT
     
     ════════════════════════════════════════════════════════════
     Magic Cert v02 - Deployment Summary
@@ -118,8 +118,8 @@ output "deployment_summary" {
       - Tag Editor: ${module.resource_group.tag_editor_url}
     
     Next Steps:
-      1. Seed questions: ./scripts/seed-data.sh
-      2. Build frontend: cd ../Magic_Cert_v01 && npm run build
+      1. Seed questions: ./scripts/seed-questions.sh
+      2. Build frontend: cd ../frontend && npm run build
       3. Deploy frontend: ./scripts/deploy-frontend.sh
       4. Test: open ${module.frontend.website_url}
     

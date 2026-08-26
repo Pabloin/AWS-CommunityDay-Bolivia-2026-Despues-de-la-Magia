@@ -60,42 +60,48 @@ CloudWatch (Logs & Metrics)
 ### Prerequisites
 
 - AWS Account with admin permissions
-- AWS CLI configured with `magic-account` profile
+- AWS CLI configured with a local profile or environment credentials
 - Terraform >= 1.0
 - Node.js >= 18
 - Git
 
-### Step 1: Build Lambda Functions
+Create local, ignored environment/backend files for your machine:
+
+```bash
+cp terraform/backend.hcl.example terraform/backend.hcl
+cat > .env <<EOF
+AWS_PROFILE=your-profile-name
+AWS_REGION=us-east-1
+EOF
+```
+
+Update `terraform/backend.hcl` with your backend bucket, state key, region, lock table, and optional local profile. Direct Terraform commands must run with `AWS_PROFILE` set, or through the scripts that source `.env`.
+
+### Step 1: Deploy Infrastructure
 
 ```bash
 cd Magic_Cert_v02
 chmod +x scripts/*.sh
-./scripts/build-lambda-functions.sh
-```
-
-### Step 2: Deploy Infrastructure
-
-```bash
 ./scripts/deploy.sh
 ```
 
 This will:
-1. Build Lambda deployment packages
-2. Initialize Terraform
+1. Initialize Terraform
+2. Package Lambda functions deterministically from `backend/functions/*/package-lock.json`
 3. Show infrastructure plan
 4. Ask for confirmation
 5. Deploy all AWS resources
 6. Output deployment URLs
 
-### Step 3: Seed Questions
+### Step 2: Seed Questions
 
 ```bash
 ./scripts/seed-questions.sh
 ```
 
-Loads questions from v01 into DynamoDB.
+Loads questions from `scripts/seed-data/` into DynamoDB.
 
-### Step 4: Deploy Frontend
+### Step 3: Deploy Frontend
 
 ```bash
 ./scripts/deploy-frontend.sh
@@ -109,12 +115,20 @@ Builds and uploads React app to S3.
 
 ```
 Magic_Cert_v02/
+├── frontend/
+│   ├── src/                         # React app source
+│   ├── public/                      # Static frontend assets
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.ts
+│
 ├── terraform/
 │   ├── main.tf                    # Main configuration
 │   ├── variables.tf               # Input variables
 │   ├── outputs.tf                 # Output values
+│   ├── backend.hcl.example        # Remote state config template
 │   └── modules/
-│       ├── frontend/              # S3 static website
+│       ├── frontend/              # S3 static website infrastructure
 │       ├── database/              # DynamoDB tables
 │       ├── api/                   # API Gateway + Lambda
 │       ├── monitoring/            # CloudWatch
@@ -128,14 +142,15 @@ Magic_Cert_v02/
 │       └── user-progress/         # Progress tracking
 │
 ├── scripts/
-│   ├── build-lambda-functions.sh  # Build Lambda packages
+│   ├── lib/env.sh                 # Shared script environment loader
+│   ├── setup-backend.sh           # One-time remote state bootstrap
 │   ├── deploy.sh                  # Full deployment
 │   ├── seed-questions.sh          # Seed DynamoDB
 │   ├── deploy-frontend.sh         # Deploy to S3
+│   ├── get-urls.sh                # Print deployed URLs
 │   └── destroy.sh                 # Cleanup everything
 │
 ├── ARCHITECTURE_REQ.md            # Architecture requirements
-├── TAGGING_STRATEGY.md            # Tagging documentation
 └── README.md                      # This file
 ```
 
@@ -289,7 +304,7 @@ This opens the AWS Console showing:
 - Bulk operations
 - Presentation demos
 
-See `RESOURCE_GROUPS.md` for detailed documentation.
+See `ARCHITECTURE_REQ.md` for the tagging strategy and resource grouping details.
 
 ### CloudWatch Alarms
 
@@ -302,10 +317,10 @@ If `alert_email` is configured, you'll receive alerts for:
 
 ```bash
 # Questions function logs
-aws logs tail /aws/lambda/magic-cert-questions-production --follow --profile magic-account
+aws logs tail /aws/lambda/magic-cert-questions-production --follow
 
 # Auth function logs
-aws logs tail /aws/lambda/magic-cert-auth-production --follow --profile magic-account
+aws logs tail /aws/lambda/magic-cert-auth-production --follow
 ```
 
 ---
@@ -342,7 +357,6 @@ aws ce get-cost-and-usage \
   --granularity MONTHLY \
   --metrics "UnblendedCost" \
   --group-by Type=TAG,Key=Event \
-  --profile magic-account
 ```
 
 ---
@@ -351,11 +365,12 @@ aws ce get-cost-and-usage \
 
 ### Terraform Errors
 
-**Problem:** `Error: creating Lambda Function: InvalidParameterValueException`
+**Problem:** Lambda package creation fails during Terraform apply
 
-**Solution:** Build Lambda functions first:
+**Solution:** Check that Node.js/npm are installed locally and each function has a valid `package-lock.json`:
 ```bash
-./scripts/build-lambda-functions.sh
+npm --version
+ls backend/functions/*/package-lock.json
 ```
 
 **Problem:** `Error: creating S3 bucket: BucketAlreadyExists`
@@ -373,7 +388,6 @@ variable "project_name" {
 
 **Solution:** Check CloudWatch logs:
 ```bash
-aws logs tail /aws/lambda/magic-cert-FUNCTION-production --follow --profile magic-account
 ```
 
 Common issues:
@@ -424,11 +438,8 @@ If automatic cleanup fails:
 # List all resources by tag
 aws resourcegroupstaggingapi get-resources \
   --tag-filters Key=Event,Values=aws-cday-bolivia-2026 \
-  --profile magic-account
 
 # Delete specific resources manually
-aws s3 rb s3://BUCKET_NAME --force --profile magic-account
-aws dynamodb delete-table --table-name TABLE_NAME --profile magic-account
 ```
 
 ---
@@ -444,12 +455,11 @@ aws dynamodb delete-table --table-name TABLE_NAME --profile magic-account
 ### Update Lambda Functions
 
 1. Edit function code in `backend/functions/FUNCTION_NAME/`
-2. Run `./scripts/build-lambda-functions.sh`
-3. Run `terraform apply` to deploy updates
+2. Run `terraform apply` to package and deploy updates
 
 ### Update Frontend
 
-1. Edit v01 React app
+1. Edit the React app in `frontend/`
 2. Run `./scripts/deploy-frontend.sh`
 
 ---

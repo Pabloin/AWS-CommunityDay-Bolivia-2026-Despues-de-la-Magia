@@ -3,34 +3,31 @@
 
 set -e
 
-export AWS_PROFILE=magic-account
-export AWS_REGION=us-east-1
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+source "$SCRIPT_DIR/lib/env.sh"
 
 echo "🚀 Deploying Magic Cert v02..."
 echo "AWS Profile: $AWS_PROFILE"
 echo "AWS Region: $AWS_REGION"
 echo ""
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-TERRAFORM_DIR="$PROJECT_ROOT/terraform"
-
-# Step 1: Build Lambda functions
-echo "📦 Step 1: Building Lambda functions..."
-bash "$SCRIPT_DIR/build-lambda-functions.sh"
-
-# Step 2: Initialize Terraform
+# Step 1: Initialize Terraform
 echo ""
-echo "🔧 Step 2: Initializing Terraform..."
+echo "🔧 Step 1: Initializing Terraform..."
 cd "$TERRAFORM_DIR"
-terraform init
+if [ -f backend.hcl ]; then
+  terraform init -backend-config=backend.hcl
+else
+  terraform init
+fi
 
-# Step 3: Plan
+# Step 2: Plan
 echo ""
-echo "📋 Step 3: Planning infrastructure changes..."
+echo "📋 Step 2: Planning infrastructure changes..."
 terraform plan -out=tfplan
 
-# Step 4: Ask for confirmation
+# Step 3: Ask for confirmation
 echo ""
 read -p "🤔 Do you want to apply these changes? (yes/no): " CONFIRM
 
@@ -39,12 +36,12 @@ if [ "$CONFIRM" != "yes" ]; then
   exit 0
 fi
 
-# Step 5: Apply
+# Step 4: Apply
 echo ""
 echo "🏗️  Step 4: Applying infrastructure..."
 terraform apply tfplan
 
-# Step 6: Save outputs
+# Step 5: Save outputs
 echo ""
 echo "💾 Step 5: Saving outputs..."
 terraform output -json > "$PROJECT_ROOT/terraform-outputs.json"

@@ -29,6 +29,9 @@ pnpm-debug.log*
 
 # Environment variables
 .env
+.env.*
+!.env.example
+!.env.*.example
 .env.local
 .env.development.local
 .env.test.local
@@ -126,6 +129,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+!Magic_Cert_v02/scripts/lib/
+!Magic_Cert_v02/scripts/lib/env.sh
 lib64/
 parts/
 sdist/
@@ -435,9 +440,14 @@ tramp
 # Terraform
 *.tfstate
 *.tfstate.*
+tfplan
+*.tfplan
 *.tfvars
 .terraform/
-.terraform.lock.hcl
+.terraform-build/
+backend.hcl
+*.backend.hcl
+terraform-outputs.json
 override.tf
 override.tf.json
 *_override.tf

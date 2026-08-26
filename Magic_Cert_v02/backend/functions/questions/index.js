@@ -21,37 +21,13 @@ exports.handler = async (event) => {
     
     let questions = [];
     
-    if (domain === 'all') {
-      // Get all questions for certification
-      const params = {
-        TableName: TABLE_NAME,
-        IndexName: 'CertificationIndex',
-        KeyConditionExpression: 'certification = :cert',
-        ExpressionAttributeValues: {
-          ':cert': certification
-        }
-      };
-      
-      const result = await docClient.send(new QueryCommand(params));
-      questions = result.Items || [];
-    } else {
-      // Get questions for specific domain
-      const params = {
-        TableName: TABLE_NAME,
-        IndexName: 'CertificationIndex',
-        KeyConditionExpression: 'certification = :cert AND #domain = :dom',
-        ExpressionAttributeNames: {
-          '#domain': 'domain'
-        },
-        ExpressionAttributeValues: {
-          ':cert': certification,
-          ':dom': domain
-        }
-      };
-      
-      const result = await docClient.send(new QueryCommand(params));
-      questions = result.Items || [];
-    }
+    // Scan all questions (simple approach for demo)
+    const params = {
+      TableName: TABLE_NAME
+    };
+    
+    const result = await docClient.send(new ScanCommand(params));
+    questions = result.Items || [];
     
     // Shuffle and limit questions
     const shuffled = questions.sort(() => Math.random() - 0.5);

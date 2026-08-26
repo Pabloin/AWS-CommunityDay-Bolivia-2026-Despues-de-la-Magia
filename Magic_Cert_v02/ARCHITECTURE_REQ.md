@@ -303,7 +303,7 @@ Magic_Cert_v02/
 │   │   ├── dev/
 │   │   │   ├── main.tf
 │   │   │   ├── terraform.tfvars
-│   │   │   └── backend.tf
+│   │   │   └── backend.hcl
 │   │   ├── staging/
 │   │   └── production/
 │   │
@@ -321,8 +321,11 @@ Magic_Cert_v02/
 │
 └── scripts/
     ├── deploy.sh
+    ├── deploy-frontend.sh
     ├── destroy.sh
-    └── plan.sh
+    ├── get-urls.sh
+    ├── seed-questions.sh
+    └── setup-backend.sh
 ```
 
 **Required Variables:**
@@ -448,6 +451,46 @@ After deployment, activate cost allocation tags in AWS Billing console:
 2. Activate tags: `Event`, `Project`, `Owner`, `Environment`
 3. Wait 24 hours for tags to appear in Cost Explorer
 4. Filter costs by tag in Cost Explorer
+
+**Operational Tagging Checks:**
+
+Use tags to validate resource coverage and support cleanup after the demo:
+
+```bash
+# List all resources for this event
+aws resourcegroupstaggingapi get-resources \
+  --tag-filters Key=Event,Values=aws-cday-bolivia-2026 \
+  --output table
+
+# Count tagged resources
+aws resourcegroupstaggingapi get-resources \
+  --tag-filters Key=Event,Values=aws-cday-bolivia-2026 \
+  | jq '.ResourceTagMappingList | length'
+
+# Group tagged resources by AWS service
+aws resourcegroupstaggingapi get-resources \
+  --tag-filters Key=Project,Values=magic-certs-local2prod \
+  | jq '.ResourceTagMappingList | group_by(.ResourceARN | split(":")[2]) | map({service: .[0].ResourceARN | split(":")[2], count: length})'
+```
+
+**Component-Specific Tags:**
+
+| Resource Type | Additional Tags | Example Values |
+|---------------|-----------------|----------------|
+| Lambda Functions | `Component`, `Function` | `api`, `questions` |
+| DynamoDB Tables | `Component`, `DataType` | `database`, `questions` |
+| S3 Buckets | `Component`, `Purpose` | `frontend`, `static-website` |
+| API Gateway | `Component` | `api` |
+| CloudWatch Logs | `Component` | `logging` |
+
+**Tag Compliance Checklist:**
+
+- [ ] Provider configured with `default_tags`
+- [ ] Required tags defined: `Event`, `Project`, `Owner`, `Environment`, `ManagedBy`
+- [ ] Component-specific tags added where useful
+- [ ] Cost allocation tags activated in AWS Billing
+- [ ] Resource discovery command tested
+- [ ] Cleanup procedure documented
 
 ---
 
@@ -798,11 +841,11 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
-        working-directory: ./Magic_Cert_v01
+        working-directory: ./Magic_Cert_v02/frontend
       
       - name: Build
         run: npm run build
-        working-directory: ./Magic_Cert_v01
+        working-directory: ./Magic_Cert_v02/frontend
         env:
           VITE_API_URL: ${{ secrets.API_URL }}
       
@@ -815,7 +858,7 @@ jobs:
       - name: Deploy to S3
         run: |
           aws s3 sync ./dist s3://magic-cert-frontend --delete
-        working-directory: ./Magic_Cert_v01
+        working-directory: ./Magic_Cert_v02/frontend
       
       # Only for v03 with CloudFront
       # - name: Invalidate CloudFront
