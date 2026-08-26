@@ -1,0 +1,365 @@
+{
+  "certification": "SAA-C03",
+  "certificationName": "AWS Certified Solutions Architect - Associate",
+  "version": "C03",
+  "questions": [
+    {
+      "id": "saa-c03-001",
+      "certification": "SAA-C03",
+      "category": "Compute",
+      "subcategory": "EC2",
+      "difficulty": "easy",
+      "question": "A company needs to run a web application on EC2 instances. The application must be highly available and automatically scale based on demand. Which combination of AWS services should be used? (Choose TWO)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon EC2 Auto Scaling",
+          "isCorrect": true
+        },
+        {
+          "id": "b",
+          "text": "Elastic Load Balancing",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Amazon CloudFront",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Lambda",
+          "isCorrect": false
+        },
+        {
+          "id": "e",
+          "text": "Amazon ECS",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Amazon EC2 Auto Scaling automatically adjusts the number of EC2 instances based on demand, ensuring the application can handle varying loads. Elastic Load Balancing distributes incoming traffic across multiple EC2 instances, improving fault tolerance and availability. Together, these services provide high availability and automatic scaling.",
+      "references": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+      ],
+      "tags": ["high-availability", "auto-scaling", "load-balancing"]
+    },
+    {
+      "id": "saa-c03-002",
+      "certification": "SAA-C03",
+      "category": "Storage",
+      "subcategory": "S3",
+      "difficulty": "medium",
+      "question": "A solutions architect needs to design a storage solution for a company that stores millions of small files that are rarely accessed after 90 days. The company needs to minimize storage costs while ensuring the data remains accessible when needed. What is the MOST cost-effective solution?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Store files in S3 Standard and manually move them to S3 Glacier after 90 days",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use S3 Lifecycle policies to transition objects to S3 Glacier Flexible Retrieval after 90 days",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Store files directly in S3 Glacier Deep Archive",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use S3 Intelligent-Tiering for automatic cost optimization",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "S3 Lifecycle policies automate the transition of objects to different storage classes, eliminating manual intervention. Transitioning to S3 Glacier Flexible Retrieval after 90 days provides a balance between cost savings and retrieval time (minutes to hours). S3 Intelligent-Tiering would be less cost-effective for millions of small files due to monitoring fees. Storing directly in Deep Archive would make initial access slower than necessary.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html",
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+      ],
+      "tags": ["cost-optimization", "lifecycle-policies", "s3-glacier"]
+    },
+    {
+      "id": "saa-c03-003",
+      "certification": "SAA-C03",
+      "category": "Database",
+      "subcategory": "RDS",
+      "difficulty": "medium",
+      "question": "A company's database is experiencing high read traffic that is causing performance issues. The application performs many read-heavy queries but writes are infrequent. What is the BEST solution to improve performance?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Increase the size of the RDS instance",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Create Amazon RDS Read Replicas and distribute read traffic",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Enable Multi-AZ deployment",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Migrate to Amazon DynamoDB",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "RDS Read Replicas allow you to create read-only copies of your database that can serve read traffic, effectively distributing the load and improving performance. Increasing instance size addresses both read and write capacity but is more expensive. Multi-AZ is for high availability, not performance. Migrating to DynamoDB would be a major architectural change.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+      ],
+      "tags": ["read-replicas", "performance", "rds"]
+    },
+    {
+      "id": "saa-c03-004",
+      "certification": "SAA-C03",
+      "category": "Security",
+      "subcategory": "IAM",
+      "difficulty": "easy",
+      "question": "A company wants to grant temporary access to AWS resources for users who authenticate through their corporate identity provider. Which AWS service should be used?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS IAM Users with long-term credentials",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "AWS IAM Identity Center (formerly AWS SSO)",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Amazon Cognito User Pools",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Directory Service",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "AWS IAM Identity Center enables single sign-on access to AWS accounts and applications using corporate credentials. It supports federation with external identity providers (SAML 2.0) and provides temporary credentials. Cognito User Pools is for customer-facing applications. Long-term IAM credentials are less secure than temporary credentials. AWS Directory Service manages Active Directory but doesn't directly provide AWS access.",
+      "references": [
+        "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+      ],
+      "tags": ["identity-federation", "sso", "iam"]
+    },
+    {
+      "id": "saa-c03-005",
+      "certification": "SAA-C03",
+      "category": "Networking",
+      "subcategory": "VPC",
+      "difficulty": "hard",
+      "question": "A company has a VPC with public and private subnets across two Availability Zones. EC2 instances in private subnets need to download software updates from the internet without being directly accessible from the internet. What is the MOST secure and cost-effective solution?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy a NAT Gateway in each public subnet and update route tables in private subnets",
+          "isCorrect": true
+        },
+        {
+          "id": "b",
+          "text": "Attach an Internet Gateway directly to the private subnets",
+          "isCorrect": false
+        },
+        {
+          "id": "c",
+          "text": "Use a VPC Endpoint for all internet traffic",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Move instances to public subnets with security groups restricting inbound traffic",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "NAT Gateway allows instances in private subnets to initiate outbound connections to the internet while preventing inbound connections from the internet. Deploying one in each AZ ensures high availability. Internet Gateways cannot be attached to private subnets. VPC Endpoints only work for AWS services. Moving to public subnets exposes instances to potential internet threats even with security groups.",
+      "references": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+      ],
+      "tags": ["nat-gateway", "vpc", "private-subnet", "networking"]
+    },
+    {
+      "id": "saa-c03-006",
+      "certification": "SAA-C03",
+      "category": "Storage",
+      "subcategory": "EBS",
+      "difficulty": "medium",
+      "question": "An application requires a storage solution that provides consistent IOPS performance and low latency for a database workload. Which EBS volume type should be used?",
+      "options": [
+        {
+          "id": "a",
+          "text": "General Purpose SSD (gp3)",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Provisioned IOPS SSD (io2)",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Throughput Optimized HDD (st1)",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Cold HDD (sc1)",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Provisioned IOPS SSD (io2) volumes are designed for I/O-intensive workloads like databases that require consistent IOPS performance and low latency. They allow you to provision specific IOPS requirements. While gp3 can be suitable for many workloads, io2 provides the highest performance and consistency. HDD volumes (st1, sc1) are not suitable for database workloads requiring low latency.",
+      "references": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html"
+      ],
+      "tags": ["ebs", "storage", "iops", "database"]
+    },
+    {
+      "id": "saa-c03-007",
+      "certification": "SAA-C03",
+      "category": "Application Integration",
+      "subcategory": "SQS",
+      "difficulty": "medium",
+      "question": "A distributed application needs to decouple components to handle varying workloads independently. Messages must be processed exactly once, and the order of messages must be preserved. Which AWS service configuration meets these requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon SQS Standard Queue",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon SQS FIFO Queue",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Amazon SNS with multiple subscribers",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Kinesis Data Streams",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "SQS FIFO (First-In-First-Out) queues guarantee that messages are processed exactly once and in the exact order they are sent. Standard queues provide at-least-once delivery but don't guarantee order. SNS is for pub/sub messaging, not queuing. Kinesis is for real-time streaming data processing, not simple message queuing with order preservation.",
+      "references": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html"
+      ],
+      "tags": ["sqs", "fifo", "message-queue", "decoupling"]
+    },
+    {
+      "id": "saa-c03-008",
+      "certification": "SAA-C03",
+      "category": "Monitoring",
+      "subcategory": "CloudWatch",
+      "difficulty": "easy",
+      "question": "A company wants to be notified when the CPU utilization of their EC2 instances exceeds 80% for more than 5 minutes. Which AWS service should they use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS CloudTrail",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon CloudWatch Alarms",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "AWS Config",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon EventBridge",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "CloudWatch Alarms can monitor metrics like CPU utilization and trigger notifications (via SNS) when thresholds are breached. CloudTrail logs API calls. AWS Config tracks resource configuration changes. EventBridge handles event routing but CloudWatch Alarms is the direct solution for metric-based alerting.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html"
+      ],
+      "tags": ["cloudwatch", "monitoring", "alarms"]
+    },
+    {
+      "id": "saa-c03-009",
+      "certification": "SAA-C03",
+      "category": "Content Delivery",
+      "subcategory": "CloudFront",
+      "difficulty": "medium",
+      "question": "A global media company needs to deliver video content to users worldwide with low latency. The content is stored in an S3 bucket in us-east-1. What is the BEST solution to optimize content delivery?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable S3 Transfer Acceleration",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Create an Amazon CloudFront distribution with the S3 bucket as the origin",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Replicate the S3 bucket to multiple regions",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use AWS Global Accelerator",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "CloudFront is a content delivery network (CDN) that caches content at edge locations worldwide, providing low-latency access to users globally. S3 Transfer Acceleration is for faster uploads, not delivery. Cross-region replication would be more expensive and complex to manage. Global Accelerator is for optimizing network paths to applications, not content delivery.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+      ],
+      "tags": ["cloudfront", "cdn", "content-delivery", "global"]
+    },
+    {
+      "id": "saa-c03-010",
+      "certification": "SAA-C03",
+      "category": "Security",
+      "subcategory": "Encryption",
+      "difficulty": "hard",
+      "question": "A company must encrypt sensitive data at rest in S3 and maintain full control over the encryption keys, including the ability to rotate them. The company also needs to audit all key usage. Which solution meets these requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use S3-managed encryption keys (SSE-S3)",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use AWS KMS-managed keys (SSE-KMS) with customer managed keys",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Use client-side encryption before uploading to S3",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use AWS KMS with AWS-managed keys",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "SSE-KMS with customer managed keys (CMKs) provides full control over key management, including rotation policies, and integrates with CloudTrail for auditing key usage. SSE-S3 uses Amazon-managed keys without customer control. Client-side encryption provides control but lacks integrated auditing. AWS-managed KMS keys don't allow the same level of control and rotation as customer managed keys.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html",
+        "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
+      ],
+      "tags": ["encryption", "kms", "s3", "security", "compliance"]
+    }
+  ]
+}

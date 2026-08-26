@@ -1,0 +1,12 @@
+{
+  "name": "magic-cert-user-profile-function",
+  "version": "1.0.0",
+  "description": "Lambda function for user profile management",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.0.0",
+    "@aws-sdk/lib-dynamodb": "^3.0.0",
+    "@aws-sdk/client-secrets-manager": "^3.0.0",
+    "jsonwebtoken": "^9.0.0"
+  }
+}

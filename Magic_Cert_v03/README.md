@@ -1,8 +1,8 @@
-# Magic Cert v02 - AWS Serverless Deployment
+# Magic Cert v03 - AWS Serverless CI/CD
 
 ## 🎯 Overview
 
-Magic Cert v02 is the AWS serverless version of the quiz application, featuring:
+Magic Cert v03 keeps the v02 serverless runtime and adds a production-oriented delivery path:
 
 - **S3 Static Website** for frontend hosting (HTTP)
 - **API Gateway** for REST API endpoints
@@ -11,6 +11,8 @@ Magic Cert v02 is the AWS serverless version of the quiz application, featuring:
 - **CloudWatch** for monitoring and logging
 - **Terraform** for infrastructure as code
 - **Complete tagging** for cost tracking
+- **GitHub Actions** for Terraform plan/apply
+- **AWS OIDC** for short-lived CI credentials
 
 **Estimated Cost:** $5-7/month (development), $18-32/month (production with moderate traffic)
 
@@ -77,10 +79,23 @@ EOF
 
 Update `terraform/backend.hcl` with your backend bucket, state key, region, lock table, and optional local profile. Direct Terraform commands must run with `AWS_PROFILE` set, or through the scripts that source `.env`.
 
-### Step 1: Deploy Infrastructure
+### Step 1: Bootstrap GitHub OIDC
+
+This one-time step uses the local AWS profile from `.env` to create the GitHub OIDC provider and two roles:
 
 ```bash
-cd Magic_Cert_v02
+cp .env.example .env
+# Edit .env with the real GitHub owner/repository and state bucket.
+./scripts/bootstrap-oidc.sh
+```
+
+The plan role trusts Pull Requests. The apply role trusts only the protected GitHub `production` environment.
+Copy the output role ARNs into GitHub repository variables named `AWS_TERRAFORM_PLAN_ROLE_ARN` and `AWS_TERRAFORM_APPLY_ROLE_ARN`. Set `TF_STATE_BUCKET` as a repository variable too.
+
+### Step 2: Deploy Infrastructure Locally
+
+```bash
+cd Magic_Cert_v03
 chmod +x scripts/*.sh
 ./scripts/deploy.sh
 ```
@@ -93,7 +108,7 @@ This will:
 5. Deploy all AWS resources
 6. Output deployment URLs
 
-### Step 2: Seed Questions
+### Step 3: Seed Questions
 
 ```bash
 ./scripts/seed-questions.sh
@@ -101,7 +116,7 @@ This will:
 
 Loads questions from `scripts/seed-data/` into DynamoDB.
 
-### Step 3: Deploy Frontend
+### Step 4: Deploy Frontend
 
 ```bash
 ./scripts/deploy-frontend.sh
@@ -114,7 +129,7 @@ Builds and uploads React app to S3.
 ## 📁 Project Structure
 
 ```
-Magic_Cert_v02/
+Magic_Cert_v03/
 ├── frontend/
 │   ├── src/                         # React app source
 │   ├── index.html
@@ -122,6 +137,7 @@ Magic_Cert_v02/
 │   └── vite.config.ts
 │
 ├── terraform/
+│   ├── bootstrap-oidc/             # One-time GitHub federation stack
 │   ├── main.tf                    # Main configuration
 │   ├── variables.tf               # Input variables
 │   ├── outputs.tf                 # Output values
@@ -141,6 +157,7 @@ Magic_Cert_v02/
 │       └── user-progress/         # Progress tracking
 │
 ├── scripts/
+│   ├── bootstrap-oidc.sh           # Create OIDC provider and CI roles
 │   ├── lib/env.sh                 # Shared script environment loader
 │   ├── setup-backend.sh           # One-time remote state bootstrap
 │   ├── deploy.sh                  # Full deployment
@@ -149,9 +166,15 @@ Magic_Cert_v02/
 │   ├── get-urls.sh                # Print deployed URLs
 │   └── destroy.sh                 # Cleanup everything
 │
-├── ARCHITECTURE_REQ.md            # Architecture requirements
+├── ARQUITECTURA_REQ_V3.md         # v02 baseline plus v03 architecture
 └── README.md                      # This file
 ```
+
+## GitHub Actions
+
+The repository workflow lives at the repository root in `.github/workflows/magic-cert-v03-terraform.yml` because GitHub only discovers workflows from the root `.github/workflows` directory. Pull Requests run formatting, validation and a Terraform plan. Merges to `main` run apply through the protected `production` environment.
+
+OIDC uses temporary AWS credentials; no AWS access keys are stored in GitHub. The apply role intentionally has broad permissions for this conference demo and should be narrowed before production use.
 
 ---
 
@@ -165,7 +188,7 @@ Project:     magic-certs-local2prod
 Owner:       @pablo-ezequiel-inchausti
 Environment: production
 ManagedBy:   terraform
-Release:     magic-cert-v02
+Release:     magic-cert-v03
 ```
 
 **Cost Tracking:**
@@ -304,7 +327,7 @@ This opens the AWS Console showing:
 - Bulk operations
 - Presentation demos
 
-See `ARCHITECTURE_REQ.md` for the tagging strategy and resource grouping details.
+See `ARQUITECTURA_REQ_V3.md` for the v02 baseline, v03 CI/CD design, tagging strategy and resource grouping details.
 
 ### CloudWatch Alarms
 

@@ -32,7 +32,7 @@ provider "aws" {
       Environment = var.environment
       ManagedBy   = "terraform"
       Repository  = var.repository_url
-      Release     = "magic-cert-v02"
+      Release     = "magic-cert-v03"
     }
   }
 }
@@ -47,7 +47,7 @@ locals {
   region     = data.aws_region.current.name
 
   common_tags = {
-    Component = "magic-cert-v02"
+    Component = "magic-cert-v03"
   }
 }
 

@@ -1,0 +1,5 @@
+bucket         = "magic-cert-terraform-state-198804754422"
+key            = "v03/bootstrap-oidc.tfstate"
+region         = "us-east-1"
+dynamodb_table = "magic-cert-terraform-locks"
+encrypt        = true

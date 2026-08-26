@@ -1,0 +1,642 @@
+{
+  "certification": "SAA-C03",
+  "certificationName": "AWS Certified Solutions Architect - Associate",
+  "version": "C03",
+  "examDomains": [
+    {
+      "domainId": "domain1",
+      "domainName": "Design Secure Architectures",
+      "weight": "30%"
+    },
+    {
+      "domainId": "domain2",
+      "domainName": "Design Resilient Architectures",
+      "weight": "26%"
+    },
+    {
+      "domainId": "domain3",
+      "domainName": "Design High-Performing Architectures",
+      "weight": "24%"
+    },
+    {
+      "domainId": "domain4",
+      "domainName": "Design Cost-Optimized Architectures",
+      "weight": "20%"
+    }
+  ],
+  "questions": [
+    {
+      "id": "saa-c03-d1-001",
+      "certification": "SAA-C03",
+      "domain": "domain1",
+      "domainName": "Design Secure Architectures",
+      "category": "Security",
+      "subcategory": "IAM",
+      "difficulty": "medium",
+      "question": "A company needs to grant its development team access to AWS resources using their existing corporate Active Directory credentials. The solution must support multi-factor authentication and provide temporary credentials. Which solution meets these requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create IAM users for each developer and enable MFA",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use AWS IAM Identity Center (AWS SSO) with Active Directory as the identity source",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Set up AWS Directory Service AD Connector and create IAM roles",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use Amazon Cognito User Pools with SAML federation",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "AWS IAM Identity Center (formerly AWS SSO) provides the best solution as it supports federation with corporate Active Directory, enables MFA, and provides temporary credentials through SAML 2.0. It simplifies access management for multiple AWS accounts. Option C (AD Connector) would require additional configuration with IAM roles and doesn't provide the complete SSO experience. Cognito User Pools is designed for customer-facing applications, not corporate workforce authentication.",
+      "references": [
+        "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html",
+        "https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_ad_connector.html"
+      ],
+      "tags": ["iam", "sso", "identity-federation", "active-directory", "mfa"]
+    },
+    {
+      "id": "saa-c03-d1-002",
+      "certification": "SAA-C03",
+      "domain": "domain1",
+      "domainName": "Design Secure Architectures",
+      "category": "Security",
+      "subcategory": "Data Protection",
+      "difficulty": "hard",
+      "question": "A financial services company must encrypt all data at rest and in transit. They need to maintain full control over encryption keys, including the ability to import their own key material and set automatic key rotation. Which solution meets these requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use AWS managed keys (AWS-managed CMKs) in AWS KMS",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use customer managed keys (customer-managed CMKs) in AWS KMS",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Use AWS CloudHSM with custom encryption libraries",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use S3-managed encryption keys (SSE-S3)",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Customer managed keys (CMKs) in AWS KMS provide full control over encryption keys, including the ability to import key material, enable/disable keys, define key rotation policies, and set usage policies. AWS-managed keys don't allow key material import or custom rotation schedules. While CloudHSM provides dedicated hardware, it requires more management overhead and custom implementation. SSE-S3 uses AWS-managed keys without customer control.",
+      "references": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html",
+        "https://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html"
+      ],
+      "tags": ["kms", "encryption", "cmk", "key-management", "compliance"]
+    },
+    {
+      "id": "saa-c03-d1-003",
+      "certification": "SAA-C03",
+      "domain": "domain1",
+      "domainName": "Design Secure Architectures",
+      "category": "Networking",
+      "subcategory": "VPC",
+      "difficulty": "medium",
+      "question": "A company has a VPC with public and private subnets. EC2 instances in the private subnet need to download software updates from the internet without being directly accessible from the internet. What is the MOST secure solution?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Deploy a NAT Gateway in the public subnet and update the private subnet route table",
+          "isCorrect": true
+        },
+        {
+          "id": "b",
+          "text": "Move the EC2 instances to the public subnet and use security groups",
+          "isCorrect": false
+        },
+        {
+          "id": "c",
+          "text": "Create a VPC Peering connection to another VPC with internet access",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Attach an Internet Gateway directly to the private subnet",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "NAT Gateway allows instances in private subnets to initiate outbound connections to the internet while preventing inbound connections from the internet. It's managed by AWS, highly available, and scales automatically. Moving instances to public subnets exposes them to internet threats. Internet Gateways cannot be attached to private subnets. VPC Peering would add unnecessary complexity and still require a NAT solution.",
+      "references": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+      ],
+      "tags": ["vpc", "nat-gateway", "private-subnet", "security"]
+    },
+    {
+      "id": "saa-c03-d2-001",
+      "certification": "SAA-C03",
+      "domain": "domain2",
+      "domainName": "Design Resilient Architectures",
+      "category": "Compute",
+      "subcategory": "Auto Scaling",
+      "difficulty": "medium",
+      "question": "A web application experiences unpredictable traffic patterns with sudden spikes. The application must scale quickly to handle increased load and scale down during low traffic to minimize costs. Which combination provides the MOST cost-effective and responsive solution? (Choose TWO)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use target tracking scaling policy based on CPU utilization",
+          "isCorrect": true
+        },
+        {
+          "id": "b",
+          "text": "Use scheduled scaling actions",
+          "isCorrect": false
+        },
+        {
+          "id": "c",
+          "text": "Enable predictive scaling",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use Application Load Balancer with health checks",
+          "isCorrect": true
+        },
+        {
+          "id": "e",
+          "text": "Use manual scaling only",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Target tracking scaling adjusts capacity automatically to maintain a target metric (like CPU utilization), responding dynamically to actual demand. An Application Load Balancer with health checks ensures traffic is only routed to healthy instances and works seamlessly with Auto Scaling. Scheduled scaling works for predictable patterns, not unpredictable spikes. Predictive scaling is useful for recurring patterns. Manual scaling can't respond quickly to sudden changes.",
+      "references": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"
+      ],
+      "tags": ["auto-scaling", "high-availability", "alb", "target-tracking"]
+    },
+    {
+      "id": "saa-c03-d2-002",
+      "certification": "SAA-C03",
+      "domain": "domain2",
+      "domainName": "Design Resilient Architectures",
+      "category": "Database",
+      "subcategory": "RDS",
+      "difficulty": "hard",
+      "question": "A critical application uses Amazon RDS MySQL. The company requires automatic failover to a standby instance in case of primary instance failure, with minimal data loss and the ability to perform automated backups. Which deployment option should be used?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Single-AZ deployment with automated backups",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Multi-AZ deployment",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Read Replica in another Availability Zone",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Aurora Serverless",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Multi-AZ deployment automatically creates a synchronous standby replica in a different Availability Zone. In case of failure, RDS automatically fails over to the standby (typically within 60-120 seconds) with zero data loss due to synchronous replication. Automated backups are included. Read Replicas use asynchronous replication and don't provide automatic failover. Single-AZ lacks the standby instance. Aurora Serverless is a different database engine, not MySQL RDS configuration.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+      ],
+      "tags": ["rds", "multi-az", "high-availability", "failover", "disaster-recovery"]
+    },
+    {
+      "id": "saa-c03-d2-003",
+      "certification": "SAA-C03",
+      "domain": "domain2",
+      "domainName": "Design Resilient Architectures",
+      "category": "Storage",
+      "subcategory": "S3",
+      "difficulty": "medium",
+      "question": "A company needs to ensure that critical data stored in S3 is protected against accidental deletion and provides the ability to restore deleted objects. Which combination of S3 features should be implemented? (Choose TWO)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable S3 Versioning",
+          "isCorrect": true
+        },
+        {
+          "id": "b",
+          "text": "Enable S3 Object Lock",
+          "isCorrect": false
+        },
+        {
+          "id": "c",
+          "text": "Enable MFA Delete",
+          "isCorrect": true
+        },
+        {
+          "id": "d",
+          "text": "Use S3 Glacier storage class",
+          "isCorrect": false
+        },
+        {
+          "id": "e",
+          "text": "Enable Cross-Region Replication",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "S3 Versioning maintains multiple versions of objects, allowing recovery from accidental deletions and overwrites. MFA Delete adds an extra layer of protection by requiring multi-factor authentication to permanently delete object versions or change versioning state. Object Lock is for regulatory compliance requiring WORM (Write-Once-Read-Many). Glacier is a storage class, not a protection mechanism. CRR is for disaster recovery, not accidental deletion protection.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html",
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html"
+      ],
+      "tags": ["s3", "versioning", "mfa-delete", "data-protection", "resilience"]
+    },
+    {
+      "id": "saa-c03-d3-001",
+      "certification": "SAA-C03",
+      "domain": "domain3",
+      "domainName": "Design High-Performing Architectures",
+      "category": "Database",
+      "subcategory": "DynamoDB",
+      "difficulty": "medium",
+      "question": "An application requires single-digit millisecond latency for read operations on a DynamoDB table with unpredictable traffic patterns. Which solution provides the BEST performance?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable DynamoDB Auto Scaling",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use DynamoDB Accelerator (DAX)",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Increase provisioned read capacity units",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Enable DynamoDB Streams",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "DynamoDB Accelerator (DAX) is a fully managed, in-memory cache that delivers microsecond response times for read operations, significantly faster than DynamoDB's standard millisecond latency. Auto Scaling adjusts capacity but doesn't improve latency. Increasing RCUs improves throughput but not latency. DynamoDB Streams captures changes, not a performance enhancement for reads.",
+      "references": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html"
+      ],
+      "tags": ["dynamodb", "dax", "performance", "caching", "low-latency"]
+    },
+    {
+      "id": "saa-c03-d3-002",
+      "certification": "SAA-C03",
+      "domain": "domain3",
+      "domainName": "Design High-Performing Architectures",
+      "category": "Content Delivery",
+      "subcategory": "CloudFront",
+      "difficulty": "easy",
+      "question": "A media company hosts video content in an S3 bucket in us-east-1 and serves users globally. Users in Asia and Europe experience slow download speeds. What is the MOST effective solution to improve performance?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable S3 Transfer Acceleration",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Create an Amazon CloudFront distribution with the S3 bucket as origin",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Replicate the S3 bucket to regions in Asia and Europe",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Use Amazon Global Accelerator",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "CloudFront is a CDN that caches content at edge locations worldwide, providing low-latency access to users globally. It's specifically designed for content delivery with built-in integration with S3. Transfer Acceleration is for faster uploads to S3, not downloads. Cross-region replication would require complex routing logic. Global Accelerator is for improving availability and performance of applications, not static content delivery.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+      ],
+      "tags": ["cloudfront", "cdn", "s3", "global-delivery", "performance"]
+    },
+    {
+      "id": "saa-c03-d3-003",
+      "certification": "SAA-C03",
+      "domain": "domain3",
+      "domainName": "Design High-Performing Architectures",
+      "category": "Compute",
+      "subcategory": "EC2",
+      "difficulty": "hard",
+      "question": "A machine learning application requires high network throughput, low latency, and tightly-coupled node-to-node communication for distributed training. Which EC2 feature should be used?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enhanced Networking with Elastic Network Adapter (ENA)",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Placement Groups with cluster strategy",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Multiple Elastic Network Interfaces (ENIs)",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Elastic Fabric Adapter (EFA)",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Placement Groups with cluster strategy place instances in a single Availability Zone with low-latency, high-bandwidth connectivity (up to 25 Gbps), ideal for HPC and ML workloads requiring tightly-coupled communication. While ENA provides enhanced networking, and EFA provides even lower latency for MPI workloads, the cluster placement group provides the network proximity. Multiple ENIs don't improve inter-instance performance.",
+      "references": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html"
+      ],
+      "tags": ["ec2", "placement-groups", "hpc", "machine-learning", "network-performance"]
+    },
+    {
+      "id": "saa-c03-d4-001",
+      "certification": "SAA-C03",
+      "domain": "domain4",
+      "domainName": "Design Cost-Optimized Architectures",
+      "category": "Compute",
+      "subcategory": "EC2",
+      "difficulty": "medium",
+      "question": "A company runs a batch processing application that runs for 4 hours every night. The workload is flexible regarding when it runs and can tolerate interruptions. Which EC2 pricing model provides the LOWEST cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "On-Demand Instances",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Reserved Instances",
+          "isCorrect": false
+        },
+        {
+          "id": "c",
+          "text": "Spot Instances",
+          "isCorrect": true
+        },
+        {
+          "id": "d",
+          "text": "Savings Plans",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Spot Instances can provide up to 90% discount compared to On-Demand pricing and are ideal for flexible, interruptible workloads like batch processing. The workload's flexibility regarding timing and interruption tolerance makes it perfect for Spot. Reserved Instances require 1-3 year commitments. Savings Plans require commitment. On-Demand is the most expensive option.",
+      "references": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ],
+      "tags": ["ec2", "spot-instances", "cost-optimization", "batch-processing"]
+    },
+    {
+      "id": "saa-c03-d4-002",
+      "certification": "SAA-C03",
+      "domain": "domain4",
+      "domainName": "Design Cost-Optimized Architectures",
+      "category": "Storage",
+      "subcategory": "S3",
+      "difficulty": "medium",
+      "question": "A company stores millions of log files in S3. Files are frequently accessed for the first 30 days, occasionally accessed for the next 60 days, and rarely accessed after 90 days but must be retained for 7 years for compliance. What is the MOST cost-effective solution?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Store all files in S3 Standard",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use S3 Lifecycle policies to transition to S3 Standard-IA after 30 days, then to S3 Glacier after 90 days",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Use S3 Intelligent-Tiering for all objects",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Store directly in S3 Glacier Deep Archive",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "S3 Lifecycle policies automate transitions between storage classes. Moving to Standard-IA after 30 days (for occasional access) and Glacier after 90 days (for archival) optimizes costs based on access patterns. S3 Standard for 7 years would be very expensive. Intelligent-Tiering has monitoring fees that may not be cost-effective for predictable patterns. Glacier Deep Archive has long retrieval times unsuitable for first 90 days.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"
+      ],
+      "tags": ["s3", "lifecycle-policies", "cost-optimization", "storage-classes"]
+    },
+    {
+      "id": "saa-c03-d4-003",
+      "certification": "SAA-C03",
+      "domain": "domain4",
+      "domainName": "Design Cost-Optimized Architectures",
+      "category": "Compute",
+      "subcategory": "Lambda",
+      "difficulty": "easy",
+      "question": "A company has a web API that receives sporadic traffic with long periods of inactivity. The API performs simple data transformations. Which compute service provides the MOST cost-effective solution?",
+      "options": [
+        {
+          "id": "a",
+          "text": "EC2 instances with Auto Scaling",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "AWS Lambda",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "ECS with Fargate",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "EC2 Reserved Instances",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "AWS Lambda is ideal for sporadic workloads as you only pay for compute time used (per millisecond). There are no charges during idle periods. Lambda automatically scales and requires no infrastructure management. EC2 instances (even with Auto Scaling) incur costs when running even with no traffic. Reserved Instances require commitment. Fargate charges for vCPU and memory allocated, even if underutilized.",
+      "references": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+        "https://aws.amazon.com/lambda/pricing/"
+      ],
+      "tags": ["lambda", "serverless", "cost-optimization", "pay-per-use"]
+    },
+    {
+      "id": "saa-c03-d1-004",
+      "certification": "SAA-C03",
+      "domain": "domain1",
+      "domainName": "Design Secure Architectures",
+      "category": "Security",
+      "subcategory": "WAF",
+      "difficulty": "medium",
+      "question": "A web application behind an Application Load Balancer is experiencing SQL injection attacks and DDoS attacks. Which combination of AWS services provides the BEST protection? (Choose TWO)",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS WAF with managed rule groups",
+          "isCorrect": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Shield Standard",
+          "isCorrect": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Shield Advanced",
+          "isCorrect": true
+        },
+        {
+          "id": "d",
+          "text": "Amazon GuardDuty",
+          "isCorrect": false
+        },
+        {
+          "id": "e",
+          "text": "AWS Security Hub",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "AWS WAF protects against web exploits like SQL injection using managed rule groups and custom rules. AWS Shield Advanced provides enhanced DDoS protection for ALB, CloudFront, and Route 53, including 24/7 DDoS Response Team support. Shield Standard (included free) provides basic DDoS protection. GuardDuty detects threats but doesn't actively block them. Security Hub aggregates security findings but doesn't provide protection.",
+      "references": [
+        "https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html",
+        "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html"
+      ],
+      "tags": ["waf", "shield", "ddos", "sql-injection", "application-security"]
+    },
+    {
+      "id": "saa-c03-d2-004",
+      "certification": "SAA-C03",
+      "domain": "domain2",
+      "domainName": "Design Resilient Architectures",
+      "category": "Application Integration",
+      "subcategory": "SQS",
+      "difficulty": "medium",
+      "question": "An application processes orders and must ensure each order is processed exactly once and in the order received. Which AWS service configuration meets these requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon SQS Standard Queue",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon SQS FIFO Queue",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Amazon SNS with multiple subscribers",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Kinesis Data Streams",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "SQS FIFO queues guarantee exactly-once processing and preserve message order using message deduplication IDs and sequence numbers. Standard queues provide at-least-once delivery but don't guarantee order. SNS is pub/sub, not queuing. Kinesis is for real-time streaming data processing with at-least-once delivery semantics.",
+      "references": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/FIFO-queues.html"
+      ],
+      "tags": ["sqs", "fifo", "exactly-once", "message-ordering", "application-integration"]
+    },
+    {
+      "id": "saa-c03-d3-004",
+      "certification": "SAA-C03",
+      "domain": "domain3",
+      "domainName": "Design High-Performing Architectures",
+      "category": "Storage",
+      "subcategory": "EFS",
+      "difficulty": "medium",
+      "question": "A company needs shared file storage that can be accessed concurrently by multiple EC2 instances across multiple Availability Zones. The storage must support NFS protocol. Which solution meets these requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon EBS Multi-Attach volumes",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon EFS",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Amazon S3 with POSIX file system interface",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon FSx for Windows File Server",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Amazon EFS is a fully managed, elastic NFS file system that can be accessed concurrently by thousands of EC2 instances across multiple AZs. EBS Multi-Attach only supports specific instance types in the same AZ and is limited to 16 instances. S3 is object storage, not NFS. FSx for Windows uses SMB protocol, not NFS.",
+      "references": [
+        "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html"
+      ],
+      "tags": ["efs", "nfs", "shared-storage", "multi-az", "concurrent-access"]
+    },
+    {
+      "id": "saa-c03-d4-004",
+      "certification": "SAA-C03",
+      "domain": "domain4",
+      "domainName": "Design Cost-Optimized Architectures",
+      "category": "Database",
+      "subcategory": "RDS",
+      "difficulty": "hard",
+      "question": "A development team runs multiple non-production RDS database instances that are only used during business hours (8 AM - 6 PM, Monday-Friday). Which approach provides the MOST cost savings?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use Reserved Instances for all databases",
+          "isCorrect": false
+        },
+        {
+          "id": "b",
+          "text": "Use AWS Lambda to stop instances at 6 PM and start at 8 AM on weekdays",
+          "isCorrect": true
+        },
+        {
+          "id": "c",
+          "text": "Use RDS Proxy to share connections",
+          "isCorrect": false
+        },
+        {
+          "id": "d",
+          "text": "Migrate to Aurora Serverless",
+          "isCorrect": false
+        }
+      ],
+      "explanation": "Stopping RDS instances when not in use (nights and weekends) saves approximately 60-70% of costs as you only pay for storage, not compute. Lambda with EventBridge rules can automate this. Reserved Instances require 24/7 running to get value. RDS Proxy optimizes connections but doesn't reduce instance costs. Aurora Serverless has minimum capacity charges and is better for unpredictable workloads, not scheduled downtime.",
+      "references": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html"
+      ],
+      "tags": ["rds", "cost-optimization", "automation", "scheduled-scaling", "lambda"]
+    }
+  ]
+}
