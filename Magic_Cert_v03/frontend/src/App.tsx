@@ -17,7 +17,7 @@ function VersionBadge() {
   return (
     <div className="version-badge" aria-label="Application version">
       <span className="version-badge-main">v03</span>
-      <span className="version-badge-detail">Serverless + OIDC + Bedrock</span>
+      <span className="version-badge-detail">Serverless + GitHub Actions + OIDC + Bedrock</span>
       <span className="version-badge-stack">S3 + API Gateway + Lambda + DynamoDB + Nova</span>
     </div>
   );
