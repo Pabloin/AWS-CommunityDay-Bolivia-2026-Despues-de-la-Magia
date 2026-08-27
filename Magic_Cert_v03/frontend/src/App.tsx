@@ -23,6 +23,78 @@ function VersionBadge() {
   );
 }
 
+function renderInlineMarkdown(value: string) {
+  const parts = value.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return <code key={index}>{part.slice(1, -1)}</code>;
+    }
+
+    return <span key={index}>{part}</span>;
+  });
+}
+
+function MarkdownContent({ content }: { content: string }) {
+  const lines = content.replace(/\r/g, '').split('\n');
+  const blocks: JSX.Element[] = [];
+  let paragraph: string[] = [];
+  let list: string[] = [];
+
+  const flushParagraph = () => {
+    if (paragraph.length) {
+      blocks.push(<p key={`paragraph-${blocks.length}`}>{renderInlineMarkdown(paragraph.join(' '))}</p>);
+      paragraph = [];
+    }
+  };
+
+  const flushList = () => {
+    if (list.length) {
+      blocks.push(
+        <ul key={`list-${blocks.length}`}>
+          {list.map((item, index) => <li key={index}>{renderInlineMarkdown(item)}</li>)}
+        </ul>
+      );
+      list = [];
+    }
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    const heading = trimmed.match(/^(#{2,4})\s+(.+)$/);
+    const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+    } else if (heading) {
+      flushParagraph();
+      flushList();
+      const Heading = heading[1].length === 2 ? 'h4' : 'h5';
+      blocks.push(<Heading key={`heading-${index}`}>{renderInlineMarkdown(heading[2])}</Heading>);
+    } else if (trimmed === '---') {
+      flushParagraph();
+      flushList();
+      blocks.push(<hr key={`rule-${index}`} />);
+    } else if (bullet) {
+      flushParagraph();
+      list.push(bullet[1]);
+    } else {
+      flushList();
+      paragraph.push(trimmed);
+    }
+  });
+
+  flushParagraph();
+  flushList();
+
+  return <div className="markdown-content">{blocks}</div>;
+}
+
 function App() {
   // Quiz mode state
   const [mode, setMode] = useState<QuizMode>('welcome');
@@ -587,7 +659,7 @@ function App() {
               {aiExplanation && (
                 <div className="ai-explanation">
                   <h3>Amazon Nova explanation</h3>
-                  <p>{aiExplanation}</p>
+                  <MarkdownContent content={aiExplanation} />
                 </div>
               )}
               {aiError && <p className="ai-error">{aiError}</p>}
