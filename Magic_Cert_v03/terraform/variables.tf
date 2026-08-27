@@ -81,7 +81,7 @@ variable "bedrock_region" {
 variable "bedrock_model_id" {
   description = "Amazon Bedrock model ID used by Magic Cert AI endpoints."
   type        = string
-  default     = "amazon.nova-lite-v1:0"
+  default     = "amazon.nova-micro-v1:0"
 }
 
 variable "ai_daily_quota_per_user" {

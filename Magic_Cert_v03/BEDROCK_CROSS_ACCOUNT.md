@@ -95,7 +95,7 @@ Set the returned Bedrock role ARN in the Magic Cert app account deployment. The 
 export TF_VAR_bedrock_role_arn="arn:aws:iam::123456789012:role/MagicCertBedrockInvokeRole"
 export TF_VAR_bedrock_role_external_id="replace-with-shared-external-id"
 export TF_VAR_bedrock_region="us-east-1"
-export TF_VAR_bedrock_model_id="amazon.nova-lite-v1:0"
+export TF_VAR_bedrock_model_id="amazon.nova-micro-v1:0"
 export TF_VAR_ai_daily_quota_per_user="20"
 ```
 
