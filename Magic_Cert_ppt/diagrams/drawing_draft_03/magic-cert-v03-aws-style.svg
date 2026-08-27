@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img">
+  <defs>
+    <style>text { font-family: Amazon Ember, Arial, Helvetica, sans-serif; }</style>
+    <marker id="arrow" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto">
+      <path d="M0,0 L11,4 L0,8 Z" fill="#414D5C"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="900" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="1600" height="16" fill="#232F3E"/>
+  <rect x="0" y="16" width="1600" height="5" fill="#FF9900"/>
+  <text x="80" y="70" font-size="13" font-weight="900" fill="#FF9900" letter-spacing="2">VERSION 03 / DELIVERY + AI</text>
+  <text x="80" y="118" font-size="39" font-weight="900" fill="#161E2D" text-anchor="start">Magic Cert v03: delivery controlado y practica con IA</text>
+  <text x="80" y="154" font-size="19" font-weight="600" fill="#5F6B7A" text-anchor="start">El runtime serverless se mantiene; GitHub OIDC elimina credenciales largas y Bedrock agrega explicaciones con IA.</text>
+  
+    
+    <g>
+      <rect x="1234" y="78" width="168" height="32" rx="16" fill="#FF9900"/>
+      <text x="1318" y="100" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">~$20-30/month+</text>
+    </g>
+    
+    <g>
+      <rect x="80" y="205" width="410" height="440" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="80" y="205" width="10" height="440" fill="#FF9900"/>
+      <text x="104" y="235" font-size="17" font-weight="800" fill="#161E2D">Ruta runtime</text>
+      <text x="466" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">TRAFICO</text>
+    </g>
+    
+    <g>
+      <rect x="116" y="278" width="338" height="132" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="116" y="278" width="338" height="7" fill="#7AA116"/>
+      <image href="assets/aws-icons/amazon-s3.svg" x="136" y="314" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="224" y="320" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Amazon S3</text>
+      <text x="224" y="345" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Frontend hosting</text>
+      <circle cx="224" cy="373" r="3.5" fill="#879196"/>
+<text x="239" y="379" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Assets React/Vite</text>
+    </g>
+    
+    <g>
+      <rect x="116" y="442" width="338" height="132" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="116" y="442" width="338" height="7" fill="#8C4FFF"/>
+      <image href="assets/aws-icons/amazon-api-gateway.svg" x="136" y="478" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="224" y="484" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">API Gateway</text>
+      <text x="224" y="509" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">REST HTTPS</text>
+      <circle cx="224" cy="537" r="3.5" fill="#879196"/>
+<text x="239" y="543" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">auth/questions/progress/AI</text>
+    </g>
+
+    
+    <g>
+      <rect x="590" y="205" width="430" height="440" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="590" y="205" width="10" height="440" fill="#ED7100"/>
+      <text x="614" y="235" font-size="17" font-weight="800" fill="#161E2D">Backend aplicacion</text>
+      <text x="996" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">SERVERLESS</text>
+    </g>
+    
+    <g>
+      <rect x="636" y="278" width="338" height="142" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="636" y="278" width="338" height="7" fill="#ED7100"/>
+      <image href="assets/aws-icons/aws-lambda.svg" x="656" y="314" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="744" y="320" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">AWS Lambda</text>
+      <text x="744" y="345" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">5 funciones</text>
+      <circle cx="744" cy="373" r="3.5" fill="#879196"/>
+<text x="759" y="379" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">questions/auth/profile/progress</text>
+<circle cx="744" cy="399" r="3.5" fill="#879196"/>
+<text x="759" y="405" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">ai-practice</text>
+    </g>
+    
+    <g>
+      <rect x="636" y="458" width="338" height="142" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="636" y="458" width="338" height="7" fill="#C925D1"/>
+      <image href="assets/aws-icons/amazon-dynamodb.svg" x="656" y="494" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="744" y="500" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">DynamoDB + Secrets</text>
+      <text x="744" y="525" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Estado y JWT</text>
+      <circle cx="744" cy="553" r="3.5" fill="#879196"/>
+<text x="759" y="559" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">users/questions/progress</text>
+<circle cx="744" cy="579" r="3.5" fill="#879196"/>
+<text x="759" y="585" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">sessions TTL + JWT secret</text>
+    </g>
+
+    
+    <g>
+      <rect x="1110" y="205" width="410" height="440" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1110" y="205" width="10" height="440" fill="#01A88D"/>
+      <text x="1134" y="235" font-size="17" font-weight="800" fill="#161E2D">Cuenta de IA</text>
+      <text x="1496" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">CROSS-ACCOUNT</text>
+    </g>
+    
+    <g>
+      <rect x="1150" y="278" width="330" height="132" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1150" y="278" width="330" height="7" fill="#DD344C"/>
+      <image href="assets/aws-icons/aws-sts.svg" x="1170" y="314" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="1258" y="320" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">AWS STS</text>
+      <text x="1258" y="345" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">AssumeRole</text>
+      <circle cx="1258" cy="373" r="3.5" fill="#879196"/>
+<text x="1273" y="379" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Rol externo Bedrock</text>
+    </g>
+    
+    <g>
+      <rect x="1150" y="442" width="330" height="132" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1150" y="442" width="330" height="7" fill="#01A88D"/>
+      <image href="assets/aws-icons/amazon-bedrock.svg" x="1170" y="478" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="1258" y="484" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Amazon Bedrock</text>
+      <text x="1258" y="509" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Explicaciones IA</text>
+      <circle cx="1258" cy="537" r="3.5" fill="#879196"/>
+<text x="1273" y="543" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Amazon Nova default</text>
+<circle cx="1258" cy="563" r="3.5" fill="#879196"/>
+<text x="1273" y="569" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Anthropic opcional</text>
+    </g>
+
+    
+    <line x1="286" y1="410" x2="286" y2="442" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="218" y="403" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="286" y="421" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">HTTPS API</text>
+    
+    <line x1="454" y1="508" x2="636" y2="348" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="477" y="405" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="545" y="423" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">invoke</text>
+    
+    <line x1="805" y1="420" x2="805" y2="458" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="737" y="416" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="805" y="434" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">state</text>
+    
+    <line x1="974" y1="348" x2="1150" y2="344" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="994" y="323" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="1062" y="341" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">assume role</text>
+    
+    <line x1="1315" y1="410" x2="1315" y2="442" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="1247" y="403" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="1315" y="421" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">invoke model</text>
+
+    <rect x="80" y="682" width="1440" height="118" rx="4" fill="#232F3E"/>
+    <rect x="80" y="682" width="12" height="118" fill="#FF9900"/>
+    
+    <g>
+      <rect x="124" y="714" width="44" height="44" rx="8" fill="#24292F"/>
+      <text x="146" y="744" font-size="14" font-weight="800" fill="#FFFFFF" text-anchor="middle">GH</text>
+    </g>
+    <text x="184" y="730" font-size="18" font-weight="900" fill="#FFFFFF" text-anchor="start">GitHub Actions</text>
+    <text x="184" y="762" font-size="16" font-weight="600" fill="#D5DBDB" text-anchor="start">OIDC entrega credenciales temporales; los PR ejecutan terraform plan read-only; solo el ambiente production</text>
+<text x="184" y="783" font-size="16" font-weight="600" fill="#D5DBDB" text-anchor="start">protegido puede asumir el rol de apply.</text>
+    <image href="assets/aws-icons/aws-iam.svg" x="1170" y="706" width="52" height="52" preserveAspectRatio="xMidYMid meet"/>
+    
+    <g>
+      <rect x="1250" y="706" width="52" height="52" rx="8" fill="#844FBA"/>
+      <text x="1276" y="740" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">TF</text>
+    </g>
+    <text x="1322" y="738" font-size="17" font-weight="900" fill="#FFFFFF" text-anchor="start">Sin access keys</text>
+    <text x="80" y="854" font-size="12" font-weight="600" fill="#687078">v03 agrega GitHub OIDC, rol apply protegido, Lambda ai-practice, STS cross-account y Amazon Bedrock.</text>
+  
+</svg>

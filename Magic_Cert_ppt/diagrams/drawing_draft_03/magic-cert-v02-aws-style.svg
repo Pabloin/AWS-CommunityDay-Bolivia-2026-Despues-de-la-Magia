@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img">
+  <defs>
+    <style>text { font-family: Amazon Ember, Arial, Helvetica, sans-serif; }</style>
+    <marker id="arrow" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto">
+      <path d="M0,0 L11,4 L0,8 Z" fill="#414D5C"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="900" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="1600" height="16" fill="#232F3E"/>
+  <rect x="0" y="16" width="1600" height="5" fill="#FF9900"/>
+  <text x="80" y="70" font-size="13" font-weight="900" fill="#FF9900" letter-spacing="2">VERSION 02 / SERVERLESS MVP</text>
+  <text x="80" y="118" font-size="39" font-weight="900" fill="#161E2D" text-anchor="start">Magic Cert v02: MVP serverless en AWS</text>
+  <text x="80" y="154" font-size="19" font-weight="600" fill="#5F6B7A" text-anchor="start">El prototipo de browser se convierte en un sistema desplegable con API, compute, persistencia, secretos y monitoreo.</text>
+  
+    
+    <g>
+      <rect x="1258" y="78" width="168" height="32" rx="16" fill="#FF9900"/>
+      <text x="1342" y="100" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">~$5-10/month</text>
+    </g>
+    
+    <g>
+      <rect x="80" y="205" width="300" height="420" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="80" y="205" width="10" height="420" fill="#545B64"/>
+      <text x="104" y="235" font-size="17" font-weight="800" fill="#161E2D">Usuarios</text>
+      <text x="356" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">CLIENTE</text>
+    </g>
+    
+    <g>
+      <rect x="116" y="304" width="230" height="166" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="116" y="304" width="230" height="7" fill="#545B64"/>
+      
+    <g>
+      <rect x="136" y="340" width="70" height="70" rx="8" fill="#545B64"/>
+      <text x="171" y="383" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">WEB</text>
+    </g>
+      <text x="224" y="346" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Cliente web</text>
+      <text x="224" y="371" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">React app</text>
+      <circle cx="224" cy="399" r="3.5" fill="#879196"/>
+<text x="239" y="405" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Registro/login</text>
+<circle cx="224" cy="425" r="3.5" fill="#879196"/>
+<text x="239" y="431" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Examen practico</text>
+<circle cx="224" cy="451" r="3.5" fill="#879196"/>
+<text x="239" y="457" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Progreso</text>
+    </g>
+
+    
+    <g>
+      <rect x="450" y="205" width="300" height="420" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="450" y="205" width="10" height="420" fill="#7AA116"/>
+      <text x="474" y="235" font-size="17" font-weight="800" fill="#161E2D">Frontend</text>
+      <text x="726" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">PUBLICO</text>
+    </g>
+    
+    <g>
+      <rect x="486" y="304" width="230" height="166" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="486" y="304" width="230" height="7" fill="#7AA116"/>
+      <image href="assets/aws-icons/amazon-s3.svg" x="506" y="340" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="594" y="346" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Amazon S3</text>
+      <text x="594" y="371" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Static website</text>
+      <circle cx="594" cy="399" r="3.5" fill="#879196"/>
+<text x="609" y="405" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Assets publicos</text>
+<circle cx="594" cy="425" r="3.5" fill="#879196"/>
+<text x="609" y="431" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sitio HTTP demo</text>
+<circle cx="594" cy="451" r="3.5" fill="#879196"/>
+<text x="609" y="457" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Upload por script</text>
+    </g>
+
+    
+    <g>
+      <rect x="820" y="205" width="300" height="420" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="820" y="205" width="10" height="420" fill="#ED7100"/>
+      <text x="844" y="235" font-size="17" font-weight="800" fill="#161E2D">Backend</text>
+      <text x="1096" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">API + COMPUTE</text>
+    </g>
+    
+    <g>
+      <rect x="856" y="256" width="230" height="148" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="856" y="256" width="230" height="7" fill="#8C4FFF"/>
+      <image href="assets/aws-icons/amazon-api-gateway.svg" x="876" y="292" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="964" y="298" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">API Gateway</text>
+      <text x="964" y="323" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">REST HTTPS</text>
+      <circle cx="964" cy="351" r="3.5" fill="#879196"/>
+<text x="979" y="357" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Rutas auth</text>
+<circle cx="964" cy="377" r="3.5" fill="#879196"/>
+<text x="979" y="383" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Rutas questions</text>
+    </g>
+    
+    <g>
+      <rect x="856" y="444" width="230" height="148" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="856" y="444" width="230" height="7" fill="#ED7100"/>
+      <image href="assets/aws-icons/aws-lambda.svg" x="876" y="480" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="964" y="486" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">AWS Lambda</text>
+      <text x="964" y="511" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Handlers Node.js</text>
+      <circle cx="964" cy="539" r="3.5" fill="#879196"/>
+<text x="979" y="545" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">questions</text>
+<circle cx="964" cy="565" r="3.5" fill="#879196"/>
+<text x="979" y="571" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">auth/profile/progress</text>
+    </g>
+
+    
+    <g>
+      <rect x="1190" y="205" width="330" height="420" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1190" y="205" width="10" height="420" fill="#C925D1"/>
+      <text x="1214" y="235" font-size="17" font-weight="800" fill="#161E2D">Datos y operacion</text>
+      <text x="1496" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">MANAGED</text>
+    </g>
+    
+    <g>
+      <rect x="1226" y="246" width="258" height="142" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1226" y="246" width="258" height="7" fill="#C925D1"/>
+      <image href="assets/aws-icons/amazon-dynamodb.svg" x="1246" y="282" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="1334" y="288" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">DynamoDB</text>
+      <text x="1334" y="313" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Tablas on-demand</text>
+      <circle cx="1334" cy="341" r="3.5" fill="#879196"/>
+<text x="1349" y="347" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">questions/users</text>
+<circle cx="1334" cy="367" r="3.5" fill="#879196"/>
+<text x="1349" y="373" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">progress/sessions</text>
+    </g>
+    
+    <g>
+      <rect x="1226" y="414" width="258" height="142" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1226" y="414" width="258" height="7" fill="#DD344C"/>
+      <image href="assets/aws-icons/aws-secrets-manager.svg" x="1246" y="450" width="70" height="70" preserveAspectRatio="xMidYMid meet"/>
+      <text x="1334" y="456" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Secrets + CloudWatch</text>
+      <text x="1334" y="481" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Seguridad y</text>
+<text x="1334" y="498" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">observabilidad</text>
+      <circle cx="1334" cy="509" r="3.5" fill="#879196"/>
+<text x="1349" y="515" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">JWT secret</text>
+<circle cx="1334" cy="535" r="3.5" fill="#879196"/>
+<text x="1349" y="541" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Logs, dashboard, alarms</text>
+    </g>
+
+    
+    <line x1="346" y1="388" x2="486" y2="388" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="348" y="365" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="416" y="383" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">HTTP</text>
+    
+    <line x1="716" y1="388" x2="856" y2="330" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="718" y="336" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="786" y="354" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">HTTPS</text>
+    
+    <line x1="971" y1="404" x2="971" y2="444" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="903" y="401" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="971" y="419" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">invoke</text>
+    
+    <line x1="1086" y1="510" x2="1226" y2="316" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="1088" y="390" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="1156" y="408" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">read/write</text>
+    
+    <line x1="1086" y1="530" x2="1226" y2="484" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="1088" y="484" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="1156" y="502" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">logs/secret</text>
+
+    <rect x="80" y="696" width="1440" height="102" rx="4" fill="#F2F3F3" stroke="#D5DBDB"/>
+    <text x="112" y="731" font-size="18" font-weight="900" fill="#161E2D" text-anchor="start">Tradeoff del MVP</text>
+    <text x="112" y="764" font-size="18" font-weight="600" fill="#414D5C" text-anchor="start">S3 website hosting mantiene simple la historia de costos, pero el frontend queda en HTTP. API Gateway sigue en HTTPS. Sirve</text>
+<text x="112" y="787" font-size="18" font-weight="600" fill="#414D5C" text-anchor="start">para demo; no para login productivo real.</text>
+    <text x="80" y="854" font-size="12" font-weight="600" fill="#687078">Servicios v02: S3, API Gateway, Lambda, DynamoDB, Secrets Manager, CloudWatch e infraestructura Terraform.</text>
+  
+</svg>

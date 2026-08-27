@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img">
+  <defs>
+    <style>text { font-family: Amazon Ember, Arial, Helvetica, sans-serif; }</style>
+    <marker id="arrow" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto">
+      <path d="M0,0 L11,4 L0,8 Z" fill="#414D5C"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="900" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="1600" height="16" fill="#232F3E"/>
+  <rect x="0" y="16" width="1600" height="5" fill="#FF9900"/>
+  <text x="80" y="70" font-size="13" font-weight="900" fill="#FF9900" letter-spacing="2">VERSION 01 / LOCAL</text>
+  <text x="80" y="118" font-size="39" font-weight="900" fill="#161E2D" text-anchor="start">Magic Cert v01: prototipo local generado con IA</text>
+  <text x="80" y="154" font-size="19" font-weight="600" fill="#5F6B7A" text-anchor="start">La aplicacion funciona, pero todo vive dentro del browser y la maquina del desarrollador.</text>
+  
+    
+    <g>
+      <rect x="1296" y="78" width="168" height="32" rx="16" fill="#1D8102"/>
+      <text x="1380" y="100" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">$0/month</text>
+    </g>
+    
+    <g>
+      <rect x="80" y="205" width="420" height="440" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="80" y="205" width="10" height="440" fill="#879196"/>
+      <text x="104" y="235" font-size="17" font-weight="800" fill="#161E2D">Maquina del desarrollador</text>
+      <text x="476" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">LOCAL</text>
+    </g>
+    
+    <g>
+      <rect x="126" y="278" width="330" height="156" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="126" y="278" width="330" height="7" fill="#545B64"/>
+      
+    <g>
+      <rect x="146" y="314" width="70" height="70" rx="8" fill="#545B64"/>
+      <text x="181" y="357" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">WEB</text>
+    </g>
+      <text x="234" y="320" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Browser</text>
+      <text x="234" y="345" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">localhost:5173</text>
+      <circle cx="234" cy="373" r="3.5" fill="#879196"/>
+<text x="249" y="379" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sesion del usuario</text>
+<circle cx="234" cy="399" r="3.5" fill="#879196"/>
+<text x="249" y="405" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Estado del quiz</text>
+<circle cx="234" cy="425" r="3.5" fill="#879196"/>
+<text x="249" y="431" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Feedback inmediato</text>
+    </g>
+    
+    <g>
+      <rect x="126" y="464" width="330" height="138" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="126" y="464" width="330" height="7" fill="#646CFF"/>
+      
+    <g>
+      <rect x="146" y="500" width="70" height="70" rx="8" fill="#646CFF"/>
+      <text x="181" y="543" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">V</text>
+    </g>
+      <text x="234" y="506" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">Vite dev server</text>
+      <text x="234" y="531" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Ciclo local</text>
+      <circle cx="234" cy="559" r="3.5" fill="#879196"/>
+<text x="249" y="565" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sirve assets</text>
+<circle cx="234" cy="585" r="3.5" fill="#879196"/>
+<text x="249" y="591" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Hot reload</text>
+    </g>
+
+    
+    <g>
+      <rect x="590" y="205" width="430" height="440" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="590" y="205" width="10" height="440" fill="#149ECA"/>
+      <text x="614" y="235" font-size="17" font-weight="800" fill="#161E2D">Aplicacion frontend</text>
+      <text x="996" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">SPA</text>
+    </g>
+    
+    <g>
+      <rect x="636" y="278" width="338" height="156" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="636" y="278" width="338" height="7" fill="#149ECA"/>
+      
+    <g>
+      <rect x="656" y="314" width="70" height="70" rx="8" fill="#149ECA"/>
+      <text x="691" y="357" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">R</text>
+    </g>
+      <text x="744" y="320" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">React + TypeScript</text>
+      <text x="744" y="345" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">UI de Magic Cert</text>
+      <circle cx="744" cy="373" r="3.5" fill="#879196"/>
+<text x="759" y="379" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">App.tsx</text>
+<circle cx="744" cy="399" r="3.5" fill="#879196"/>
+<text x="759" y="405" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Render de preguntas</text>
+<circle cx="744" cy="425" r="3.5" fill="#879196"/>
+<text x="759" y="431" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Calculo de score</text>
+    </g>
+    
+    <g>
+      <rect x="636" y="464" width="338" height="138" rx="4" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="636" y="464" width="338" height="7" fill="#687078"/>
+      
+    <g>
+      <rect x="656" y="500" width="70" height="70" rx="8" fill="#545B64"/>
+      <text x="691" y="543" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">{}</text>
+    </g>
+      <text x="744" y="506" font-size="18" font-weight="800" fill="#161E2D" text-anchor="start">JSON estatico</text>
+      <text x="744" y="531" font-size="13" font-weight="700" fill="#5F6B7A" text-anchor="start">Catalogo embebido</text>
+      <circle cx="744" cy="559" r="3.5" fill="#879196"/>
+<text x="759" y="565" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sin base de datos</text>
+<circle cx="744" cy="585" r="3.5" fill="#879196"/>
+<text x="759" y="591" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sin API runtime</text>
+    </g>
+
+    
+    <g>
+      <rect x="1110" y="205" width="410" height="440" rx="4" fill="#FAFAFA" stroke="#D5DBDB" stroke-width="1.5"/>
+      <rect x="1110" y="205" width="10" height="440" fill="#DD344C"/>
+      <text x="1134" y="235" font-size="17" font-weight="800" fill="#161E2D">Limite arquitectonico</text>
+      <text x="1496" y="235" font-size="12" font-weight="800" fill="#879196" text-anchor="end">SIN CLOUD</text>
+    </g>
+    <text x="1160" y="293" font-size="24" font-weight="900" fill="#161E2D" text-anchor="start">Que demuestra</text>
+    <circle cx="1164" cy="332" r="3.5" fill="#879196"/>
+<text x="1179" y="338" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Una UX funcional puede generarse</text>
+<text x="1179" y="357" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">rapido</text>
+<circle cx="1164" cy="377" r="3.5" fill="#879196"/>
+<text x="1179" y="383" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">La idea de producto es testeable</text>
+<circle cx="1164" cy="403" r="3.5" fill="#879196"/>
+<text x="1179" y="409" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Aun faltan decisiones de</text>
+<text x="1179" y="428" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">arquitectura</text>
+<circle cx="1164" cy="448" r="3.5" fill="#879196"/>
+<text x="1179" y="454" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sin estado compartido, auth, API,</text>
+<text x="1179" y="473" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">monitoreo ni deployment</text>
+
+    
+    <line x1="456" y1="356" x2="636" y2="356" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="478" y="333" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="546" y="351" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">HTTP local</text>
+    
+    <line x1="456" y1="532" x2="636" y2="532" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="478" y="509" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="546" y="527" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">bundle</text>
+    
+    <line x1="805" y1="464" x2="805" y2="434" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="737" y="426" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="805" y="444" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">imports</text>
+
+    <rect x="80" y="700" width="1440" height="92" rx="4" fill="#F2F3F3" stroke="#D5DBDB"/>
+    <text x="112" y="735" font-size="18" font-weight="900" fill="#161E2D" text-anchor="start">Narrativa</text>
+    <text x="112" y="766" font-size="18" font-weight="600" fill="#414D5C" text-anchor="start">La primera version sirve como prototipo rapido. El siguiente paso no es solo pulir la UI: es darle a la app una arquitectura</text>
+<text x="112" y="789" font-size="18" font-weight="600" fill="#414D5C" text-anchor="start">cloud real.</text>
+    <text x="80" y="854" font-size="12" font-weight="600" fill="#687078">Progresion Magic Cert: prototipo local -&gt; MVP serverless -&gt; delivery controlado y practica con IA.</text>
+  
+</svg>

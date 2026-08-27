@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img">
+  <defs>
+    <style>text { font-family: Amazon Ember, Arial, Helvetica, sans-serif; }</style>
+    <marker id="arrow" markerWidth="11" markerHeight="8" refX="10" refY="4" orient="auto">
+      <path d="M0,0 L11,4 L0,8 Z" fill="#414D5C"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="900" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="1600" height="16" fill="#232F3E"/>
+  <rect x="0" y="16" width="1600" height="5" fill="#FF9900"/>
+  <text x="80" y="70" font-size="13" font-weight="900" fill="#FF9900" letter-spacing="2">STORY ARC / DESPUES DE LA MAGIA</text>
+  <text x="80" y="118" font-size="39" font-weight="900" fill="#161E2D" text-anchor="start">Magic Cert: evolucion de arquitectura</text>
+  <text x="80" y="154" font-size="19" font-weight="600" fill="#5F6B7A" text-anchor="start">La misma idea de producto, tres niveles de madurez arquitectonica.</text>
+  
+    <rect x="80" y="218" width="420" height="430" rx="4" fill="#FFFFFF" stroke="#D5DBDB"/>
+    <rect x="80" y="218" width="420" height="8" fill="#879196"/>
+    <text x="116" y="282" font-size="44" font-weight="900" fill="#161E2D" text-anchor="start">v01</text>
+    <text x="116" y="322" font-size="24" font-weight="900" fill="#414D5C" text-anchor="start">Prototipo local</text>
+    
+    <g>
+      <rect x="116" y="366" width="76" height="76" rx="8" fill="#545B64"/>
+      <text x="154" y="412" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">WEB</text>
+    </g>
+    
+    <g>
+      <rect x="212" y="366" width="76" height="76" rx="8" fill="#149ECA"/>
+      <text x="250" y="412" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">R</text>
+    </g>
+    
+    <g>
+      <rect x="308" y="366" width="76" height="76" rx="8" fill="#545B64"/>
+      <text x="346" y="412" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">{}</text>
+    </g>
+    <circle cx="122" cy="488" r="3.5" fill="#879196"/>
+<text x="137" y="494" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Corre local con Vite</text>
+<circle cx="122" cy="514" r="3.5" fill="#879196"/>
+<text x="137" y="520" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Preguntas embebidas como JSON</text>
+<circle cx="122" cy="540" r="3.5" fill="#879196"/>
+<text x="137" y="546" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Sin backend, base de datos, borde de</text>
+<text x="137" y="565" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">auth ni deployment</text>
+    
+    <g>
+      <rect x="116" y="586" width="168" height="32" rx="16" fill="#1D8102"/>
+      <text x="200" y="608" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">$0/month</text>
+    </g>
+
+    <rect x="590" y="218" width="420" height="430" rx="4" fill="#FFFFFF" stroke="#D5DBDB"/>
+    <rect x="590" y="218" width="420" height="8" fill="#FF9900"/>
+    <text x="626" y="282" font-size="44" font-weight="900" fill="#161E2D" text-anchor="start">v02</text>
+    <text x="626" y="322" font-size="24" font-weight="900" fill="#414D5C" text-anchor="start">MVP serverless</text>
+    <image href="assets/aws-icons/amazon-s3.svg" x="626" y="366" width="66" height="66" preserveAspectRatio="xMidYMid meet"/>
+    <image href="assets/aws-icons/amazon-api-gateway.svg" x="710" y="366" width="66" height="66" preserveAspectRatio="xMidYMid meet"/>
+    <image href="assets/aws-icons/aws-lambda.svg" x="794" y="366" width="66" height="66" preserveAspectRatio="xMidYMid meet"/>
+    <image href="assets/aws-icons/amazon-dynamodb.svg" x="878" y="366" width="66" height="66" preserveAspectRatio="xMidYMid meet"/>
+    <circle cx="632" cy="488" r="3.5" fill="#879196"/>
+<text x="647" y="494" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Frontend en S3 website</text>
+<circle cx="632" cy="514" r="3.5" fill="#879196"/>
+<text x="647" y="520" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">API Gateway + Lambda</text>
+<circle cx="632" cy="540" r="3.5" fill="#879196"/>
+<text x="647" y="546" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Persistencia en DynamoDB</text>
+<circle cx="632" cy="566" r="3.5" fill="#879196"/>
+<text x="647" y="572" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Secrets y CloudWatch</text>
+    
+    <g>
+      <rect x="626" y="608" width="168" height="32" rx="16" fill="#FF9900"/>
+      <text x="710" y="630" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">~$5-10/month</text>
+    </g>
+
+    <rect x="1100" y="218" width="420" height="430" rx="4" fill="#FFFFFF" stroke="#D5DBDB"/>
+    <rect x="1100" y="218" width="420" height="8" fill="#01A88D"/>
+    <text x="1136" y="282" font-size="44" font-weight="900" fill="#161E2D" text-anchor="start">v03</text>
+    <text x="1136" y="322" font-size="24" font-weight="900" fill="#414D5C" text-anchor="start">Delivery controlado + IA</text>
+    
+    <g>
+      <rect x="1136" y="366" width="60" height="60" rx="8" fill="#24292F"/>
+      <text x="1166" y="404" font-size="24" font-weight="800" fill="#FFFFFF" text-anchor="middle">GH</text>
+    </g>
+    <image href="assets/aws-icons/aws-iam.svg" x="1212" y="366" width="60" height="60" preserveAspectRatio="xMidYMid meet"/>
+    <image href="assets/aws-icons/aws-sts.svg" x="1288" y="366" width="60" height="60" preserveAspectRatio="xMidYMid meet"/>
+    <image href="assets/aws-icons/amazon-bedrock.svg" x="1364" y="366" width="60" height="60" preserveAspectRatio="xMidYMid meet"/>
+    <circle cx="1142" cy="488" r="3.5" fill="#879196"/>
+<text x="1157" y="494" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">GitHub OIDC y rol apply protegido</text>
+<circle cx="1142" cy="514" r="3.5" fill="#879196"/>
+<text x="1157" y="520" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Workflow Terraform plan/apply</text>
+<circle cx="1142" cy="540" r="3.5" fill="#879196"/>
+<text x="1157" y="546" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">Lambda ai-practice</text>
+<circle cx="1142" cy="566" r="3.5" fill="#879196"/>
+<text x="1157" y="572" font-size="15" font-weight="500" fill="#414D5C" text-anchor="start">STS hacia cuenta Bedrock</text>
+    
+    <g>
+      <rect x="1136" y="608" width="168" height="32" rx="16" fill="#01A88D"/>
+      <text x="1220" y="630" font-size="13" font-weight="800" fill="#FFFFFF" text-anchor="middle">~$20-30/month+</text>
+    </g>
+
+    
+    <line x1="500" y1="430" x2="590" y2="430" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="477" y="407" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="545" y="425" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">arquitectura</text>
+    
+    <line x1="1010" y1="430" x2="1100" y2="430" stroke="#414D5C" stroke-width="2.5"  marker-end="url(#arrow)"/>
+    <rect x="987" y="407" width="136" height="26" rx="3" fill="#FFFFFF" stroke="#EAeded"/>
+<text x="1055" y="425" font-size="12" font-weight="800" fill="#414D5C" text-anchor="middle">operacion + IA</text>
+
+    <rect x="80" y="714" width="1440" height="84" rx="4" fill="#F2F3F3" stroke="#D5DBDB"/>
+    <text x="112" y="748" font-size="18" font-weight="900" fill="#161E2D" text-anchor="start">Mensaje de la charla</text>
+    <text x="112" y="779" font-size="18" font-weight="600" fill="#414D5C" text-anchor="start">La IA puede producir la primera pantalla funcional. Ingenieria la convierte en sistema: hosting, APIs, persistencia, seguridad,</text>
+<text x="112" y="802" font-size="18" font-weight="600" fill="#414D5C" text-anchor="start">observabilidad, delivery controlado e integracion con IA.</text>
+    <text x="80" y="854" font-size="12" font-weight="600" fill="#687078">Draft 03 usa composicion estilo AWS e iconos oficiales AWS Architecture Icons para servicios AWS.</text>
+  
+</svg>
