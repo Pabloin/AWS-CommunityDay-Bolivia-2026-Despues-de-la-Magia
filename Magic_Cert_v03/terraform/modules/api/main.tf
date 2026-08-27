@@ -211,7 +211,10 @@ resource "aws_iam_role_policy" "lambda_bedrock_invoke" {
           "bedrock:InvokeModelWithResponseStream"
         ]
         Resource = [
-          "arn:aws:bedrock:${var.bedrock_region}::foundation-model/*",
+          "arn:aws:bedrock:::foundation-model/*",
+          "arn:aws:bedrock:us-east-1::foundation-model/*",
+          "arn:aws:bedrock:us-east-2::foundation-model/*",
+          "arn:aws:bedrock:us-west-2::foundation-model/*",
           "arn:aws:bedrock:${var.bedrock_region}:${var.account_id}:inference-profile/*"
         ]
       }

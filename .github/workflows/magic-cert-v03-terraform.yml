@@ -1,4 +1,4 @@
-name: Terraform
+name: GitHub Actions con CI/CD
 
 on:
   pull_request:

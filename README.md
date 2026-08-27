@@ -31,10 +31,10 @@ Esta es una demostración en vivo del poder de la IA generativa y los servicios 
 **Estado:** Por desarrollar  
 **Descripción:** Infraestructura como código con Terraform
 
-### 🚧 v03: AWS Integration
-📁 **Carpeta:** `Magic_Cert_v03/` (TBD)  
-**Estado:** Por desarrollar  
-**Descripción:** Despliegue completo en AWS con CI/CD
+### ✅ v03: Serverless + OIDC + Bedrock
+📁 **Carpeta:** `Magic_Cert_v03/`  
+**Estado:** Desplegado  
+**Servicios:** S3 + API Gateway + Lambda + DynamoDB + Nova
 
 ---
 

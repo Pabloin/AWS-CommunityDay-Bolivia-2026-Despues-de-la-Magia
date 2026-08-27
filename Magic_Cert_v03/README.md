@@ -1,4 +1,6 @@
-# Magic Cert v03 - AWS Serverless CI/CD
+# Magic Cert v03 - Serverless + OIDC + Bedrock
+
+S3 + API Gateway + Lambda + DynamoDB + Nova
 
 ## 🎯 Overview
 

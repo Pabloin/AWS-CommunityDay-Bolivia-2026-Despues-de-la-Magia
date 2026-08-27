@@ -225,11 +225,14 @@ async function assumeBedrockRole() {
 }
 
 function getModelProvider() {
-  if (BEDROCK_MODEL_ID.startsWith('amazon.nova')) {
+  // Inference profile IDs can be prefixed with global., us., eu., or apac.
+  const providerModelId = BEDROCK_MODEL_ID.replace(/^(global|us|eu|apac)\./, '');
+
+  if (providerModelId.startsWith('amazon.nova')) {
     return 'nova';
   }
 
-  if (BEDROCK_MODEL_ID.startsWith('anthropic.') || BEDROCK_MODEL_ID.includes('.anthropic.')) {
+  if (providerModelId.startsWith('anthropic.')) {
     return 'anthropic';
   }
 

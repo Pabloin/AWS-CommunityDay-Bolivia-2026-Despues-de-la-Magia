@@ -42,12 +42,13 @@ Key decisions:
 - Resource names use `project_name`, optional `deployment_id`, and `environment`. The default `project_name = "magic-cert-v03"` keeps v03 resources separate from v02 defaults.
 - Multiple parallel deployments of v03 require both a unique `deployment_id` and a separate Terraform state key/workspace. Changing `deployment_id` inside the same state renames the same stack; it does not create a second tenant.
 - The frontend public entry point is CloudFront over HTTPS. S3 is a private origin accessed only through CloudFront Origin Access Control.
-- Terraform manages the ACM DNS validation record and Route53 alias for `cert.magic.glaciar.org` in the `magic.glaciar.org` public hosted zone.
+- Terraform manages the ACM DNS validation record and Route53 alias for `magic.cert.glaciar.org` in the delegated `cert.glaciar.org` public hosted zone.
 - API Gateway applies stage-level throttling to all methods, defaulting to 10 requests per second with a burst of 20, so abusive spikes are rejected before Lambda invocation.
-- AI explanations use Amazon Bedrock through a cross-account role. The app account receives only `sts:AssumeRole` on the Bedrock account role.
+- AI explanations use Amazon Bedrock. The deployment supports same-account execution with the Lambda role and optional cross-account execution through `sts:AssumeRole`.
 - `/ai/explain` requires a valid app JWT and enforces a DynamoDB-backed daily quota per user before invoking Bedrock.
-- Claude Haiku 4.5 is the current demo model because it is `ACTIVE` in the Bedrock account and provides a lightweight response for explanations. It is invoked through the regional inference profile `us.anthropic.claude-haiku-4-5-20251001-v1:0`; Amazon Nova remains supported as the AWS-native alternative.
-- The AI Lambda intentionally supports only model IDs starting with `amazon.nova` or `anthropic.` so provider-specific request payloads stay explicit and auditable.
+- Amazon Nova is the current demo provider because it is AWS-native and can use the account's AWS credits. V3 uses the active inference profile `global.amazon.nova-2-lite-v1:0`.
+- Anthropic Claude Haiku remains the supported alternative provider; the Lambda keeps separate Nova and Anthropic payload formats so either provider can be selected explicitly.
+- Inference profile prefixes such as `global.` and `us.` are normalized before provider detection, while the original profile ID is preserved for Bedrock invocation.
 
 The bootstrap trust policy must restrict both the OIDC audience and the repository subject. GitHub documents this restriction as a security requirement.
 
