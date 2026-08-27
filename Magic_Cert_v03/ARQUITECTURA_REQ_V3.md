@@ -39,7 +39,11 @@ Key decisions:
 - Only the protected `production` environment can assume the apply role.
 - Terraform state remains in the shared S3 backend with locking.
 - Application artifacts remain outside Terraform; frontend deployment is a CI step.
+- Resource names use `project_name`, optional `deployment_id`, and `environment`. The default `project_name = "magic-cert-v03"` keeps v03 resources separate from v02 defaults.
+- Multiple parallel deployments of v03 require both a unique `deployment_id` and a separate Terraform state key/workspace. Changing `deployment_id` inside the same state renames the same stack; it does not create a second tenant.
+- API Gateway applies stage-level throttling to all methods, defaulting to 10 requests per second with a burst of 20, so abusive spikes are rejected before Lambda invocation.
 - AI explanations use Amazon Bedrock through a cross-account role. The app account receives only `sts:AssumeRole` on the Bedrock account role.
+- `/ai/explain` requires a valid app JWT and enforces a DynamoDB-backed daily quota per user before invoking Bedrock.
 - Amazon Nova is the default model family because it keeps the demo aligned with AWS-native model billing and AWS credits. Anthropic remains supported as an explicit alternative provider for comparison or quality checks.
 - The AI Lambda intentionally supports only model IDs starting with `amazon.nova` or `anthropic.` so provider-specific request payloads stay explicit and auditable.
 
@@ -221,7 +225,7 @@ Resource Groups expose tagged resource views.
 | S3 | Static website bucket | Public website hosting for demo frontend. |
 | API Gateway | REST API | HTTPS backend endpoint. |
 | Lambda | Backend logic | Questions, auth, profile, progress, AI explanation. |
-| DynamoDB | Persistence | On-demand billing, PITR enabled. |
+| DynamoDB | Persistence | On-demand billing, PITR enabled. Includes AI usage quota records with TTL. |
 | STS | Cross-account access | AI Lambda assumes the Bedrock account role. |
 | Bedrock | AI explanations | Default model family is Amazon Nova; Anthropic is a supported alternative. |
 | Secrets Manager | JWT secret | Avoids committed secrets. |
@@ -241,6 +245,8 @@ GET  /user/progress
 POST /user/progress
 POST /ai/explain
 ```
+
+`POST /ai/explain` must reject anonymous requests and enforce the configured per-user daily quota before invoking Bedrock.
 
 Out of scope for current v02 unless explicitly added:
 

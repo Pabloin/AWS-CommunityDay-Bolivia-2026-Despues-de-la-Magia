@@ -1,10 +1,20 @@
 const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
+const { DynamoDBClient, UpdateItemCommand } = require('@aws-sdk/client-dynamodb');
+const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
 const { STSClient, AssumeRoleCommand } = require('@aws-sdk/client-sts');
+const jwt = require('jsonwebtoken');
 
 const BEDROCK_ROLE_ARN = process.env.BEDROCK_ROLE_ARN || '';
 const BEDROCK_EXTERNAL_ID = process.env.BEDROCK_EXTERNAL_ID || '';
 const BEDROCK_REGION = process.env.BEDROCK_REGION || process.env.AWS_REGION || 'us-east-1';
 const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'amazon.nova-lite-v1:0';
+const JWT_SECRET_ARN = process.env.JWT_SECRET_ARN || '';
+const AI_USAGE_TABLE = process.env.AI_USAGE_TABLE || '';
+const AI_DAILY_QUOTA = parseInt(process.env.AI_DAILY_QUOTA || '20', 10);
+
+const dynamoClient = new DynamoDBClient({});
+const secretsClient = new SecretsManagerClient({});
+let jwtSecret = null;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -76,6 +86,112 @@ Return:
 - Why the selected answer is correct or wrong
 - A short memory tip
 - One similar AWS scenario`;
+}
+
+function getBearerToken(event) {
+  const authorization = event.headers?.Authorization || event.headers?.authorization || '';
+  const match = authorization.match(/^Bearer\s+(.+)$/i);
+  return match ? match[1] : '';
+}
+
+async function getJwtSecret() {
+  if (jwtSecret) {
+    return jwtSecret;
+  }
+
+  if (!JWT_SECRET_ARN) {
+    throw Object.assign(new Error('JWT_SECRET_ARN is not configured'), {
+      statusCode: 500,
+      code: 'JWT_SECRET_NOT_CONFIGURED'
+    });
+  }
+
+  const response = await secretsClient.send(
+    new GetSecretValueCommand({ SecretId: JWT_SECRET_ARN })
+  );
+  const secret = JSON.parse(response.SecretString);
+  jwtSecret = secret.secret;
+  return jwtSecret;
+}
+
+async function verifyRequest(event) {
+  const token = getBearerToken(event);
+
+  if (!token) {
+    throw Object.assign(new Error('Authorization bearer token is required'), {
+      statusCode: 401,
+      code: 'AUTH_TOKEN_REQUIRED'
+    });
+  }
+
+  try {
+    return jwt.verify(token, await getJwtSecret());
+  } catch (error) {
+    throw Object.assign(new Error('Invalid authorization token'), {
+      statusCode: 401,
+      code: 'INVALID_AUTH_TOKEN'
+    });
+  }
+}
+
+function secondsUntilTomorrowUtc() {
+  const now = new Date();
+  const tomorrow = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + 1,
+    0,
+    0,
+    0
+  ));
+
+  return Math.floor(tomorrow.getTime() / 1000);
+}
+
+async function consumeDailyQuota(user) {
+  if (!AI_USAGE_TABLE) {
+    throw Object.assign(new Error('AI_USAGE_TABLE is not configured'), {
+      statusCode: 500,
+      code: 'AI_USAGE_TABLE_NOT_CONFIGURED'
+    });
+  }
+
+  const userId = user.userId || user.email;
+  const day = new Date().toISOString().slice(0, 10);
+
+  try {
+    const response = await dynamoClient.send(new UpdateItemCommand({
+      TableName: AI_USAGE_TABLE,
+      Key: {
+        PK: { S: `USER#${userId}` },
+        SK: { S: `DAY#${day}` }
+      },
+      UpdateExpression: 'SET #count = if_not_exists(#count, :zero) + :one, #ttl = :ttl',
+      ConditionExpression: 'attribute_not_exists(#count) OR #count < :quota',
+      ExpressionAttributeNames: {
+        '#count': 'count',
+        '#ttl': 'ttl'
+      },
+      ExpressionAttributeValues: {
+        ':zero': { N: '0' },
+        ':one': { N: '1' },
+        ':quota': { N: String(AI_DAILY_QUOTA) },
+        ':ttl': { N: String(secondsUntilTomorrowUtc()) }
+      },
+      ReturnValues: 'UPDATED_NEW'
+    }));
+
+    return Number(response.Attributes?.count?.N || '0');
+  } catch (error) {
+    if (error.name === 'ConditionalCheckFailedException') {
+      throw Object.assign(new Error(`Daily AI explanation quota exceeded (${AI_DAILY_QUOTA} per user)`), {
+        statusCode: 429,
+        code: 'AI_DAILY_QUOTA_EXCEEDED'
+      });
+    }
+
+    throw error;
+  }
 }
 
 async function assumeBedrockRole() {
@@ -226,6 +342,7 @@ exports.handler = async (event) => {
   }
 
   try {
+    const user = await verifyRequest(event);
     const payload = parseBody(event);
 
     if (!payload.question) {
@@ -236,11 +353,16 @@ exports.handler = async (event) => {
       });
     }
 
+    const dailyUsage = await consumeDailyQuota(user);
     const explanation = await invokeBedrock(buildPrompt(payload));
 
     return json(200, {
       success: true,
-      explanation
+      explanation,
+      quota: {
+        used: dailyUsage,
+        limit: AI_DAILY_QUOTA
+      }
     });
   } catch (error) {
     return errorResponse(error);

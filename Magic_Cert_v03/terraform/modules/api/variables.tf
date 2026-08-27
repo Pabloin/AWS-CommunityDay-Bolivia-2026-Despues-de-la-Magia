@@ -58,6 +58,16 @@ variable "sessions_table_arn" {
   type        = string
 }
 
+variable "ai_usage_table_name" {
+  description = "AI usage quota table name"
+  type        = string
+}
+
+variable "ai_usage_table_arn" {
+  description = "AI usage quota table ARN"
+  type        = string
+}
+
 variable "bedrock_role_arn" {
   description = "Cross-account IAM role ARN to assume before invoking Amazon Bedrock. Leave empty to disable AI endpoints."
   type        = string
@@ -81,4 +91,22 @@ variable "bedrock_model_id" {
   description = "Amazon Bedrock model ID used by Magic Cert AI endpoints."
   type        = string
   default     = "amazon.nova-lite-v1:0"
+}
+
+variable "ai_daily_quota_per_user" {
+  description = "Maximum number of AI explanations allowed per authenticated user per UTC day."
+  type        = number
+  default     = 20
+}
+
+variable "api_throttling_rate_limit" {
+  description = "Steady-state API Gateway stage throttling rate limit in requests per second."
+  type        = number
+  default     = 10
+}
+
+variable "api_throttling_burst_limit" {
+  description = "Short burst API Gateway stage throttling limit in requests."
+  type        = number
+  default     = 20
 }

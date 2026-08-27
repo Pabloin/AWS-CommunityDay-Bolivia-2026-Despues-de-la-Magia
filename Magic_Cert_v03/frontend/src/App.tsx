@@ -37,6 +37,7 @@ function App() {
   const [aiExplanation, setAiExplanation] = useState<string>('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
+  const [authToken] = useState(() => localStorage.getItem('magicCertToken') || '');
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -128,18 +129,26 @@ function App() {
   };
 
   const handleAiExplanation = async () => {
+    if (!authToken) {
+      setAiError('Sign in to use Amazon Nova explanations.');
+      return;
+    }
+
     const correctAnswer = currentQuestion.correctAnswer;
     const correctAnswers = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
 
     setAiLoading(true);
     setAiError('');
 
-    const result = await explainAnswerWithAi({
-      question: currentQuestion,
-      selectedAnswers,
-      correctAnswers,
-      explanation: currentQuestion.explanation
-    });
+    const result = await explainAnswerWithAi(
+      authToken,
+      {
+        question: currentQuestion,
+        selectedAnswers,
+        correctAnswers,
+        explanation: currentQuestion.explanation
+      }
+    );
 
     if (result.success && result.explanation) {
       setAiExplanation(result.explanation);
@@ -363,13 +372,17 @@ function App() {
             <div className="explanation">
               <h3>Explanation</h3>
               <p>{currentQuestion.explanation}</p>
-              <button
-                onClick={handleAiExplanation}
-                className="btn btn-secondary ai-explain-btn"
-                disabled={aiLoading}
-              >
-                {aiLoading ? 'Asking Amazon Nova...' : 'Explain with Amazon Nova'}
-              </button>
+              {authToken ? (
+                <button
+                  onClick={handleAiExplanation}
+                  className="btn btn-secondary ai-explain-btn"
+                  disabled={aiLoading}
+                >
+                  {aiLoading ? 'Asking Amazon Nova...' : 'Explain with Amazon Nova'}
+                </button>
+              ) : (
+                <p className="ai-login-required">Sign in to use Amazon Nova explanations.</p>
+              )}
               {aiExplanation && (
                 <div className="ai-explanation">
                   <h3>Amazon Nova explanation</h3>

@@ -275,6 +275,12 @@ body {
   margin-top: 14px;
 }
 
+.ai-login-required {
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
 .references {
   margin-top: 20px;
 }

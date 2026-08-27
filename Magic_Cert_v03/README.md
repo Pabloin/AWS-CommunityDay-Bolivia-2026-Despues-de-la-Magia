@@ -40,7 +40,7 @@ CloudWatch (Logs & Metrics)
 | **S3 Bucket** | Frontend hosting | 1 |
 | **API Gateway** | REST API | 1 |
 | **Lambda Functions** | Backend logic | 5 |
-| **DynamoDB Tables** | Data storage | 4 |
+| **DynamoDB Tables** | Data storage | 5 |
 | **CloudWatch** | Monitoring | Dashboards + Alarms |
 | **Secrets Manager** | JWT secret | 1 |
 
@@ -58,6 +58,7 @@ CloudWatch (Logs & Metrics)
 2. **users** - User accounts
 3. **progress** - Quiz attempts and scores
 4. **sessions** - Guest sessions (24h TTL)
+5. **ai-usage** - Daily AI explanation quota per user (TTL)
 
 ---
 
@@ -84,6 +85,8 @@ EOF
 Update `terraform/backend.hcl` with your backend bucket, state key, region, lock table, and optional local profile. Direct Terraform commands must run with `AWS_PROFILE` set, or through the scripts that source `.env`.
 
 Optional Bedrock cross-account setup is documented in [BEDROCK_CROSS_ACCOUNT.md](BEDROCK_CROSS_ACCOUNT.md).
+
+Resource names are isolated from v02 by the default `project_name = "magic-cert-v03"`. For multiple parallel v03 copies, set a unique `deployment_id` and use a separate Terraform state key or workspace.
 
 ### Step 1: Bootstrap GitHub OIDC
 

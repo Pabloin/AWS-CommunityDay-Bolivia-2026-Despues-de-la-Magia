@@ -37,3 +37,13 @@ output "sessions_table_arn" {
   description = "Sessions table ARN"
   value       = aws_dynamodb_table.sessions.arn
 }
+
+output "ai_usage_table_name" {
+  description = "AI usage quota table name"
+  value       = aws_dynamodb_table.ai_usage.name
+}
+
+output "ai_usage_table_arn" {
+  description = "AI usage quota table ARN"
+  value       = aws_dynamodb_table.ai_usage.arn
+}

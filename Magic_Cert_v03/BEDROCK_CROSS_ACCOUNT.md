@@ -96,6 +96,7 @@ export TF_VAR_bedrock_role_arn="arn:aws:iam::123456789012:role/MagicCertBedrockI
 export TF_VAR_bedrock_role_external_id="replace-with-shared-external-id"
 export TF_VAR_bedrock_region="us-east-1"
 export TF_VAR_bedrock_model_id="amazon.nova-lite-v1:0"
+export TF_VAR_ai_daily_quota_per_user="20"
 ```
 
 Then redeploy Magic Cert:
@@ -109,6 +110,7 @@ cd Magic_Cert_v03
 
 - The app account only gets `sts:AssumeRole` on the specific Bedrock role ARN.
 - The Bedrock account role only trusts the Magic Cert Lambda execution role.
+- `/ai/explain` requires an app JWT and consumes one DynamoDB-backed daily quota unit per successful request validation before invoking Bedrock.
 - `BEDROCK_ROLE_ARN` is intentionally not hardcoded in Terraform. Use `TF_VAR_bedrock_role_arn`, `terraform.tfvars`, CI variables, or another secret/config source.
 - The AI Lambda supports only Amazon Nova model IDs starting with `amazon.nova` and Anthropic model IDs starting with `anthropic.`.
 - If `bedrock_role_arn` is empty, `/ai/explain` deploys but returns `BEDROCK_ROLE_NOT_CONFIGURED`.

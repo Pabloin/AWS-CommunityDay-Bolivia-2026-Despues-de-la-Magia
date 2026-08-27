@@ -167,17 +167,25 @@ export interface AiExplanationRequest {
 export interface AiExplanationResponse {
   success: boolean;
   explanation?: string;
+  quota?: {
+    used: number;
+    limit: number;
+  };
   error?: string;
   message?: string;
 }
 
 export async function explainAnswerWithAi(
+  token: string,
   request: AiExplanationRequest
 ): Promise<AiExplanationResponse> {
   try {
     const response = await fetch(`${API_URL}/ai/explain`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify(request)
     });
 

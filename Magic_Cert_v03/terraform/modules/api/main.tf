@@ -145,7 +145,9 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
           var.progress_table_arn,
           "${var.progress_table_arn}/index/*",
           var.sessions_table_arn,
-          "${var.sessions_table_arn}/index/*"
+          "${var.sessions_table_arn}/index/*",
+          var.ai_usage_table_arn,
+          "${var.ai_usage_table_arn}/index/*"
         ]
       }
     ]
@@ -353,6 +355,9 @@ resource "aws_lambda_function" "ai_practice" {
       BEDROCK_EXTERNAL_ID = var.bedrock_external_id
       BEDROCK_REGION      = var.bedrock_region
       BEDROCK_MODEL_ID    = var.bedrock_model_id
+      JWT_SECRET_ARN      = aws_secretsmanager_secret.jwt_secret.arn
+      AI_USAGE_TABLE      = var.ai_usage_table_name
+      AI_DAILY_QUOTA      = tostring(var.ai_daily_quota_per_user)
       ENVIRONMENT         = var.environment
     }
   }
@@ -675,5 +680,17 @@ resource "aws_api_gateway_stage" "main" {
 
   tags = {
     Component = "api"
+  }
+}
+
+resource "aws_api_gateway_method_settings" "stage_throttling" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  stage_name  = aws_api_gateway_stage.main.stage_name
+  method_path = "*/*"
+
+  settings {
+    metrics_enabled        = true
+    throttling_rate_limit  = var.api_throttling_rate_limit
+    throttling_burst_limit = var.api_throttling_burst_limit
   }
 }

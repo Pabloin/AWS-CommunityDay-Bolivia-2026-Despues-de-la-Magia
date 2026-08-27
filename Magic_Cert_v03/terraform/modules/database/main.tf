@@ -140,3 +140,35 @@ resource "aws_dynamodb_table" "sessions" {
     DataType  = "sessions"
   }
 }
+
+# AI Usage Table (daily quota per user)
+resource "aws_dynamodb_table" "ai_usage" {
+  name         = "${var.project_name}-ai-usage-${var.environment}"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
+
+  attribute {
+    name = "PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "SK"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  tags = {
+    Component = "database"
+    DataType  = "ai-usage"
+  }
+}

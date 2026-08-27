@@ -10,6 +10,11 @@ output "region" {
   value       = data.aws_region.current.name
 }
 
+output "resource_prefix" {
+  description = "Prefix used for named AWS resources in this deployment"
+  value       = local.resource_prefix
+}
+
 # Frontend outputs
 output "website_bucket_name" {
   description = "S3 bucket name for frontend"
@@ -51,6 +56,11 @@ output "progress_table_name" {
 output "sessions_table_name" {
   description = "Sessions DynamoDB table name"
   value       = module.database.sessions_table_name
+}
+
+output "ai_usage_table_name" {
+  description = "AI usage quota DynamoDB table name"
+  value       = module.database.ai_usage_table_name
 }
 
 # Lambda outputs
