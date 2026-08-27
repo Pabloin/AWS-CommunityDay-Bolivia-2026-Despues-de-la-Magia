@@ -92,7 +92,27 @@ Optional Bedrock cross-account setup is documented in [BEDROCK_CROSS_ACCOUNT.md]
 
 Resource names are isolated from v02 by the default `project_name = "magic-cert-v03"`. For multiple parallel v03 copies, set a unique `deployment_id` and use a separate Terraform state key or workspace.
 
-The frontend is served through CloudFront with S3 as a private Origin Access Control origin. By default, Terraform requests an ACM certificate and Route53 alias for `cert.magic.glaciar.org` in the `magic.glaciar.org` hosted zone.
+The frontend is served through CloudFront with S3 as a private Origin Access Control origin. The default configuration targets the original `cert.magic.glaciar.org` deployment in the `magic.glaciar.org` hosted zone. The AI Lambda supports both same-account Bedrock (empty `bedrock_role_arn`) and cross-account Bedrock (AssumeRole).
+
+### Standalone demo account
+
+For the isolated demo account using the local AWS profile `sebas`, use the prepared configuration:
+
+```bash
+cp .env.sebas.example .env
+cp terraform/environments/sebas.tfvars.example terraform/environments/sebas.tfvars
+cp terraform/backend.sebas.hcl.example terraform/backend.sebas.hcl
+```
+
+The parent `glaciar.org` hosted zone must delegate `cert.glaciar.org` to the nameservers of the child hosted zone in account `442809140287`. This deployment uses the apex domain `cert.glaciar.org`, a unique `deployment_id = "sebas"`, and same-account Bedrock. No cross-account role or AWS credentials are stored in Terraform.
+
+Bootstrap the state backend if needed, then deploy with:
+
+```bash
+AWS_PROFILE=sebas AWS_REGION=us-east-1 terraform -chdir=terraform init -backend-config=backend.sebas.hcl
+AWS_PROFILE=sebas terraform -chdir=terraform plan -var-file=environments/sebas.tfvars
+AWS_PROFILE=sebas terraform -chdir=terraform apply -var-file=environments/sebas.tfvars
+```
 
 ### Step 1: Bootstrap GitHub OIDC
 

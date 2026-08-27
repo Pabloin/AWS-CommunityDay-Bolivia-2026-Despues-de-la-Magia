@@ -77,7 +77,10 @@ resource "aws_iam_role_policy" "bedrock_invoke" {
         "bedrock:InvokeModel",
         "bedrock:InvokeModelWithResponseStream"
       ]
-      Resource = "arn:aws:bedrock:${var.bedrock_region}::foundation-model/*"
+      Resource = [
+        "arn:aws:bedrock:${var.bedrock_region}:647239283646:inference-profile/*",
+        "arn:aws:bedrock:*::foundation-model/*"
+      ]
     }]
   })
 }
@@ -95,7 +98,7 @@ Set the returned Bedrock role ARN in the Magic Cert app account deployment. The 
 export TF_VAR_bedrock_role_arn="arn:aws:iam::123456789012:role/MagicCertBedrockInvokeRole"
 export TF_VAR_bedrock_role_external_id="replace-with-shared-external-id"
 export TF_VAR_bedrock_region="us-east-1"
-export TF_VAR_bedrock_model_id="amazon.nova-micro-v1:0"
+export TF_VAR_bedrock_model_id="us.anthropic.claude-haiku-4-5-20251001-v1:0"
 export TF_VAR_ai_daily_quota_per_user="20"
 ```
 
@@ -112,5 +115,6 @@ cd Magic_Cert_v03
 - The Bedrock account role only trusts the Magic Cert Lambda execution role.
 - `/ai/explain` requires an app JWT and consumes one DynamoDB-backed daily quota unit per successful request validation before invoking Bedrock.
 - `BEDROCK_ROLE_ARN` is intentionally not hardcoded in Terraform. Use `TF_VAR_bedrock_role_arn`, `terraform.tfvars`, CI variables, or another secret/config source.
-- The AI Lambda supports only Amazon Nova model IDs starting with `amazon.nova` and Anthropic model IDs starting with `anthropic.`.
+- The AI Lambda supports Amazon Nova model IDs and Anthropic model IDs, including regional inference profiles such as `us.anthropic.claude-haiku-4-5-20251001-v1:0`.
+- Claude Haiku 4.5 must be invoked through an inference profile; direct on-demand invocation of its foundation model ID is not supported.
 - If `bedrock_role_arn` is empty, `/ai/explain` deploys but returns `BEDROCK_ROLE_NOT_CONFIGURED`.

@@ -69,7 +69,7 @@ variable "ai_usage_table_arn" {
 }
 
 variable "bedrock_role_arn" {
-  description = "Cross-account IAM role ARN to assume before invoking Amazon Bedrock. Leave empty to disable AI endpoints."
+  description = "Optional cross-account IAM role ARN to assume before invoking Amazon Bedrock. Leave empty for same-account invocation."
   type        = string
   default     = ""
 }
@@ -90,7 +90,7 @@ variable "bedrock_region" {
 variable "bedrock_model_id" {
   description = "Amazon Bedrock model ID used by Magic Cert AI endpoints."
   type        = string
-  default     = "amazon.nova-micro-v1:0"
+  default     = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 }
 
 variable "ai_daily_quota_per_user" {

@@ -1,0 +1,6 @@
+bucket         = "magic-cert-terraform-state-442809140287"
+key            = "v03/sebas/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "magic-cert-terraform-locks"
+encrypt        = true
+profile        = "sebas"

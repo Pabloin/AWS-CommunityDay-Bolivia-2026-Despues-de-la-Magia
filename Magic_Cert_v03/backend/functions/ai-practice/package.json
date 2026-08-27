@@ -1,7 +1,7 @@
 {
   "name": "magic-cert-ai-practice-function",
   "version": "1.0.0",
-  "description": "Lambda function for AI-powered practice explanations through cross-account Amazon Bedrock",
+  "description": "Lambda function for AI-powered practice explanations through same-account or cross-account Amazon Bedrock",
   "main": "index.js",
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.0.0",

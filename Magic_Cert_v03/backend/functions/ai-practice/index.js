@@ -1,4 +1,4 @@
-const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
+const { BedrockRuntimeClient, ConverseCommand, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 const { DynamoDBClient, UpdateItemCommand } = require('@aws-sdk/client-dynamodb');
 const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
 const { STSClient, AssumeRoleCommand } = require('@aws-sdk/client-sts');
@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const BEDROCK_ROLE_ARN = process.env.BEDROCK_ROLE_ARN || '';
 const BEDROCK_EXTERNAL_ID = process.env.BEDROCK_EXTERNAL_ID || '';
 const BEDROCK_REGION = process.env.BEDROCK_REGION || process.env.AWS_REGION || 'us-east-1';
-const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'amazon.nova-micro-v1:0';
+const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'us.anthropic.claude-haiku-4-5-20251001-v1:0';
 const JWT_SECRET_ARN = process.env.JWT_SECRET_ARN || '';
 const AI_USAGE_TABLE = process.env.AI_USAGE_TABLE || '';
 const AI_DAILY_QUOTA = parseInt(process.env.AI_DAILY_QUOTA || '20', 10);
@@ -196,10 +196,7 @@ async function consumeDailyQuota(user) {
 
 async function assumeBedrockRole() {
   if (!BEDROCK_ROLE_ARN) {
-    throw Object.assign(new Error('BEDROCK_ROLE_ARN is not configured'), {
-      statusCode: 501,
-      code: 'BEDROCK_ROLE_NOT_CONFIGURED'
-    });
+    return null;
   }
 
   const sts = new STSClient({});
@@ -232,7 +229,7 @@ function getModelProvider() {
     return 'nova';
   }
 
-  if (BEDROCK_MODEL_ID.startsWith('anthropic.')) {
+  if (BEDROCK_MODEL_ID.startsWith('anthropic.') || BEDROCK_MODEL_ID.includes('.anthropic.')) {
     return 'anthropic';
   }
 
@@ -285,10 +282,27 @@ function extractBedrockText(payload) {
 
 async function invokeBedrock(prompt) {
   const credentials = await assumeBedrockRole();
-  const bedrock = new BedrockRuntimeClient({
-    region: BEDROCK_REGION,
-    credentials
-  });
+  const bedrockConfig = { region: BEDROCK_REGION };
+  if (credentials) {
+    bedrockConfig.credentials = credentials;
+  }
+  const bedrock = new BedrockRuntimeClient(bedrockConfig);
+
+  if (getModelProvider() === 'anthropic') {
+    const response = await bedrock.send(new ConverseCommand({
+      modelId: BEDROCK_MODEL_ID,
+      messages: [{
+        role: 'user',
+        content: [{ text: prompt }]
+      }],
+      inferenceConfig: {
+        maxTokens: 400,
+        temperature: 0.2
+      }
+    }));
+
+    return response.output?.message?.content?.[0]?.text || 'No explanation was generated.';
+  }
 
   const response = await bedrock.send(new InvokeModelCommand({
     modelId: BEDROCK_MODEL_ID,

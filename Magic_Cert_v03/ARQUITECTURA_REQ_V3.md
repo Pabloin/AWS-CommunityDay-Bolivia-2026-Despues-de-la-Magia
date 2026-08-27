@@ -46,7 +46,7 @@ Key decisions:
 - API Gateway applies stage-level throttling to all methods, defaulting to 10 requests per second with a burst of 20, so abusive spikes are rejected before Lambda invocation.
 - AI explanations use Amazon Bedrock through a cross-account role. The app account receives only `sts:AssumeRole` on the Bedrock account role.
 - `/ai/explain` requires a valid app JWT and enforces a DynamoDB-backed daily quota per user before invoking Bedrock.
-- Amazon Nova is the default model family because it keeps the demo aligned with AWS-native model billing and AWS credits. Anthropic remains supported as an explicit alternative provider for comparison or quality checks.
+- Claude Haiku 4.5 is the current demo model because it is `ACTIVE` in the Bedrock account and provides a lightweight response for explanations. It is invoked through the regional inference profile `us.anthropic.claude-haiku-4-5-20251001-v1:0`; Amazon Nova remains supported as the AWS-native alternative.
 - The AI Lambda intentionally supports only model IDs starting with `amazon.nova` or `anthropic.` so provider-specific request payloads stay explicit and auditable.
 
 The bootstrap trust policy must restrict both the OIDC audience and the repository subject. GitHub documents this restriction as a security requirement.
@@ -233,7 +233,7 @@ Resource Groups expose tagged resource views.
 | Lambda | Backend logic | Questions, auth, profile, progress, AI explanation. |
 | DynamoDB | Persistence | On-demand billing, PITR enabled. Includes AI usage quota records with TTL. |
 | STS | Cross-account access | AI Lambda assumes the Bedrock account role. |
-| Bedrock | AI explanations | Default model family is Amazon Nova; Anthropic is a supported alternative. |
+| Bedrock | AI explanations | Claude Haiku 4.5 via regional inference profile; Amazon Nova remains supported as an alternative provider. |
 | Secrets Manager | JWT secret | Avoids committed secrets. |
 | CloudWatch | Logs, dashboard, alarms | Retention should stay bounded. |
 | Resource Groups | Discovery by tags | Useful for demo and cleanup. |

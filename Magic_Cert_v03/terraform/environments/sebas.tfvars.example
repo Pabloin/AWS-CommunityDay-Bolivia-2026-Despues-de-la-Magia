@@ -1,0 +1,18 @@
+# Standalone demo account (AWS account 442809140287, profile sebas).
+# Use with: terraform plan -var-file=environments/sebas.tfvars
+project_name       = "magic-cert-v03"
+environment        = "production"
+deployment_id      = "sebas"
+aws_region         = "us-east-1"
+custom_domain_name = "cert.glaciar.org"
+hosted_zone_name   = "cert.glaciar.org"
+
+# Same-account Bedrock: leave the cross-account role settings empty.
+bedrock_role_arn        = ""
+bedrock_role_external_id = ""
+bedrock_region          = "us-east-1"
+bedrock_model_id        = "amazon.nova-2-lite-v1:0"
+
+ai_daily_quota_per_user    = 20
+api_throttling_rate_limit  = 10
+api_throttling_burst_limit = 20

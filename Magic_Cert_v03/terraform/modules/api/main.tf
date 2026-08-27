@@ -193,6 +193,32 @@ resource "aws_iam_role_policy" "lambda_assume_bedrock" {
   })
 }
 
+# Same-account Bedrock policy. When bedrock_role_arn is set, the Lambda uses
+# the cross-account AssumeRole policy above instead.
+resource "aws_iam_role_policy" "lambda_bedrock_invoke" {
+  count = var.bedrock_role_arn == "" ? 1 : 0
+
+  name = "${var.project_name}-lambda-bedrock-invoke-${var.environment}"
+  role = aws_iam_role.lambda_exec.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream"
+        ]
+        Resource = [
+          "arn:aws:bedrock:${var.bedrock_region}::foundation-model/*",
+          "arn:aws:bedrock:${var.bedrock_region}:${var.account_id}:inference-profile/*"
+        ]
+      }
+    ]
+  })
+}
+
 # CloudWatch Log Groups
 resource "aws_cloudwatch_log_group" "questions" {
   name              = "/aws/lambda/${aws_lambda_function.questions.function_name}"
