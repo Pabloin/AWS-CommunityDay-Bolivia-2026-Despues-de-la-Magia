@@ -51,7 +51,7 @@ cat > backend.hcl << EOF
 bucket         = "${BUCKET_NAME}"
 key            = "production/terraform.tfstate"
 region         = "${AWS_REGION}"
-dynamodb_table = "magic-cert-terraform-locks"
+use_lockfile   = true
 encrypt        = true
 profile        = "${AWS_PROFILE}"
 EOF

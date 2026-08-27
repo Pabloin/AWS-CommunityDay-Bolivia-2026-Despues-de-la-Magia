@@ -24,7 +24,7 @@ else
     -backend-config="bucket=$TF_STATE_BUCKET" \
     -backend-config="key=v03/bootstrap-oidc.tfstate" \
     -backend-config="region=$AWS_REGION" \
-    -backend-config="dynamodb_table=magic-cert-terraform-locks" \
+    -backend-config="use_lockfile=true" \
     -backend-config="encrypt=true"
 fi
 

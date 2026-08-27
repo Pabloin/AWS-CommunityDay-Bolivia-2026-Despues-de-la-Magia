@@ -6,9 +6,11 @@ if [ -z "${PROJECT_ROOT:-}" ]; then
   exit 1
 fi
 
-if [ -f "$PROJECT_ROOT/.env" ]; then
+ENV_FILE="${ENV_FILE:-$PROJECT_ROOT/.env}"
+
+if [ -f "$ENV_FILE" ]; then
   set -a
-  . "$PROJECT_ROOT/.env"
+  . "$ENV_FILE"
   set +a
 fi
 

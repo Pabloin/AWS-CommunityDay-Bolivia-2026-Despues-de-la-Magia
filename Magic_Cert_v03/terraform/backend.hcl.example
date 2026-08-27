@@ -1,6 +1,6 @@
 bucket         = "magic-cert-terraform-state-YOUR_ACCOUNT_ID"
 key            = "v03/terraform.tfstate"
 region         = "us-east-1"
-dynamodb_table = "magic-cert-terraform-locks"
+use_lockfile   = true
 encrypt        = true
 profile        = "YOUR_AWS_PROFILE"
