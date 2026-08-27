@@ -241,42 +241,42 @@
 
           
     <g>
-      <rect x="624" y="826" width="30" height="30" rx="10" fill="#646cff"/>
-      <rect x="632" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
-      <text x="639" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">V</text>
+      <rect x="574" y="826" width="30" height="30" rx="10" fill="#646cff"/>
+      <rect x="582" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
+      <text x="589" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">V</text>
     </g>
-          <text x="664" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">Vite</text>
-          <text x="664" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">Dev server</text>
+          <text x="614" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">Vite</text>
+          <text x="614" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">Dev server</text>
         
 
           
     <g>
-      <rect x="888" y="826" width="30" height="30" rx="10" fill="#149eca"/>
-      <rect x="896" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
-      <text x="903" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">R</text>
+      <rect x="788" y="826" width="30" height="30" rx="10" fill="#149eca"/>
+      <rect x="796" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
+      <text x="803" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">R</text>
     </g>
-          <text x="928" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">React</text>
-          <text x="928" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">SPA</text>
+          <text x="828" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">React</text>
+          <text x="828" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">SPA</text>
         
 
           
     <g>
-      <rect x="1152" y="826" width="30" height="30" rx="10" fill="#64748b"/>
-      <rect x="1160" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
-      <text x="1167" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">{}</text>
+      <rect x="1002" y="826" width="30" height="30" rx="10" fill="#64748b"/>
+      <rect x="1010" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
+      <text x="1017" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">{}</text>
     </g>
-          <text x="1192" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">JSON</text>
-          <text x="1192" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">Preguntas</text>
+          <text x="1042" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">JSON</text>
+          <text x="1042" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">Preguntas</text>
         
 
           
     <g>
-      <rect x="1416" y="826" width="30" height="30" rx="10" fill="#64748b"/>
-      <rect x="1424" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
-      <text x="1431" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">{}</text>
+      <rect x="1216" y="826" width="30" height="30" rx="10" fill="#64748b"/>
+      <rect x="1224" y="834" width="14" height="14" rx="8" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.5"/>
+      <text x="1231" y="849" font-size="18" font-weight="800" fill="#ffffff" text-anchor="middle">{}</text>
     </g>
-          <text x="1456" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">TypeScript</text>
-          <text x="1456" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">Tipos</text>
+          <text x="1256" y="842" font-size="12" font-weight="800" fill="#111827" text-anchor="start">TypeScript</text>
+          <text x="1256" y="858" font-size="11" font-weight="500" fill="#4b5563" text-anchor="start">Tipos</text>
         
     </g>
   

@@ -5,15 +5,15 @@ import { fileURLToPath } from "node:url";
 const outDir = dirname(fileURLToPath(import.meta.url));
 
 const aws = {
-  s3: { color: "#7aa116", label: "S3" },
-  api: { color: "#7d3cdb", label: "API" },
-  lambda: { color: "#ff9900", label: "λ" },
-  dynamo: { color: "#3f74ba", label: "DB" },
-  secrets: { color: "#c925d1", label: "SEC" },
-  cloudwatch: { color: "#cf2e7d", label: "CW" },
-  iam: { color: "#dd344c", label: "IAM" },
-  sts: { color: "#dd344c", label: "STS" },
-  bedrock: { color: "#1f77b4", label: "AI" },
+  s3: { color: "#7aa116", label: "S3", icon: "amazon-s3.svg" },
+  api: { color: "#7d3cdb", label: "API", icon: "amazon-api-gateway.svg" },
+  lambda: { color: "#ff9900", label: "λ", icon: "aws-lambda.svg" },
+  dynamo: { color: "#3f74ba", label: "DB", icon: "amazon-dynamodb.svg" },
+  secrets: { color: "#c925d1", label: "SEC", icon: "aws-secrets-manager.svg" },
+  cloudwatch: { color: "#cf2e7d", label: "CW", icon: "amazon-cloudwatch.svg" },
+  iam: { color: "#dd344c", label: "IAM", icon: "aws-iam.svg" },
+  sts: { color: "#dd344c", label: "STS", icon: "aws-sts.svg" },
+  bedrock: { color: "#1f77b4", label: "AI", icon: "amazon-bedrock.svg" },
   github: { color: "#24292f", label: "GH" },
   browser: { color: "#4b5563", label: "WEB" },
   react: { color: "#149eca", label: "R" },
@@ -83,6 +83,12 @@ function bulletList(items, x, y, opts = {}) {
 
 function serviceIcon(service, x, y, size = 74) {
   const s = aws[service] ?? aws.browser;
+  if (s.icon) {
+    return `
+    <g>
+      <image href="assets/aws-icons/${s.icon}" x="${x}" y="${y}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid meet"/>
+    </g>`;
+  }
   const r = 10;
   return `
     <g>
@@ -144,13 +150,15 @@ function legend(items) {
   const x = 140;
   const y = 815;
   const w = 1320;
-  const itemW = w / items.length;
+  const labelW = 220;
+  const itemsX = x + 220;
+  const itemW = (w - 250) / items.length;
   return `
     <g>
       <rect x="${x}" y="${y}" width="${w}" height="52" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5"/>
       ${textBlock("SERVICIOS / COMPONENTES", x + 18, y + 31, { size: 12, weight: 800, color: "#374151" })}
       ${items.map((item, i) => {
-        const ix = x + 220 + i * itemW;
+        const ix = itemsX + i * itemW;
         return `
           ${serviceIcon(item.service, ix, y + 11, 30)}
           ${textBlock(item.name, ix + 40, y + 27, { size: 12, weight: 800, color: "#111827" })}
