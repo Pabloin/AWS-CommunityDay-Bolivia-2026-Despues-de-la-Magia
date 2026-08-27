@@ -26,13 +26,14 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Event       = "aws-cday-bolivia-2026"
-      Project     = "magic-certs-local2prod"
-      Owner       = var.owner
-      Environment = var.environment
-      ManagedBy   = "terraform"
-      Repository  = var.repository_url
-      Release     = "magic-cert-v03"
+      Event        = "aws-cday-bolivia-2026"
+      Project      = "magic-certs-local2prod"
+      Owner        = var.owner
+      Environment  = var.environment
+      ManagedBy    = "terraform"
+      Repository   = var.repository_url
+      Release      = "magic-cert-v03"
+      DeploymentId = var.deployment_id != "" ? var.deployment_id : "default"
     }
   }
 }
