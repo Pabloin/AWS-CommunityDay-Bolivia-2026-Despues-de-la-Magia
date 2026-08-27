@@ -64,14 +64,15 @@ function capabilityRow({ x, y, w, h, color, version, title, subtitle, icons, bul
     <g>
       <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="#FFFFFF" stroke="#D5DBDB" stroke-width="1.5"/>
       <rect x="${x}" y="${y}" width="12" height="${h}" fill="${color}"/>
-      <text x="${x + 34}" y="${y + 40}" font-size="22" font-weight="900" fill="${color}">${esc(version)}</text>
-      ${text(title, x + 116, y + 40, { size: 23, weight: 900 })}
-      ${text(subtitle, x + 116, y + 67, { size: 14, weight: 700, fill: "#5F6B7A", max: 60 })}
+      <rect x="${x + w - 112}" y="${y + 16}" width="88" height="34" rx="4" fill="${color}"/>
+      ${text(version, x + w - 68, y + 39, { size: 18, weight: 900, fill: "#FFFFFF", anchor: "middle" })}
+      ${text(title, x + 34, y + 40, { size: 23, weight: 900 })}
+      ${text(subtitle, x + 34, y + 67, { size: 14, weight: 700, fill: "#5F6B7A", max: 72 })}
       ${icons.map((name, i) => icon(name, x + 34 + i * 54, y + 84, 40)).join("\n")}
       ${bullets.map((b, i) => {
-        const bx = x + 430 + (i % 2) * 270;
-        const by = y + 102 + Math.floor(i / 2) * 34;
-        return `<circle cx="${bx}" cy="${by - 6}" r="4" fill="${color}"/>${text(b, bx + 15, by, { size: 14, weight: 700, fill: "#414D5C", max: 25 })}`;
+        const bx = x + 420 + (i % 2) * 275;
+        const by = y + 98 + Math.floor(i / 2) * 26;
+        return `<circle cx="${bx}" cy="${by - 5}" r="3.5" fill="${color}"/>${text(b, bx + 14, by, { size: 13, weight: 700, fill: "#414D5C", max: 29 })}`;
       }).join("\n")}
     </g>`;
 }
@@ -100,7 +101,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   <rect x="0" y="16" width="1600" height="5" fill="#FF9900"/>
 
   ${text("CAPABILITIES DRAFT 02 / ROADMAP DE MADUREZ", 80, 70, { size: 13, weight: 900, fill: "#FF9900" })}
-  ${text("Magic Cert: lo que ya se apila y lo que falta", 80, 120, { size: 40, weight: 900 })}
+  ${text("Magic Cert: capacidades que se suman y lo que falta", 80, 120, { size: 40, weight: 900 })}
   ${text("La placa separa capacidades implementadas de gaps de produccion como SSL, dominio, WAF, Cognito y multi-tenant real.", 80, 156, { size: 18, weight: 650, fill: "#5F6B7A" })}
 
   <rect x="80" y="200" width="900" height="34" rx="3" fill="#232F3E"/>
