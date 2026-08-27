@@ -26,6 +26,21 @@ output "website_url" {
   value       = module.frontend.website_url
 }
 
+output "cloudfront_distribution_id" {
+  description = "CloudFront distribution ID for frontend cache invalidations"
+  value       = module.frontend.cloudfront_distribution_id
+}
+
+output "cloudfront_domain_name" {
+  description = "CloudFront distribution domain name"
+  value       = module.frontend.cloudfront_domain_name
+}
+
+output "frontend_custom_domain_name" {
+  description = "Frontend custom domain name"
+  value       = module.frontend.custom_domain_name
+}
+
 # API outputs
 output "api_gateway_url" {
   description = "API Gateway endpoint URL"
@@ -108,6 +123,7 @@ output "deployment_summary" {
     Frontend:
       - Website URL: ${module.frontend.website_url}
       - S3 Bucket: ${module.frontend.bucket_name}
+      - CloudFront Distribution: ${module.frontend.cloudfront_distribution_id}
     
     Backend API:
       - API URL: ${module.api.api_url}

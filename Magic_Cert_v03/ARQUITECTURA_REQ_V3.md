@@ -41,6 +41,8 @@ Key decisions:
 - Application artifacts remain outside Terraform; frontend deployment is a CI step.
 - Resource names use `project_name`, optional `deployment_id`, and `environment`. The default `project_name = "magic-cert-v03"` keeps v03 resources separate from v02 defaults.
 - Multiple parallel deployments of v03 require both a unique `deployment_id` and a separate Terraform state key/workspace. Changing `deployment_id` inside the same state renames the same stack; it does not create a second tenant.
+- The frontend public entry point is CloudFront over HTTPS. S3 is a private origin accessed only through CloudFront Origin Access Control.
+- Terraform manages the ACM DNS validation record and Route53 alias for `cert.magic.glaciar.org` in the `magic.glaciar.org` public hosted zone.
 - API Gateway applies stage-level throttling to all methods, defaulting to 10 requests per second with a burst of 20, so abusive spikes are rejected before Lambda invocation.
 - AI explanations use Amazon Bedrock through a cross-account role. The app account receives only `sts:AssumeRole` on the Bedrock account role.
 - `/ai/explain` requires a valid app JWT and enforces a DynamoDB-backed daily quota per user before invoking Bedrock.
@@ -193,9 +195,13 @@ terraform init -backend-config=backend.hcl
 ```text
 Users
   |
-  | HTTP
+  | HTTPS
   v
-S3 Static Website
+CloudFront
+  |
+  | private OAC origin
+  v
+S3 static assets
   |
   | HTTPS API calls
   v
@@ -293,20 +299,19 @@ Requirements:
 - CORS configured for frontend access.
 - CloudWatch log retention set, not infinite.
 - S3 state bucket encrypted and versioned.
-- Public S3 access limited to static website assets.
+- Frontend S3 bucket is private and readable only through CloudFront OAC.
 
-### v02 Known Gaps
+### v02 Baseline Gaps Resolved or Revisited in v03
 
-These are acceptable for the demo but should be called out honestly:
+These were acceptable in v02 and are either resolved in v03 or intentionally deferred:
 
-- Frontend is HTTP because S3 website hosting is used without CloudFront.
-- No Cognito.
-- No WAF.
-- No custom domain.
-- No frontend HTTPS.
+- Frontend HTTP/S3 website hosting is replaced in v03 by CloudFront HTTPS and private S3 origin.
+- Custom domain and frontend HTTPS are managed in v03 through Route53 and ACM.
+- Cognito remains deferred.
+- WAF remains deferred.
 - No formal refresh-token flow.
-- No CI/CD pipeline.
-- API Gateway throttling/rate limiting is not yet a first-class requirement in Terraform.
+- CI/CD pipeline is handled in v03 through GitHub Actions and OIDC.
+- API Gateway stage throttling is managed in v03 Terraform.
 - Lambda functions currently share one execution role.
 
 ### v03 Security Requirements
@@ -315,7 +320,8 @@ These are acceptable for the demo but should be called out honestly:
 - The plan role trusts only Pull Requests from this repository.
 - The apply role trusts only the protected `production` environment.
 - No long-lived AWS keys are stored in GitHub.
-- CloudFront, ACM, Route 53, Cognito, WAF, and stricter Lambda roles remain future hardening work.
+- CloudFront, ACM, Route53, S3 private origin, API Gateway throttling, and Bedrock per-user quotas are managed in Terraform.
+- Cognito, WAF, and stricter per-function Lambda roles remain future hardening work.
 
 ## Cost Requirements
 
@@ -327,7 +333,7 @@ v02 cost targets:
 
 Cost choices:
 
-- S3 website hosting instead of CloudFront.
+- CloudFront in front of private S3 for HTTPS frontend delivery.
 - DynamoDB on-demand.
 - Lambda/API Gateway pay per request.
 - CloudWatch log retention set to 7 days.
@@ -418,13 +424,9 @@ Expected demo URLs:
 
 Production hardening candidates:
 
-- CloudFront distribution in front of S3.
-- HTTPS frontend with ACM certificate.
-- Custom domain with Route53.
-- S3 bucket private behind CloudFront origin access control.
 - Cognito or OIDC-based authentication.
 - Narrow GitHub apply permissions to the final AWS resource set.
-- API Gateway throttling and usage plans.
+- API Gateway usage plans if API key based clients are added.
 - WAF managed rules and rate limits.
 - OpenAPI spec.
 - Automated smoke tests.
@@ -458,6 +460,13 @@ Production hardening candidates:
 - [x] Main branch workflow with protected `apply`.
 - [x] Frontend build and S3 deployment from GitHub Actions.
 - [x] No long-lived AWS credentials in GitHub.
+- [x] CloudFront distribution in front of S3.
+- [x] HTTPS frontend with ACM certificate.
+- [x] Custom domain with Route53.
+- [x] S3 bucket private behind CloudFront origin access control.
+- [x] API Gateway stage throttling.
+- [x] Bedrock cross-account invocation role pattern.
+- [x] Daily per-user Bedrock quota.
 
 ### v02 Should Have Before Talk
 

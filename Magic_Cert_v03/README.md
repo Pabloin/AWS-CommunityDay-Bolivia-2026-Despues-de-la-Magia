@@ -4,7 +4,8 @@
 
 Magic Cert v03 keeps the v02 serverless runtime and adds a production-oriented delivery path:
 
-- **S3 Static Website** for frontend hosting (HTTP)
+- **Private S3 bucket** for frontend static assets
+- **CloudFront + ACM + Route53** for HTTPS frontend delivery
 - **API Gateway** for REST API endpoints
 - **Lambda Functions** for backend logic (Node.js 20)
 - **DynamoDB** for data persistence (on-demand)
@@ -22,9 +23,9 @@ Magic Cert v03 keeps the v02 serverless runtime and adds a production-oriented d
 ## 📋 Architecture
 
 ```
-Users (HTTP)
+Users (HTTPS)
     ↓
-S3 Static Website → React App
+CloudFront HTTPS → private S3 React App
     ↓
 API Gateway (HTTPS) → Lambda Functions → DynamoDB
                                   ↓
@@ -37,7 +38,10 @@ CloudWatch (Logs & Metrics)
 
 | Resource | Purpose | Count |
 |----------|---------|-------|
-| **S3 Bucket** | Frontend hosting | 1 |
+| **S3 Bucket** | Private frontend origin | 1 |
+| **CloudFront** | HTTPS frontend CDN | 1 |
+| **ACM Certificate** | TLS for custom domain | 1 |
+| **Route53 Record** | `cert.magic.glaciar.org` alias | 1 |
 | **API Gateway** | REST API | 1 |
 | **Lambda Functions** | Backend logic | 5 |
 | **DynamoDB Tables** | Data storage | 5 |
@@ -87,6 +91,8 @@ Update `terraform/backend.hcl` with your backend bucket, state key, region, lock
 Optional Bedrock cross-account setup is documented in [BEDROCK_CROSS_ACCOUNT.md](BEDROCK_CROSS_ACCOUNT.md).
 
 Resource names are isolated from v02 by the default `project_name = "magic-cert-v03"`. For multiple parallel v03 copies, set a unique `deployment_id` and use a separate Terraform state key or workspace.
+
+The frontend is served through CloudFront with S3 as a private Origin Access Control origin. By default, Terraform requests an ACM certificate and Route53 alias for `cert.magic.glaciar.org` in the `magic.glaciar.org` hosted zone.
 
 ### Step 1: Bootstrap GitHub OIDC
 

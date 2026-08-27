@@ -12,3 +12,15 @@ variable "api_url" {
   description = "API Gateway URL"
   type        = string
 }
+
+variable "custom_domain_name" {
+  description = "Optional custom domain for the frontend CloudFront distribution."
+  type        = string
+  default     = ""
+}
+
+variable "hosted_zone_name" {
+  description = "Route53 hosted zone name used to validate ACM and create the frontend alias record."
+  type        = string
+  default     = ""
+}

@@ -29,6 +29,18 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "custom_domain_name" {
+  description = "Optional custom domain for the frontend CloudFront distribution."
+  type        = string
+  default     = "cert.magic.glaciar.org"
+}
+
+variable "hosted_zone_name" {
+  description = "Route53 hosted zone name used to validate ACM and create the frontend alias record."
+  type        = string
+  default     = "magic.glaciar.org"
+}
+
 variable "owner" {
   description = "Resource owner (GitHub username)"
   type        = string

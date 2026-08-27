@@ -39,6 +39,62 @@ body {
   margin: 0 auto;
 }
 
+.auth-panel {
+  margin: 0 0 28px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.auth-form {
+  display: grid;
+  gap: 10px;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.auth-heading,
+.auth-signed-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth-heading h2 {
+  font-size: 1.05rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.auth-switch {
+  border: 0;
+  background: transparent;
+  color: #1565c0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.auth-message {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .auth-heading,
+  .auth-signed-in {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 .version-badge {
   display: flex;
   align-items: center;
@@ -228,8 +284,16 @@ body {
 
 .explanation h3 {
   color: var(--aws-orange);
-  margin-bottom: 15px;
+  margin-bottom: 0;
   font-size: 1.2rem;
+}
+
+.explanation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 15px;
 }
 
 .explanation p {
@@ -239,7 +303,16 @@ body {
 }
 
 .ai-explain-btn {
-  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.ai-icon {
+  font-size: 1.15rem;
+  line-height: 1;
 }
 
 .btn-secondary {
@@ -276,9 +349,16 @@ body {
 }
 
 .ai-login-required {
-  margin-top: 14px;
+  margin: 0;
   color: var(--text-secondary);
   font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .explanation-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .references {

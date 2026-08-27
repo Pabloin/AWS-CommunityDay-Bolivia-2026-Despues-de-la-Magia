@@ -254,7 +254,7 @@ function buildBedrockBody(prompt) {
         }
       ],
       inferenceConfig: {
-        max_new_tokens: 700,
+        max_new_tokens: 400,
         temperature: 0.2
       }
     };
@@ -262,7 +262,7 @@ function buildBedrockBody(prompt) {
 
   return {
     anthropic_version: 'bedrock-2023-05-31',
-    max_tokens: 700,
+    max_tokens: 400,
     temperature: 0.2,
     messages: [
       {
@@ -326,7 +326,20 @@ function errorResponse(error) {
     });
   }
 
-  console.error('Unhandled AI error:', error);
+  if (error.name === 'ThrottlingException') {
+    return json(429, {
+      success: false,
+      error: 'BEDROCK_THROTTLED',
+      message: 'Amazon Bedrock reached its token quota. Please try again after the quota resets or request a quota increase.'
+    });
+  }
+
+  console.error('Unhandled AI error:', {
+    name: error.name,
+    code: error.code,
+    message: error.message,
+    requestId: error.$metadata?.requestId
+  });
   return json(500, {
     success: false,
     error: 'AI_EXPLANATION_FAILED',
@@ -335,7 +348,12 @@ function errorResponse(error) {
 }
 
 exports.handler = async (event) => {
-  console.log('Event:', JSON.stringify(event, null, 2));
+  console.log('AI request received:', {
+    method: event.httpMethod,
+    path: event.path,
+    requestId: event.requestContext?.requestId,
+    hasAuthorization: Boolean(getBearerToken(event))
+  });
 
   if (event.httpMethod === 'OPTIONS') {
     return json(200, {});

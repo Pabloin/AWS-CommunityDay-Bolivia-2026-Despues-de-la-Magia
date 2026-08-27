@@ -2,6 +2,8 @@ import { useState } from 'react';
 import {
   explainAnswerWithAi,
   fetchQuestions,
+  login,
+  register,
   Question as APIQuestion
 } from './services/api';
 
@@ -37,7 +39,13 @@ function App() {
   const [aiExplanation, setAiExplanation] = useState<string>('');
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState('');
-  const [authToken] = useState(() => localStorage.getItem('magicCertToken') || '');
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem('magicCertToken') || '');
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+  const [authMessage, setAuthMessage] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -159,6 +167,27 @@ function App() {
     setAiLoading(false);
   };
 
+  const handleAuth = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setAuthLoading(true);
+    setAuthMessage('');
+
+    const result = authMode === 'login'
+      ? await login(authEmail, authPassword)
+      : await register(authEmail, authPassword, authName);
+
+    if (result.success && result.token) {
+      localStorage.setItem('magicCertToken', result.token);
+      setAuthToken(result.token);
+      setAuthMessage(`Signed in as ${result.user?.name || result.user?.email || authEmail}`);
+      setAuthPassword('');
+    } else {
+      setAuthMessage(result.error || 'Authentication failed.');
+    }
+
+    setAuthLoading(false);
+  };
+
   // Welcome Screen
   if (mode === 'welcome') {
     const domains = [
@@ -185,6 +214,69 @@ function App() {
               <p className="welcome-description">
                 Practice with real-world scenarios and detailed explanations
               </p>
+            </div>
+
+            <div className="auth-panel">
+              {authToken ? (
+                <div className="auth-signed-in">
+                  <span>{authMessage || 'Signed in. Amazon Nova explanations are enabled.'}</span>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      localStorage.removeItem('magicCertToken');
+                      setAuthToken('');
+                      setAuthMessage('');
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleAuth} className="auth-form">
+                  <div className="auth-heading">
+                    <h2>{authMode === 'login' ? 'Sign in for AI explanations' : 'Create an account'}</h2>
+                    <button
+                      type="button"
+                      className="auth-switch"
+                      onClick={() => {
+                        setAuthMode(authMode === 'login' ? 'register' : 'login');
+                        setAuthMessage('');
+                      }}
+                    >
+                      {authMode === 'login' ? 'Create account' : 'Already registered? Sign in'}
+                    </button>
+                  </div>
+                  {authMode === 'register' && (
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      value={authName}
+                      onChange={(event) => setAuthName(event.target.value)}
+                      required
+                    />
+                  )}
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={authEmail}
+                    onChange={(event) => setAuthEmail(event.target.value)}
+                    required
+                  />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    minLength={8}
+                    value={authPassword}
+                    onChange={(event) => setAuthPassword(event.target.value)}
+                    required
+                  />
+                  <button type="submit" className="btn btn-primary" disabled={authLoading}>
+                    {authLoading ? 'Working...' : authMode === 'login' ? 'Sign in' : 'Register'}
+                  </button>
+                  {authMessage && <p className="auth-message">{authMessage}</p>}
+                </form>
+              )}
             </div>
 
             <div className="quiz-options">
@@ -370,19 +462,23 @@ function App() {
 
           {showExplanation && currentQuestion.explanation && (
             <div className="explanation">
-              <h3>Explanation</h3>
+              <div className="explanation-heading">
+                <h3>Explanation</h3>
+                {authToken ? (
+                  <button
+                    onClick={handleAiExplanation}
+                    className="btn btn-secondary ai-explain-btn"
+                    disabled={aiLoading}
+                    title="Ask Amazon Nova for an AI explanation"
+                  >
+                    <span className="ai-icon" aria-hidden="true">🤖</span>
+                    {aiLoading ? 'Asking Nova...' : 'Explain with Amazon Nova'}
+                  </button>
+                ) : (
+                  <p className="ai-login-required">Sign in to use Amazon Nova.</p>
+                )}
+              </div>
               <p>{currentQuestion.explanation}</p>
-              {authToken ? (
-                <button
-                  onClick={handleAiExplanation}
-                  className="btn btn-secondary ai-explain-btn"
-                  disabled={aiLoading}
-                >
-                  {aiLoading ? 'Asking Amazon Nova...' : 'Explain with Amazon Nova'}
-                </button>
-              ) : (
-                <p className="ai-login-required">Sign in to use Amazon Nova explanations.</p>
-              )}
               {aiExplanation && (
                 <div className="ai-explanation">
                   <h3>Amazon Nova explanation</h3>
