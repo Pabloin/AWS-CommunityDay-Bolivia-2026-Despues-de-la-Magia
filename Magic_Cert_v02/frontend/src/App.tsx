@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { fetchQuestions, Question as APIQuestion } from './services/api';
+import { useEffect, useState } from 'react';
+import { fetchQuestions, getProgress, getStatistics, login, register, saveProgress, Question as APIQuestion } from './services/api';
 
 type QuizMode = 'welcome' | 'quiz' | 'complete';
 type Dataset = 'basic' | 'extended';
+type AuthMode = 'login' | 'register';
 
 function VersionBadge() {
   return (
@@ -30,8 +31,42 @@ function App() {
   const [questions, setQuestions] = useState<APIQuestion[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const [authMode, setAuthMode] = useState<AuthMode>('login');
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+  const [authMessage, setAuthMessage] = useState('');
+  const [authToken, setAuthToken] = useState(() => localStorage.getItem('magicCertV2Token') || '');
+  const [authUser, setAuthUser] = useState(() => {
+    const stored = localStorage.getItem('magicCertV2User');
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [answerHistory, setAnswerHistory] = useState<Array<{ questionId: string; selectedAnswers: string[]; correctAnswers: string[]; isCorrect: boolean }>>([]);
+  const [quizStartedAt, setQuizStartedAt] = useState('');
+  const [progressStats, setProgressStats] = useState<any>(null);
+  const [progressMessage, setProgressMessage] = useState('');
+  const [showProgress, setShowProgress] = useState(false);
+  const [progressHistory, setProgressHistory] = useState<any[]>([]);
+  const [progressLoading, setProgressLoading] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  const getCorrectAnswers = (question: APIQuestion) => {
+    if (Array.isArray(question.correctAnswers)) return question.correctAnswers;
+    if (Array.isArray(question.correctAnswer)) return question.correctAnswer;
+    return question.correctAnswer ? [question.correctAnswer] : [];
+  };
+
+  useEffect(() => {
+    if (!authToken) {
+      setProgressStats(null);
+      return;
+    }
+
+    getStatistics(authToken).then((response) => {
+      if (response.success) setProgressStats(response);
+    });
+  }, [authToken]);
 
   // Start quiz handler - Fetch questions from API
   const handleStartQuiz = async () => {
@@ -54,6 +89,9 @@ function App() {
       setShowExplanation(false);
       setScore(0);
       setQuizComplete(false);
+      setAnswerHistory([]);
+      setQuizStartedAt(new Date().toISOString());
+      setProgressMessage('');
     } catch (err) {
       setError('Failed to load questions from API. Please try again.');
       console.error('Error loading questions:', err);
@@ -83,8 +121,7 @@ function App() {
     setShowExplanation(true);
     
     // API format uses correctAnswer (string or array)
-    const correctAnswer = currentQuestion.correctAnswer;
-    const correctAnswers = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
+    const correctAnswers = getCorrectAnswers(currentQuestion);
     
     const isCorrect = 
       correctAnswers.length === selectedAnswers.length &&
@@ -93,14 +130,42 @@ function App() {
     if (isCorrect) {
       setScore(score + 1);
     }
+
+    setAnswerHistory((previous) => [
+      ...previous,
+      {
+        questionId: currentQuestion.questionId || currentQuestion.id || `question-${currentQuestionIndex}`,
+        selectedAnswers,
+        correctAnswers,
+        isCorrect
+      }
+    ]);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswers([]);
       setShowExplanation(false);
     } else {
+      if (authToken) {
+        const saved = await saveProgress(authToken, {
+          certification: 'SAA-C03',
+          dataset,
+          domain: selectedDomain,
+          totalQuestions: questions.length,
+          correctAnswers: answerHistory.filter((answer) => answer.isCorrect).length,
+          score: Math.round((score / questions.length) * 100),
+          answers: answerHistory,
+          startedAt: quizStartedAt,
+          durationSeconds: Math.max(0, Math.round((Date.now() - new Date(quizStartedAt).getTime()) / 1000))
+        });
+        setProgressMessage(saved ? 'Progress saved to your account.' : 'Could not save progress.');
+        if (saved) {
+          const updatedStats = await getStatistics(authToken);
+          if (updatedStats.success) setProgressStats(updatedStats);
+        }
+      }
       setQuizComplete(true);
     }
   };
@@ -113,6 +178,94 @@ function App() {
     setScore(0);
     setQuizComplete(false);
   };
+
+  const handleAuth = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setAuthMessage('');
+
+    if (!authEmail || !authPassword || (authMode === 'register' && !authName)) {
+      setAuthMessage('Complete the required fields.');
+      return;
+    }
+
+    const response = authMode === 'login'
+      ? await login(authEmail, authPassword)
+      : await register(authEmail, authPassword, authName);
+
+    if (!response.success || !response.token || !response.user) {
+      setAuthMessage(response.error || 'Authentication failed.');
+      return;
+    }
+
+    setAuthToken(response.token);
+    setAuthUser(response.user);
+    localStorage.setItem('magicCertV2Token', response.token);
+    localStorage.setItem('magicCertV2User', JSON.stringify(response.user));
+    setAuthPassword('');
+    setAuthMessage(`Signed in as ${response.user.name}.`);
+  };
+
+  const handleLogout = () => {
+    setAuthToken('');
+    setAuthUser(null);
+    localStorage.removeItem('magicCertV2Token');
+    localStorage.removeItem('magicCertV2User');
+    setAuthMessage('Signed out.');
+    setShowProgress(false);
+  };
+
+  const handleShowProgress = async () => {
+    setProgressLoading(true);
+    const response = await getProgress(authToken);
+    if (response.success) setProgressHistory(response.history || []);
+    setProgressLoading(false);
+    setShowProgress(true);
+  };
+
+  if (showProgress && authToken) {
+    return (
+      <div className="app">
+        <div className="container">
+          <VersionBadge />
+          <div className="progress-page">
+            <div className="progress-page-header">
+              <div>
+                <span className="auth-kicker">Account dashboard</span>
+                <h1>{authUser?.name || 'Student'}'s progress</h1>
+                <p>{authUser?.email}</p>
+              </div>
+              <button type="button" className="btn btn-secondary" onClick={() => setShowProgress(false)}>Back to quiz</button>
+            </div>
+
+            {progressLoading ? <p>Loading progress...</p> : (
+              <>
+                <div className="progress-stats-grid">
+                  <div className="progress-stat"><strong>{progressStats?.totalAttempts || 0}</strong><span>Tests completed</span></div>
+                  <div className="progress-stat"><strong>{progressStats?.averageScore || 0}%</strong><span>Average score</span></div>
+                  <div className="progress-stat"><strong>{progressStats?.bestScore || 0}%</strong><span>Best score</span></div>
+                  <div className="progress-stat"><strong>{progressStats?.totalQuestions || 0}</strong><span>Questions answered</span></div>
+                </div>
+                <h2>Test history</h2>
+                {progressHistory.length === 0 ? <p>No completed tests yet.</p> : (
+                  <div className="progress-history">
+                    {progressHistory.map((attempt) => (
+                      <div className="progress-attempt" key={attempt.attemptId || attempt.SK}>
+                        <div>
+                          <strong>{attempt.certification || 'SAA-C03'} · {attempt.domain || 'all'}</strong>
+                          <span>{new Date(attempt.completedAt || attempt.SK?.replace('ATTEMPT#', '')).toLocaleString()}</span>
+                        </div>
+                        <strong>{attempt.score || 0}%</strong>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Welcome Screen
   if (mode === 'welcome') {
@@ -134,6 +287,40 @@ function App() {
         <div className="container">
           <VersionBadge />
           <div className="welcome-screen">
+            <div className="auth-panel">
+              <div className="auth-panel-header">
+                <div>
+                  <span className="auth-kicker">Account</span>
+                  <h2>{authToken ? `Welcome, ${authUser?.name || 'student'}` : 'Save your progress'}</h2>
+                </div>
+                {authToken && <div className="auth-actions"><button type="button" className="btn btn-secondary" onClick={handleShowProgress}>View progress</button><button type="button" className="btn btn-secondary" onClick={handleLogout}>Log out</button></div>}
+              </div>
+              {!authToken && (
+                <form className="auth-form" onSubmit={handleAuth}>
+                  {authMode === 'register' && (
+                    <label>
+                      Name
+                      <input value={authName} onChange={(event) => setAuthName(event.target.value)} autoComplete="name" />
+                    </label>
+                  )}
+                  <label>
+                    Email
+                    <input type="email" value={authEmail} onChange={(event) => setAuthEmail(event.target.value)} autoComplete="email" required />
+                  </label>
+                  <label>
+                    Password
+                    <input type="password" value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} autoComplete={authMode === 'login' ? 'current-password' : 'new-password'} required />
+                  </label>
+                  <button type="submit" className="btn btn-primary" disabled={loading}>
+                    {authMode === 'login' ? 'Log in' : 'Create account'}
+                  </button>
+                  <button type="button" className="auth-switch" onClick={() => { setAuthMode(authMode === 'login' ? 'register' : 'login'); setAuthMessage(''); }}>
+                    {authMode === 'login' ? 'Need an account? Register' : 'Already registered? Log in'}
+                  </button>
+                </form>
+              )}
+              {authMessage && <p className="auth-message">{authMessage}</p>}
+            </div>
             <div className="welcome-header">
               <h1>🪄 Magic Cert</h1>
               <p className="welcome-subtitle">AWS Solutions Architect Associate (SAA-C03)</p>
@@ -266,6 +453,8 @@ function App() {
               <p className="percentage">
                 {Math.round((score / questions.length) * 100)}%
               </p>
+              {progressMessage && <p className="progress-message">{progressMessage}</p>}
+              {authToken && progressStats && <p className="progress-message">Account attempts: {progressStats.totalAttempts}</p>}
             </div>
             <button onClick={handleRestart} className="btn btn-primary">
               Restart Quiz
@@ -301,8 +490,7 @@ function App() {
           <div className="options">
             {currentQuestion.options.map((option) => {
               const isSelected = selectedAnswers.includes(option.id);
-              const correctAnswer = currentQuestion.correctAnswer;
-              const correctAnswers = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
+              const correctAnswers = getCorrectAnswers(currentQuestion);
               const showCorrect = showExplanation && correctAnswers.includes(option.id);
               const showIncorrect = showExplanation && isSelected && !correctAnswers.includes(option.id);
 

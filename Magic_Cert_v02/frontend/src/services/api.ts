@@ -4,13 +4,15 @@
 const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
 
 export interface Question {
-  id: string;
+  id?: string;
+  questionId?: string;
   certification: string;
   domain?: string;
   domainName?: string;
   question: string;
   options: { id: string; text: string }[];
-  correctAnswer: string | string[];
+  correctAnswer?: string | string[];
+  correctAnswers?: string[];
   explanation?: string;
   category?: string;
 }
