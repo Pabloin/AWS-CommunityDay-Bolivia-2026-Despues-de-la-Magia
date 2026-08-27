@@ -1,4 +1,4 @@
-const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
+const { BedrockRuntimeClient, ConverseCommand } = require('@aws-sdk/client-bedrock-runtime');
 const { STSClient, AssumeRoleCommand } = require('@aws-sdk/client-sts');
 
 const BEDROCK_ROLE_ARN = process.env.BEDROCK_ROLE_ARN || '';
@@ -118,25 +118,19 @@ async function invokeBedrock(prompt) {
     credentials
   });
 
-  const response = await bedrock.send(new InvokeModelCommand({
+  const response = await bedrock.send(new ConverseCommand({
     modelId: BEDROCK_MODEL_ID,
-    contentType: 'application/json',
-    accept: 'application/json',
-    body: JSON.stringify({
-      anthropic_version: 'bedrock-2023-05-31',
-      max_tokens: 700,
-      temperature: 0.2,
-      messages: [
-        {
-          role: 'user',
-          content: prompt
-        }
-      ]
-    })
+    messages: [{
+      role: 'user',
+      content: [{ text: prompt }]
+    }],
+    inferenceConfig: {
+      maxTokens: 700,
+      temperature: 0.2
+    }
   }));
 
-  const payload = JSON.parse(Buffer.from(response.body).toString('utf8'));
-  return payload.content?.[0]?.text || 'No explanation was generated.';
+  return response.output?.message?.content?.[0]?.text || 'No explanation was generated.';
 }
 
 function errorResponse(error) {

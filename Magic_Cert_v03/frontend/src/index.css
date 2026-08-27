@@ -238,6 +238,43 @@ body {
   margin-bottom: 15px;
 }
 
+.ai-explain-btn {
+  margin-top: 8px;
+}
+
+.btn-secondary {
+  background: var(--aws-dark);
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #232f3e;
+  transform: translateY(-2px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ai-explanation {
+  margin-top: 24px;
+  padding: 18px;
+  background: white;
+  border: 1px solid #d5dbdb;
+  border-radius: 8px;
+}
+
+.ai-explanation h3 {
+  color: var(--aws-dark);
+  margin-bottom: 10px;
+}
+
+.ai-error {
+  color: var(--error) !important;
+  margin-top: 14px;
+}
+
 .references {
   margin-top: 20px;
 }

@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { fetchQuestions, Question as APIQuestion } from './services/api';
+import {
+  explainAnswerWithAi,
+  fetchQuestions,
+  Question as APIQuestion
+} from './services/api';
 
 type QuizMode = 'welcome' | 'quiz' | 'complete';
 type Dataset = 'basic' | 'extended';
@@ -7,9 +11,9 @@ type Dataset = 'basic' | 'extended';
 function VersionBadge() {
   return (
     <div className="version-badge" aria-label="Application version">
-      <span className="version-badge-main">v02</span>
-      <span className="version-badge-detail">AWS Serverless MVP</span>
-      <span className="version-badge-stack">S3 + API Gateway + Lambda + DynamoDB</span>
+      <span className="version-badge-main">v03</span>
+      <span className="version-badge-detail">Serverless + OIDC + Bedrock</span>
+      <span className="version-badge-stack">S3 + API Gateway + Lambda + DynamoDB + Nova</span>
     </div>
   );
 }
@@ -30,6 +34,9 @@ function App() {
   const [questions, setQuestions] = useState<APIQuestion[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const [aiExplanation, setAiExplanation] = useState<string>('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -52,6 +59,8 @@ function App() {
       setCurrentQuestionIndex(0);
       setSelectedAnswers([]);
       setShowExplanation(false);
+      setAiExplanation('');
+      setAiError('');
       setScore(0);
       setQuizComplete(false);
     } catch (err) {
@@ -100,6 +109,8 @@ function App() {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswers([]);
       setShowExplanation(false);
+      setAiExplanation('');
+      setAiError('');
     } else {
       setQuizComplete(true);
     }
@@ -112,6 +123,31 @@ function App() {
     setShowExplanation(false);
     setScore(0);
     setQuizComplete(false);
+    setAiExplanation('');
+    setAiError('');
+  };
+
+  const handleAiExplanation = async () => {
+    const correctAnswer = currentQuestion.correctAnswer;
+    const correctAnswers = Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer];
+
+    setAiLoading(true);
+    setAiError('');
+
+    const result = await explainAnswerWithAi({
+      question: currentQuestion,
+      selectedAnswers,
+      correctAnswers,
+      explanation: currentQuestion.explanation
+    });
+
+    if (result.success && result.explanation) {
+      setAiExplanation(result.explanation);
+    } else {
+      setAiError(result.message || result.error || 'AI explanation is not available.');
+    }
+
+    setAiLoading(false);
   };
 
   // Welcome Screen
@@ -327,6 +363,20 @@ function App() {
             <div className="explanation">
               <h3>Explanation</h3>
               <p>{currentQuestion.explanation}</p>
+              <button
+                onClick={handleAiExplanation}
+                className="btn btn-secondary ai-explain-btn"
+                disabled={aiLoading}
+              >
+                {aiLoading ? 'Asking Amazon Nova...' : 'Explain with Amazon Nova'}
+              </button>
+              {aiExplanation && (
+                <div className="ai-explanation">
+                  <h3>Amazon Nova explanation</h3>
+                  <p>{aiExplanation}</p>
+                </div>
+              )}
+              {aiError && <p className="ai-error">{aiError}</p>}
             </div>
           )}
 
