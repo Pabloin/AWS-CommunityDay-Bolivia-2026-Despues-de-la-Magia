@@ -92,16 +92,16 @@ function layer({ x, y, w, h, color, version, title, subtitle, items, iconNames, 
       ${text(title, x + 116, y + 42, { size: 23, weight: 900 })}
       ${text(subtitle, x + 116, y + 68, { size: 15, weight: 700, fill: "#5F6B7A", max: 72 })}
       <g>
-        ${iconNames.map((name, i) => icon(name, x + 34 + i * 62, y + 82, 46)).join("\n")}
+        ${iconNames.map((name, i) => icon(name, x + 34 + i * 58, y + 86, 42)).join("\n")}
       </g>
       ${items.map((item, i) => {
         const col = i % 2;
         const row = Math.floor(i / 2);
-        const bx = x + 360 + col * 360;
+        const bx = x + 540 + col * 310;
         const by = y + 100 + row * 36;
         return `
           <circle cx="${bx}" cy="${by - 6}" r="4" fill="${color}"/>
-          ${text(item, bx + 16, by, { size: 16, weight: 650, fill: "#414D5C", max: 34 })}
+          ${text(item, bx + 16, by, { size: 15, weight: 650, fill: "#414D5C", max: 28 })}
         `;
       }).join("\n")}
     </g>`;
@@ -111,23 +111,6 @@ function connector(x, y1, y2, color) {
   return `
     <line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="${color}" stroke-width="4" marker-end="url(#arrow)"/>
     <text x="${x + 18}" y="${(y1 + y2) / 2}" font-size="14" font-weight="900" fill="${color}">se apila</text>`;
-}
-
-function legend() {
-  const entries = [
-    ["v01", "Prototipo funcional local"],
-    ["v02", "Runtime cloud serverless"],
-    ["v03", "Delivery controlado, IA y base multi-deployment"],
-    ["vNext", "Multi-tenant real como siguiente capa"],
-  ];
-  return `
-    <rect x="1012" y="112" width="430" height="150" rx="5" fill="#F2F3F3" stroke="#D5DBDB"/>
-    ${text("Como leer la placa", 1044, 150, { size: 20, weight: 900 })}
-    ${entries.map(([k, v], i) => `
-      <text x="1044" y="${183 + i * 25}" font-size="14" font-weight="900" fill="#161E2D">${esc(k)}</text>
-      <text x="1100" y="${183 + i * 25}" font-size="14" font-weight="650" fill="#5F6B7A">${esc(v)}</text>
-    `).join("\n")}
-  `;
 }
 
 const svg = `<?xml version="1.0" encoding="UTF-8"?>
@@ -145,13 +128,12 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
   ${text("STACK DE INCREMENTOS / DESPUES DE LA MAGIA", 80, 72, { size: 13, weight: 900, fill: "#FF9900" })}
   ${text("Magic Cert: capacidades que se apilan", 80, 123, { size: 42, weight: 900 })}
   ${text("Cada version conserva lo anterior y agrega nuevas responsabilidades de producto, arquitectura y operacion.", 80, 162, { size: 20, weight: 650, fill: "#5F6B7A" })}
-  ${legend()}
 
   ${layer({
-    x: 180,
-    y: 632,
-    w: 1110,
-    h: 150,
+    x: 100,
+    y: 652,
+    w: 1140,
+    h: 145,
     color: "#879196",
     version: "v01",
     title: "Base local funcional",
@@ -165,13 +147,11 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
     ],
   })}
 
-  ${connector(735, 596, 632, "#FF9900")}
-
   ${layer({
-    x: 180,
-    y: 402,
-    w: 1110,
-    h: 174,
+    x: 100,
+    y: 410,
+    w: 1140,
+    h: 210,
     color: "#FF9900",
     version: "v02",
     title: "MVP cloud serverless",
@@ -183,19 +163,15 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
       "Lambdas de negocio",
       "DynamoDB on-demand",
       "JWT en Secrets Manager",
-      "Logs, dashboard y alarmas",
-      "Infraestructura con Terraform",
-      "Scripts de deploy y seed",
+      "CloudWatch + Terraform + scripts",
     ],
   })}
 
-  ${connector(735, 366, 402, "#01A88D")}
-
   ${layer({
-    x: 180,
+    x: 100,
     y: 178,
-    w: 1110,
-    h: 168,
+    w: 1140,
+    h: 210,
     color: "#01A88D",
     version: "v03",
     title: "Delivery controlado + IA",
@@ -205,35 +181,28 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
       "GitHub Actions con OIDC",
       "Plan read-only en PR",
       "Apply protegido por environment",
-      "Sin access keys largas",
       "Lambda ai-practice",
       "STS hacia cuenta Bedrock",
-      "Amazon Nova por default",
       "deployment_id como base multi-deployment",
     ],
   })}
 
-  ${layer({
-    x: 1326,
-    y: 330,
-    w: 194,
-    h: 318,
-    color: "#7D3CDB",
-    version: "vNext",
-    title: "Multi-tenant real",
-    subtitle: "Siguiente capa posible, no parte del runtime actual.",
-    iconNames: ["tenant", "shield", "dynamo"],
-    dashed: true,
-    items: [
-      "Aislamiento tenant",
-      "Auth por tenant",
-      "Particiones de datos",
-      "Cost allocation",
-    ],
-  })}
+  <g>
+    <rect x="1290" y="362" width="230" height="286" rx="5" fill="#FFFFFF" stroke="#7D3CDB" stroke-width="2.5" stroke-dasharray="10 8"/>
+    <rect x="1290" y="362" width="10" height="286" fill="#7D3CDB" opacity="0.7"/>
+    ${text("vNext", 1318, 410, { size: 22, weight: 900, fill: "#7D3CDB" })}
+    ${text("Multi-tenant real", 1318, 444, { size: 24, weight: 900, max: 17 })}
+    ${text("Siguiente capa posible", 1318, 474, { size: 14, weight: 700, fill: "#5F6B7A" })}
+    ${icon("tenant", 1320, 508, 44)}
+    ${icon("shield", 1380, 508, 44)}
+    ${icon("dynamo", 1440, 508, 44)}
+    ${text("Aislamiento tenant", 1320, 584, { size: 15, weight: 750, fill: "#414D5C" })}
+    ${text("Auth por tenant", 1320, 612, { size: 15, weight: 750, fill: "#414D5C" })}
+    ${text("Particiones de datos", 1320, 640, { size: 15, weight: 750, fill: "#414D5C" })}
+  </g>
 
-  <path d="M1290 262 C1365 262 1390 315 1408 330" fill="none" stroke="#7D3CDB" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#arrow)"/>
-  ${text("camino natural", 1326, 282, { size: 14, weight: 900, fill: "#7D3CDB" })}
+  <path d="M1240 264 C1300 278 1340 322 1370 362" fill="none" stroke="#7D3CDB" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#arrow)"/>
+  ${text("camino natural", 1276, 306, { size: 14, weight: 900, fill: "#7D3CDB" })}
 
   <rect x="80" y="818" width="1440" height="44" rx="4" fill="#F2F3F3" stroke="#D5DBDB"/>
   ${text("Mensaje: la magia genera una app; la arquitectura apila capacidades hasta convertirla en un sistema operable y extensible.", 112, 846, { size: 17, weight: 800, fill: "#414D5C" })}
