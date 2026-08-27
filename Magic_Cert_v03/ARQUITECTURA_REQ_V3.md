@@ -39,6 +39,9 @@ Key decisions:
 - Only the protected `production` environment can assume the apply role.
 - Terraform state remains in the shared S3 backend with locking.
 - Application artifacts remain outside Terraform; frontend deployment is a CI step.
+- AI explanations use Amazon Bedrock through a cross-account role. The app account receives only `sts:AssumeRole` on the Bedrock account role.
+- Amazon Nova is the default model family because it keeps the demo aligned with AWS-native model billing and AWS credits. Anthropic remains supported as an explicit alternative provider for comparison or quality checks.
+- The AI Lambda intentionally supports only model IDs starting with `amazon.nova` or `anthropic.` so provider-specific request payloads stay explicit and auditable.
 
 The bootstrap trust policy must restrict both the OIDC audience and the repository subject. GitHub documents this restriction as a security requirement.
 
@@ -72,7 +75,8 @@ Magic_Cert_v03/
 │       ├── questions/
 │       ├── auth/
 │       ├── user-profile/
-│       └── user-progress/
+│       ├── user-progress/
+│       └── ai-practice/
 ├── terraform/
 │   ├── main.tf
 │   ├── variables.tf
@@ -195,9 +199,15 @@ API Gateway REST API
   |
   v
 Lambda functions
+  |\
+  | v
+  | DynamoDB tables
   |
   v
-DynamoDB tables
+STS AssumeRole
+  |
+  v
+Bedrock account
 
 CloudWatch receives logs and metrics.
 Secrets Manager stores the JWT secret.
@@ -210,8 +220,10 @@ Resource Groups expose tagged resource views.
 |---------|---------|-------|
 | S3 | Static website bucket | Public website hosting for demo frontend. |
 | API Gateway | REST API | HTTPS backend endpoint. |
-| Lambda | Backend logic | Questions, auth, profile, progress. |
+| Lambda | Backend logic | Questions, auth, profile, progress, AI explanation. |
 | DynamoDB | Persistence | On-demand billing, PITR enabled. |
+| STS | Cross-account access | AI Lambda assumes the Bedrock account role. |
+| Bedrock | AI explanations | Default model family is Amazon Nova; Anthropic is a supported alternative. |
 | Secrets Manager | JWT secret | Avoids committed secrets. |
 | CloudWatch | Logs, dashboard, alarms | Retention should stay bounded. |
 | Resource Groups | Discovery by tags | Useful for demo and cleanup. |
@@ -227,6 +239,7 @@ POST /auth/login
 GET  /user/profile
 GET  /user/progress
 POST /user/progress
+POST /ai/explain
 ```
 
 Out of scope for current v02 unless explicitly added:

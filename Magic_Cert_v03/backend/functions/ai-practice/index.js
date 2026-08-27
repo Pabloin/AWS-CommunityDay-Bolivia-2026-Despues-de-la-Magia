@@ -1,10 +1,10 @@
-const { BedrockRuntimeClient, ConverseCommand } = require('@aws-sdk/client-bedrock-runtime');
+const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 const { STSClient, AssumeRoleCommand } = require('@aws-sdk/client-sts');
 
 const BEDROCK_ROLE_ARN = process.env.BEDROCK_ROLE_ARN || '';
 const BEDROCK_EXTERNAL_ID = process.env.BEDROCK_EXTERNAL_ID || '';
 const BEDROCK_REGION = process.env.BEDROCK_REGION || process.env.AWS_REGION || 'us-east-1';
-const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0';
+const BEDROCK_MODEL_ID = process.env.BEDROCK_MODEL_ID || 'amazon.nova-lite-v1:0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -111,6 +111,62 @@ async function assumeBedrockRole() {
   };
 }
 
+function getModelProvider() {
+  if (BEDROCK_MODEL_ID.startsWith('amazon.nova')) {
+    return 'nova';
+  }
+
+  if (BEDROCK_MODEL_ID.startsWith('anthropic.')) {
+    return 'anthropic';
+  }
+
+  throw Object.assign(new Error(`Unsupported Bedrock model provider for ${BEDROCK_MODEL_ID}`), {
+    statusCode: 400,
+    code: 'UNSUPPORTED_BEDROCK_PROVIDER'
+  });
+}
+
+function buildBedrockBody(prompt) {
+  const provider = getModelProvider();
+
+  if (provider === 'nova') {
+    return {
+      messages: [
+        {
+          role: 'user',
+          content: [{ text: prompt }]
+        }
+      ],
+      inferenceConfig: {
+        max_new_tokens: 700,
+        temperature: 0.2
+      }
+    };
+  }
+
+  return {
+    anthropic_version: 'bedrock-2023-05-31',
+    max_tokens: 700,
+    temperature: 0.2,
+    messages: [
+      {
+        role: 'user',
+        content: prompt
+      }
+    ]
+  };
+}
+
+function extractBedrockText(payload) {
+  const provider = getModelProvider();
+
+  if (provider === 'nova') {
+    return payload.output?.message?.content?.[0]?.text || 'No explanation was generated.';
+  }
+
+  return payload.content?.[0]?.text || 'No explanation was generated.';
+}
+
 async function invokeBedrock(prompt) {
   const credentials = await assumeBedrockRole();
   const bedrock = new BedrockRuntimeClient({
@@ -118,19 +174,15 @@ async function invokeBedrock(prompt) {
     credentials
   });
 
-  const response = await bedrock.send(new ConverseCommand({
+  const response = await bedrock.send(new InvokeModelCommand({
     modelId: BEDROCK_MODEL_ID,
-    messages: [{
-      role: 'user',
-      content: [{ text: prompt }]
-    }],
-    inferenceConfig: {
-      maxTokens: 700,
-      temperature: 0.2
-    }
+    contentType: 'application/json',
+    accept: 'application/json',
+    body: JSON.stringify(buildBedrockBody(prompt))
   }));
 
-  return response.output?.message?.content?.[0]?.text || 'No explanation was generated.';
+  const payload = JSON.parse(Buffer.from(response.body).toString('utf8'));
+  return extractBedrockText(payload);
 }
 
 function errorResponse(error) {
