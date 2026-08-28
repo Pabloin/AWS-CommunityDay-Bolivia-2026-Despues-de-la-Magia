@@ -14,6 +14,6 @@ bedrock_role_external_id = ""
 bedrock_region          = "us-east-1"
 bedrock_model_id        = "global.amazon.nova-2-lite-v1:0"
 
-ai_daily_quota_per_user    = 20
+ai_daily_quota_per_user    = 6
 api_throttling_rate_limit  = 10
 api_throttling_burst_limit = 20
