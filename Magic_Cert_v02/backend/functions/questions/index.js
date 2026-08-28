@@ -7,6 +7,8 @@ const docClient = DynamoDBDocumentClient.from(client);
 
 const TABLE_NAME = process.env.QUESTIONS_TABLE;
 
+console.log('Magic Cert v2 deployment marker: questions Lambda ready');
+
 exports.handler = async (event) => {
   console.log('Event:', JSON.stringify(event, null, 2));
   

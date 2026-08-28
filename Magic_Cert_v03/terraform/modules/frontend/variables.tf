@@ -19,6 +19,12 @@ variable "custom_domain_name" {
   default     = ""
 }
 
+variable "additional_domain_names" {
+  description = "Additional HTTPS aliases for the CloudFront distribution."
+  type        = list(string)
+  default     = []
+}
+
 variable "hosted_zone_name" {
   description = "Route53 hosted zone name used to validate ACM and create the frontend alias record."
   type        = string

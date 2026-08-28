@@ -322,7 +322,7 @@ function App() {
               {authMessage && <p className="auth-message">{authMessage}</p>}
             </div>
             <div className="welcome-header">
-              <h1>🪄 Magic Cert</h1>
+              <h1>🪄 Magic Cert v2</h1>
               <p className="welcome-subtitle">AWS Solutions Architect Associate (SAA-C03)</p>
               <p className="welcome-description">
                 Practice with real-world scenarios and detailed explanations
@@ -470,7 +470,7 @@ function App() {
       <div className="container">
         <VersionBadge />
         <header className="header">
-          <h1>🪄 Magic Cert</h1>
+          <h1>🪄 Magic Cert v2</h1>
           <p className="subtitle">AWS Solutions Architect Associate (SAA-C03)</p>
           <div className="progress">
             <span>Question {currentQuestionIndex + 1} of {questions.length}</span>

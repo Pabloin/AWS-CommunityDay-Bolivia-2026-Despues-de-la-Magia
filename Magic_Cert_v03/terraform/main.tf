@@ -65,11 +65,12 @@ module "database" {
 module "frontend" {
   source = "./modules/frontend"
 
-  project_name       = local.resource_prefix
-  environment        = var.environment
-  api_url            = module.api.api_url
-  custom_domain_name = var.custom_domain_name
-  hosted_zone_name   = var.hosted_zone_name
+  project_name            = local.resource_prefix
+  environment             = var.environment
+  api_url                 = module.api.api_url
+  custom_domain_name      = var.custom_domain_name
+  additional_domain_names = var.additional_domain_names
+  hosted_zone_name        = var.hosted_zone_name
 }
 
 module "api" {

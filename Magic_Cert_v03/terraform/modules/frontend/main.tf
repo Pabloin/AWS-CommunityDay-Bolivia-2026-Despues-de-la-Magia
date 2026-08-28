@@ -2,6 +2,7 @@
 
 locals {
   custom_domain_enabled = var.custom_domain_name != "" && var.hosted_zone_name != ""
+  domain_names = distinct(compact(concat([var.custom_domain_name], var.additional_domain_names)))
 }
 
 data "aws_route53_zone" "frontend" {
@@ -15,6 +16,7 @@ resource "aws_acm_certificate" "frontend" {
   count = local.custom_domain_enabled ? 1 : 0
 
   domain_name       = var.custom_domain_name
+  subject_alternative_names = var.additional_domain_names
   validation_method = "DNS"
 
   lifecycle {
@@ -80,7 +82,7 @@ resource "aws_cloudfront_origin_access_control" "website" {
 resource "aws_cloudfront_distribution" "website" {
   enabled             = true
   default_root_object = "index.html"
-  aliases             = local.custom_domain_enabled ? [var.custom_domain_name] : []
+  aliases             = local.custom_domain_enabled ? local.domain_names : []
 
   origin {
     domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
@@ -162,9 +164,9 @@ resource "aws_s3_bucket_policy" "website" {
 }
 
 resource "aws_route53_record" "frontend_alias" {
-  count = local.custom_domain_enabled ? 1 : 0
+  for_each = local.custom_domain_enabled ? toset(local.domain_names) : toset([])
 
-  name    = var.custom_domain_name
+  name    = each.value
   type    = "A"
   zone_id = data.aws_route53_zone.frontend[0].zone_id
 
