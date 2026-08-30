@@ -29,6 +29,7 @@ provider "aws" {
       Event       = "aws-cday-bolivia-2026"
       Project     = "magic-certs-local2prod"
       Owner       = var.owner
+      Demo        = "Arq UADE"
       Environment = var.environment
       ManagedBy   = "terraform"
       Repository  = var.repository_url

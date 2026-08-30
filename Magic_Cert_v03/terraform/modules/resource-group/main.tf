@@ -22,6 +22,10 @@ resource "aws_resourcegroups_group" "magic_cert" {
           Key    = "Environment"
           Values = [var.environment]
         }
+        , {
+          Key    = "Release"
+          Values = ["magic-cert-v03"]
+        }
       ]
     })
   }
@@ -51,6 +55,10 @@ resource "aws_resourcegroups_group" "by_owner" {
           Key    = "Event"
           Values = ["aws-cday-bolivia-2026"]
         }
+        , {
+          Key    = "Release"
+          Values = ["magic-cert-v03"]
+        }
       ]
     })
   }
@@ -75,6 +83,10 @@ resource "aws_resourcegroups_group" "by_event" {
         {
           Key    = "Event"
           Values = ["aws-cday-bolivia-2026"]
+        }
+        , {
+          Key    = "Release"
+          Values = ["magic-cert-v03"]
         }
       ]
     })

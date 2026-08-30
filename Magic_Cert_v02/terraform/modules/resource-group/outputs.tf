@@ -18,9 +18,19 @@ output "by_owner_group_name" {
   value       = aws_resourcegroups_group.by_owner.name
 }
 
+output "by_owner_group_url" {
+  description = "AWS Console URL for the owner-filtered resource group"
+  value       = "https://console.aws.amazon.com/resource-groups/group/${aws_resourcegroups_group.by_owner.name}"
+}
+
 output "by_event_group_name" {
   description = "By-event resource group name"
   value       = aws_resourcegroups_group.by_event.name
+}
+
+output "by_event_group_url" {
+  description = "AWS Console URL for the version-filtered resource group"
+  value       = "https://console.aws.amazon.com/resource-groups/group/${aws_resourcegroups_group.by_event.name}"
 }
 
 output "tag_editor_url" {

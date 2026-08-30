@@ -76,6 +76,16 @@ output "resource_group_url" {
   value       = module.resource_group.resource_group_url
 }
 
+output "resource_group_by_owner_url" {
+  description = "AWS Console URL for V2 resources owned by this deployment"
+  value       = module.resource_group.by_owner_group_url
+}
+
+output "resource_group_by_version_url" {
+  description = "AWS Console URL for V2 resources filtered by Release tag"
+  value       = module.resource_group.by_event_group_url
+}
+
 output "tag_editor_url" {
   description = "AWS Tag Editor URL"
   value       = module.resource_group.tag_editor_url
@@ -115,6 +125,8 @@ output "deployment_summary" {
     
     Resource Groups:
       - View all resources: ${module.resource_group.resource_group_url}
+      - View V2 resources by owner: ${module.resource_group.by_owner_group_url}
+      - View V2 resources by Release tag: ${module.resource_group.by_event_group_url}
       - Tag Editor: ${module.resource_group.tag_editor_url}
     
     Next Steps:

@@ -22,6 +22,10 @@ resource "aws_resourcegroups_group" "magic_cert" {
           Key    = "Environment"
           Values = [var.environment]
         }
+        , {
+          Key    = "Release"
+          Values = ["magic-cert-v02"]
+        }
       ]
     })
   }
@@ -51,6 +55,10 @@ resource "aws_resourcegroups_group" "by_owner" {
           Key    = "Event"
           Values = ["aws-cday-bolivia-2026"]
         }
+        , {
+          Key    = "Release"
+          Values = ["magic-cert-v02"]
+        }
       ]
     })
   }
@@ -63,8 +71,8 @@ resource "aws_resourcegroups_group" "by_owner" {
 
 # Resource Group for Cost Tracking
 resource "aws_resourcegroups_group" "by_event" {
-  name        = "cday-bolivia-2026-all-resources"
-  description = "All resources for AWS Community Day Bolivia 2026 event"
+  name        = "${var.project_name}-${var.environment}-all-resources"
+  description = "Magic Cert v02 resources for AWS Community Day Bolivia 2026"
 
   resource_query {
     query = jsonencode({
@@ -75,6 +83,10 @@ resource "aws_resourcegroups_group" "by_event" {
         {
           Key    = "Event"
           Values = ["aws-cday-bolivia-2026"]
+        }
+        , {
+          Key    = "Release"
+          Values = ["magic-cert-v02"]
         }
       ]
     })
