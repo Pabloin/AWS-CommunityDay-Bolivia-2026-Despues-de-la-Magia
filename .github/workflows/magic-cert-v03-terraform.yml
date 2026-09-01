@@ -18,7 +18,19 @@ env:
   AWS_REGION: us-east-1
   TF_DIR: Magic_Cert_v03/terraform
   TF_STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
-  TF_LOCK_TABLE: magic-cert-terraform-locks
+  TF_STATE_KEY: v03/sebas/terraform.tfstate
+  TF_WORKSPACE: sebas-v3
+  TF_VAR_deployment_id: sebas
+  TF_VAR_custom_domain_name: magic.cert.glaciar.org
+  TF_VAR_additional_domain_names: '["magico.cert.glaciar.org"]'
+  TF_VAR_hosted_zone_name: cert.glaciar.org
+  TF_VAR_bedrock_role_arn: ""
+  TF_VAR_bedrock_role_external_id: ""
+  TF_VAR_bedrock_region: us-east-1
+  TF_VAR_bedrock_model_id: global.amazon.nova-2-lite-v1:0
+  TF_VAR_ai_daily_quota_per_user: "6"
+  TF_VAR_api_throttling_rate_limit: "10"
+  TF_VAR_api_throttling_burst_limit: "20"
 
 jobs:
   plan:
@@ -35,7 +47,8 @@ jobs:
           role-to-assume: ${{ vars.AWS_TERRAFORM_PLAN_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
       - uses: hashicorp/setup-terraform@v3
-      - run: terraform -chdir="$TF_DIR" init -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="key=v03/terraform.tfstate" -backend-config="region=$AWS_REGION" -backend-config="dynamodb_table=$TF_LOCK_TABLE" -backend-config="encrypt=true"
+      - run: terraform -chdir="$TF_DIR" init -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="key=$TF_STATE_KEY" -backend-config="region=$AWS_REGION" -backend-config="use_lockfile=true" -backend-config="encrypt=true"
+      - run: terraform -chdir="$TF_DIR" workspace select "$TF_WORKSPACE" || terraform -chdir="$TF_DIR" workspace new "$TF_WORKSPACE"
       - run: terraform -chdir="$TF_DIR" fmt -check -recursive
       - run: terraform -chdir="$TF_DIR" validate
       - run: terraform -chdir="$TF_DIR" plan -no-color
@@ -54,7 +67,8 @@ jobs:
           role-to-assume: ${{ vars.AWS_TERRAFORM_APPLY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
       - uses: hashicorp/setup-terraform@v3
-      - run: terraform -chdir="$TF_DIR" init -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="key=v03/terraform.tfstate" -backend-config="region=$AWS_REGION" -backend-config="dynamodb_table=$TF_LOCK_TABLE" -backend-config="encrypt=true"
+      - run: terraform -chdir="$TF_DIR" init -backend-config="bucket=$TF_STATE_BUCKET" -backend-config="key=$TF_STATE_KEY" -backend-config="region=$AWS_REGION" -backend-config="use_lockfile=true" -backend-config="encrypt=true"
+      - run: terraform -chdir="$TF_DIR" workspace select "$TF_WORKSPACE" || terraform -chdir="$TF_DIR" workspace new "$TF_WORKSPACE"
       - run: terraform -chdir="$TF_DIR" fmt -check -recursive
       - run: terraform -chdir="$TF_DIR" validate
       - run: terraform -chdir="$TF_DIR" apply -auto-approve

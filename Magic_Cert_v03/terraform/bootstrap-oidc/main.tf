@@ -19,7 +19,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
   oidc_url       = "https://token.actions.githubusercontent.com"
-  repository_sub = "repo:${var.github_owner}@${var.github_owner_id}/${var.github_repository}@${var.github_repository_id}"
+  repository_sub = "repo:${var.github_owner}/${var.github_repository}"
   tags = {
     Event       = "aws-cday-bolivia-2026"
     Project     = "magic-certs-local2prod"
@@ -80,15 +80,11 @@ resource "aws_iam_role_policy" "terraform_plan_state" {
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
-      Action = ["s3:GetObject", "s3:PutObject", "s3:ListBucket"]
+      Action = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject", "s3:ListBucket"]
       Resource = [
         "arn:aws:s3:::${var.tf_state_bucket}",
         "arn:aws:s3:::${var.tf_state_bucket}/*"
       ]
-      }, {
-      Effect   = "Allow"
-      Action   = ["dynamodb:DescribeTable", "dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:DeleteItem"]
-      Resource = var.tf_lock_table_arn
     }]
   })
 }
