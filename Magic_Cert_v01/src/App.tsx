@@ -231,7 +231,7 @@ function App() {
           </div>
 
           <footer className="footer">
-            <p>Created with AI ✨ | AWS Community Day Bolivia 2026</p>
+            <p>Created with AI ✨ | Nerdearla Ciudad de México 2026</p>
           </footer>
         </div>
       </div>
@@ -347,7 +347,7 @@ function App() {
         </div>
 
         <footer className="footer">
-          <p>Created with AI ✨ | AWS Community Day Bolivia 2026</p>
+          <p>Created with AI ✨ | Nerdearla Ciudad de México 2026</p>
           <p className="note">Note: These are example questions for demonstration purposes.</p>
         </footer>
       </div>
