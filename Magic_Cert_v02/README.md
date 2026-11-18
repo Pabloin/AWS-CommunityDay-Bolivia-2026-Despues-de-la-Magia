@@ -157,6 +157,8 @@ Magic_Cert_v02/
 
 ## 🏷️ Resource Tagging
 
+The `Event` tag below is a legacy value retained in Terraform from the earlier Community Day deployment.
+
 All resources are automatically tagged with:
 
 ```
@@ -464,7 +466,9 @@ aws resourcegroupstaggingapi get-resources \
 
 ---
 
-## 🎓 AWS Community Day Presentation
+## 🎓 Nerdearla Ciudad de México 2026
+
+[Después de la Magia: de localhost a producción](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/) · 18 de noviembre, 11:00 a 12:00 (GMT-6) · Workshops virtuales 2
 
 ### Demo Flow
 
@@ -538,7 +542,7 @@ For improvements or bug fixes:
 
 ## 📄 License
 
-MIT License - AWS Community Day Bolivia 2026
+MIT License
 
 ---
 
@@ -546,8 +550,8 @@ MIT License - AWS Community Day Bolivia 2026
 
 **Pablo Ezequiel Inchausti** (@pablo-ezequiel-inchausti)
 
-**Event:** AWS Community Day Bolivia 2026  
-**Talk:** "Después de la Magia" - From AI-Generated App to AWS Production
+- **Event:** Nerdearla Ciudad de México 2026
+- **Talk:** [Después de la Magia: de localhost a producción](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/)
 
 ---
 

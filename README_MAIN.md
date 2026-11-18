@@ -1,8 +1,12 @@
-# AWS Community Day Bolivia 2026 - Después de la Magia 🪄
+# Después de la Magia: de localhost a producción
 
-## 🎯 Presentación: Del Código a la Nube - Un Viaje Mágico con IA y AWS
+**Nerdearla Ciudad de México 2026** · 18 de noviembre, 11:00 a 12:00 (GMT-6) · Workshops virtuales 2
 
-Esta presentación demuestra cómo crear, desplegar y gestionar una aplicación completa usando IA generativa y servicios de AWS, mostrando el proceso completo desde el desarrollo local hasta la infraestructura en la nube.
+[Información de la charla](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/)
+
+## 🎯 Presentación
+
+La magia del Vibe Coding termina cuando llega el primer usuario real. Esta presentación usa Magic Cert para mostrar las decisiones de ingeniería y arquitectura que permiten llevar una aplicación de localhost a producción en AWS.
 
 ---
 
@@ -44,27 +48,19 @@ npm run dev
 
 ---
 
-### 🏗️ **v02: Terraform Layer - Infraestructura como Código**
-**Estado: 🚧 TBD (To Be Developed)**
+### 🏗️ **v02: Despliegue serverless con Terraform**
+**Estado: ✅ Documentado**
 
-📁 **Ubicación:** `Magic_Cert_v02/` *(próximamente)*
+📁 **Ubicación:** `Magic_Cert_v02/`
 
-**¿Qué agregará?**
-Capa de infraestructura usando Terraform para provisionar recursos AWS necesarios.
+**¿Qué agrega?**
+Infraestructura reproducible con Terraform para el frontend y la API.
 
-**Planeado:**
-- 🔄 Configuración de Terraform para AWS
-- 🔄 Definición de infraestructura como código
-- 🔄 Recursos a provisionar:
-  - VPC y subnets
-  - Security Groups
-  - S3 buckets para hosting estático
-  - CloudFront distribution
-  - Route53 (opcional)
-  - Certificate Manager (opcional)
-- 🔄 Variables y outputs de Terraform
-- 🔄 Estado remoto en S3
-- 🔄 Scripts de despliegue automatizado
+**Incluye:**
+- Frontend estático en S3
+- API Gateway, Lambda y DynamoDB
+- CloudWatch para registros y métricas
+- Scripts de despliegue
 
 **Objetivos:**
 - Infraestructura versionada y reproducible
@@ -72,35 +68,27 @@ Capa de infraestructura usando Terraform para provisionar recursos AWS necesario
 - Documentación de recursos en código
 - Best practices de seguridad AWS
 
-**Tecnologías planeadas:**
+**Tecnologías:**
 - Terraform
 - AWS CLI
 - Scripts de automatización
 
 ---
 
-### ☁️ **v03: AWS Integration - Despliegue en la Nube**
-**Estado: 🚧 TBD (To Be Developed)**
+### ☁️ **v03: Entrega en producción con OIDC y Bedrock**
+**Estado: ✅ Documentado y desplegado**
 
-📁 **Ubicación:** `Magic_Cert_v03/` *(próximamente)*
+📁 **Ubicación:** `Magic_Cert_v03/`
 
-**¿Qué agregará?**
-Integración completa con servicios AWS para deployment y operación en producción.
+**¿Qué agrega?**
+Extiende v02 con entrega del frontend por HTTPS y un flujo de despliegue orientado a producción.
 
-**Planeado:**
-- 🔄 Build pipeline automatizado
-- 🔄 Deployment a S3 + CloudFront
-- 🔄 CI/CD con GitHub Actions o AWS CodePipeline
-- 🔄 Integración con servicios AWS adicionales:
-  - API Gateway (si se agrega backend)
-  - Lambda functions (para lógica serverless)
-  - DynamoDB (para persistencia de datos)
-  - Cognito (para autenticación de usuarios)
-  - CloudWatch (para logging y monitoreo)
-- 🔄 Monitoreo y alarmas
-- 🔄 Backup y disaster recovery
-- 🔄 Optimización de costos
-- 🔄 DNS y certificados SSL/TLS
+**Incluye:**
+- S3 privado, CloudFront, ACM y Route 53
+- API Gateway, Lambda y DynamoDB
+- GitHub Actions con OIDC para Terraform
+- Explicaciones opcionales con Amazon Bedrock
+- CloudWatch para registros y métricas
 
 **Objetivos:**
 - Aplicación funcionando en producción
@@ -109,12 +97,11 @@ Integración completa con servicios AWS para deployment y operación en producci
 - Monitoreo y observabilidad
 - Costos optimizados
 
-**Tecnologías planeadas:**
+**Tecnologías:**
 - AWS S3, CloudFront, Route53
 - AWS Lambda, API Gateway, DynamoDB
-- AWS Cognito, CloudWatch
-- CI/CD (GitHub Actions o CodePipeline)
-- Terraform (del v02)
+- Amazon Bedrock y CloudWatch
+- GitHub Actions y Terraform
 
 ---
 
@@ -149,7 +136,7 @@ Integración completa con servicios AWS para deployment y operación en producci
 ## 📁 Estructura del Repositorio
 
 ```
-AWS-CommunityDay-Bolivia-2026-Despues-de-la-Magia/
+AWS-Nerdearla-2026-Mexico-Localhost-2-Produccion/
 ├── README_MAIN.md                 # Este archivo - Overview de la presentación
 ├── .gitignore
 │
@@ -167,22 +154,20 @@ AWS-CommunityDay-Bolivia-2026-Despues-de-la-Magia/
 │   ├── public/
 │   └── tests/
 │
-├── Magic_Cert_v02/                # 🚧 TBD: + Terraform
+├── Magic_Cert_v02/                # ✅ Serverless + Terraform
 │   ├── README.md
 │   ├── terraform/
 │   │   ├── main.tf
 │   │   ├── variables.tf
 │   │   ├── outputs.tf
 │   │   └── modules/
-│   ├── scripts/
-│   └── (todo de v01)
+│   └── scripts/
 │
-└── Magic_Cert_v03/                # 🚧 TBD: + AWS Integration
+└── Magic_Cert_v03/                # ✅ HTTPS + OIDC + Bedrock
     ├── README.md
-    ├── .github/workflows/         # CI/CD
-    ├── cloudformation/            # Recursos adicionales
-    ├── lambda/                    # Functions
-    └── (todo de v01 y v02)
+    ├── terraform/
+    ├── backend/
+    └── scripts/
 ```
 
 ---
@@ -214,13 +199,13 @@ AWS-CommunityDay-Bolivia-2026-Despues-de-la-Magia/
 - npm o yarn
 - Editor de código
 
-### Para v02 (TBD):
+### Para v02:
 - Todo lo de v01
 - Terraform instalado
 - AWS CLI configurado
 - Cuenta AWS
 
-### Para v03 (TBD):
+### Para v03:
 - Todo lo de v01 y v02
 - Permisos IAM apropiados
 - GitHub account (para CI/CD)
@@ -232,24 +217,24 @@ AWS-CommunityDay-Bolivia-2026-Despues-de-la-Magia/
 ```bash
 # Clonar el repositorio
 git clone [repository-url]
-cd AWS-CommunityDay-Bolivia-2026-Despues-de-la-Magia
+cd AWS-Nerdearla-2026-Mexico-Localhost-2-Produccion
 
 # Ejecutar v01
 cd Magic_Cert_v01
 npm install
 npm run dev
 
-# v02 y v03 - Coming soon!
+# Para v02 y v03, consultar sus README antes de desplegar
 ```
 
 ---
 
 ## 📞 Contacto
 
-**AWS Community Day Bolivia 2026**
-- Evento: AWS Community Day Bolivia
-- Año: 2026
-- Tema: "Después de la Magia - Del Código a la Nube"
+**Nerdearla Ciudad de México 2026**
+- Charla: [Después de la Magia: de localhost a producción](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/)
+- Fecha y horario: 18 de noviembre de 2026, 11:00 a 12:00 (GMT-6)
+- Sala: Workshops virtuales 2
 
 ---
 
@@ -262,12 +247,10 @@ MIT License - Ver archivo LICENSE para detalles
 ## 🌟 Agradecimientos
 
 - AWS Community Builders
-- Comunidad AWS Bolivia
-- Asistentes del AWS Community Day Bolivia 2026
+- Comunidad de Nerdearla Ciudad de México
+- Asistentes de la charla
 - Herramientas de IA que hicieron posible v01
 
 ---
 
-**¡La magia es solo el comienzo! 🪄✨**
-
-*El verdadero valor está en saber qué hacer después de la magia: construir sistemas robustos, seguros y escalables en la nube.*
+*Después de la magia, toca construir y operar una aplicación que funcione para usuarios reales.*

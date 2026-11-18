@@ -1,10 +1,14 @@
-# AWS Community Day Bolivia 2026 - Después de la Magia 🪄
+# Después de la Magia: de localhost a producción
 
-> **Después de la Magia: de localhost a producción**
+Bienvenidos al repositorio de la charla en **Nerdearla Ciudad de México 2026**. Acá está el ejemplo de Magic Cert, desde una versión local hasta su despliegue en AWS.
+
+- **Charla:** [Después de la Magia: de localhost a producción](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/)
+- **Cuándo:** 18 de noviembre de 2026, 11:00 a 12:00 (Ciudad de México, GMT-6)
+- **Dónde:** Workshops virtuales 2
 
 ## 📖 Sobre esta Presentación
 
-Esta es una demostración en vivo del poder de la IA generativa y los servicios de AWS, mostrando el ciclo completo desde la creación de código hasta el despliegue en la nube.
+La magia del Vibe Coding termina cuando llega el primer usuario real. Sostener una aplicación en producción requiere buenas prácticas de ingeniería y arquitectura. Esta demo recorre ese camino con una aplicación de ejemplo y servicios de AWS.
 
 ### 🎯 Concepto: "Después de la Magia"
 
@@ -26,10 +30,12 @@ Esta es una demostración en vivo del poder de la IA generativa y los servicios 
 **Estado:** Completado  
 **Descripción:** Aplicación de quiz para certificaciones AWS generada con IA
 
-### 🚧 v02: Terraform Layer
-📁 **Carpeta:** `Magic_Cert_v02/` (TBD)  
-**Estado:** Por desarrollar  
-**Descripción:** Infraestructura como código con Terraform
+### ✅ v02: Despliegue serverless con Terraform
+📁 **Carpeta:** `Magic_Cert_v02/`
+
+**Estado:** Documentado
+
+**Descripción:** Frontend en S3, API Gateway, Lambda y DynamoDB
 
 ### ✅ v03: Serverless + OIDC + Bedrock
 📁 **Carpeta:** `Magic_Cert_v03/`  
@@ -208,8 +214,7 @@ For questions or suggestions, please open an issue on GitHub.
 
 ## 🎭 Presentation Context
 
-This project is part of **AWS Community Day Bolivia 2026** presentation:  
-**"Después de la Magia - Del Código a la Nube"**
+This project accompanies the **Nerdearla Ciudad de México 2026** talk ["Después de la Magia: de localhost a producción"](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/).
 
 The presentation demonstrates:
 1. **v01 (Magic)**: How AI rapidly creates applications
@@ -226,4 +231,3 @@ The presentation demonstrates:
 ---
 
 📖 **[Ver documentación completa en español - README_MAIN.md](./README_MAIN.md)**
-AWS CommunityDay Bolivia 2026: Talk "Despues de la Magia: de Localhost a Produccion"

@@ -1,6 +1,6 @@
-# AWS CommunityDay Bolivia 2026: Talk 
+# Magic Cert v01 — aplicación local
 
-"Despues de la Magia: de Localhost a Produccion"
+Ejemplo de la charla [Después de la Magia: de localhost a producción](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/) en Nerdearla Ciudad de México 2026, el 18 de noviembre a las 11:00 (GMT-6), en Workshops virtuales 2.
 
 We use as reference Magic-Cert applicaiton, a interactive application to prepare for AWS Certifications, with focus on AWS SAA-003 for demo purposes
 
@@ -167,4 +167,3 @@ For questions or suggestions, please open an issue on GitHub.
 ---
 
 **Note**: This is an unofficial study resource. Please refer to official AWS certification guides and documentation for exam preparation.
-AWS CommunityDay Bolivia 2026: Talk "Despues de la Magia: de Localhost a Produccion"

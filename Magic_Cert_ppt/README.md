@@ -1,7 +1,9 @@
-# 🎤 Magic Cert - Presentation Materials
+# Magic Cert - Material de la presentación
 
-## AWS Community Day Bolivia 2026
-### "Después de la Magia - Del Código a la Nube"
+## Nerdearla Ciudad de México 2026
+### [Después de la Magia: de localhost a producción](https://nerdearla.com/en/mexico/schedule/despues-de-la-magia-de-localhost-a-produccion/)
+
+18 de noviembre de 2026, 11:00 a 12:00 (GMT-6) · Workshops virtuales 2
 
 ---
 
@@ -37,8 +39,8 @@ Magic_Cert_ppt/
 
 ## 🎯 Presentation Overview
 
-**Title:** Después de la Magia - Del Código a la Nube  
-**Duration:** 45-60 minutes  
+- **Title:** Después de la Magia: de localhost a producción
+- **Duration:** 60 minutes
 **Format:** Live demo + slides  
 **Audience:** AWS Community, Developers, Cloud Architects
 
@@ -58,13 +60,13 @@ Magic_Cert_ppt/
 ### Act 2: Después de la Magia - Infraestructura (15 min)
 - Why infrastructure matters
 - Introduction to Terraform
-- Show Magic_Cert_v02 (TBD)
+- Show Magic_Cert_v02
 - Explain professional expertise needed
 
 ### Act 3: Después de la Magia - Producción (15 min)
 - Production requirements
 - AWS services architecture
-- Show Magic_Cert_v03 (TBD)
+- Show Magic_Cert_v03
 - Security, monitoring, operations
 
 ### Conclusion (5-10 min)
