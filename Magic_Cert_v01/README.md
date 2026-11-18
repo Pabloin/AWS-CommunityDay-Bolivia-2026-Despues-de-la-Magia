@@ -78,7 +78,11 @@ Questions follow a standardized format documented in `QUESTION_STRUCTURE.md`. Ea
 
 ### Installation
 
+From the repository root:
+
 ```bash
+cd Magic_Cert_v01
+
 # Install dependencies
 npm install
 
